@@ -10,8 +10,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.7.0",
+    "@react-native-picker/picker": "^2.7.5",
     "react": "18.2.0",
-    "react-native": "0.73.6"
+    "react-native": "0.73.6",
+    "react-native-gifted-chat": "^2.4.0",
+    "react-native-markdown-display": "^7.0.2",
+    "react-native-picker-select": "^9.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
