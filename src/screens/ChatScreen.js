@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    paddingHorizontal: 15,
     backgroundColor: '#fff',
     borderRadius: 40,
     minHeight: 56,

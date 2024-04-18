@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, TextInput, Alert, Image, TouchableWithoutFeedback, StyleSheet, KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, Alert, Image, TouchableWithoutFeedback, StyleSheet, KeyboardAvoidingView, SafeAreaView, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import RNPickerSelect from 'react-native-picker-select';
 import Input from '../components/Input';
@@ -44,7 +44,7 @@ const SettingsScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <KeyboardAvoidingView
+        <View
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}>
 
@@ -77,27 +77,27 @@ const SettingsScreen = ({ navigation }) => {
 
             <View style={styles.inputContainer}>
               <Image style={styles.inputIcon} source={require('../assets/icons/goal.png')} />
-              {Platform.OS === 'android' && (
-                <TouchableOpacity onPress={() => console.log('pickerRef?.current?.togglePicker', pickerRef?.current?.togglePicker())}>
-                  <View >
-                    <Text>Набрать вес</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-              <RNPickerSelect
-                ref={pickerRef}
-                textInputProps={{
-                  style: [styles.input] // Применяем стили к тексту
-                }}
-                selectedValue={goal}
-                onValueChange={value => setGoal(value)}
-                items={[
-                  { label: 'Набрать вес', value: 'gain' },
-                  { label: 'Сбросить вес', value: 'lose' },
-                  { label: 'Поддерживать вес', value: 'maintain' },
-                ]}
-              />
-              <Image style={[styles.inputIcon]} source={require('../assets/icons/chevron-right.png')} />
+
+              <View style={{ width: Platform.OS === 'ios' ? 150 : 200, marginLeft:  Platform.OS === 'ios' ? 10 : 0, height: 40, justifyContent: 'center' }}>
+                <RNPickerSelect
+                  ref={pickerRef}
+                  textInputProps={{
+                    style: styles.input
+                  }}
+                  style={{
+                    inputAndroid: styles.input
+                  }}
+                  selectedValue={goal}
+                  onValueChange={value => setGoal(value)}
+                  placeholder={{ label: 'Выберите цель', value: null }}
+                  items={[
+                    { label: 'Набрать вес', value: 'gain' },
+                    { label: 'Сбросить вес', value: 'lose' },
+                    { label: 'Поддерживать вес', value: 'maintain' },
+                  ]}
+                />
+              </View>
+              {Platform.OS === 'ios' && <Image style={[styles.inputIcon]} source={require('../assets/icons/chevron-right.png')} />}
             </View>
 
 
@@ -119,8 +119,8 @@ const SettingsScreen = ({ navigation }) => {
             />
 
           </View>
-        </KeyboardAvoidingView>
-        <View style={{ height: 150 }} />
+        </View>
+        <View style={{ height: Platform.OS === 'ios' ? 280 : 50 }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
     width: 250
   },
   input: {
-
-    margin: 10,
+    color: '#3E423A',
+    // margin: 10,
     fontSize: 14,
   },
   inputIcon: { width: 24, height: 24, marginLeft: 5, marginRight: 5 }

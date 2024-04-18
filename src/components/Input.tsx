@@ -28,7 +28,7 @@ const Input: React.FC<InputProps> = ({icon, style, ...rest}) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: '#fff',
     borderRadius: 40,
     minHeight: 56,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     margin: 10,
     fontSize: 14,
     flex: 1,
-    color: '#505050'
+    color: '#3E423A'
   },
   inputIcon: {width: 24, height: 24, marginLeft: 5, marginRight: 5},
 });
