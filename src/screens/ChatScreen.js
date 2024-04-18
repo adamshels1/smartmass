@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import { Provider, useSelector } from 'react-redux'
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   TextInput,
@@ -12,6 +13,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import Header from '../components/Header';
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
@@ -23,10 +25,20 @@ function sleep(ms) {
 // Инициализация GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
 
-export default function ChatScreen() {
+export default function ChatScreen({ navigation }) {
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
+  const userData = useSelector(state => state.userData)
+
+
+  const isHasSettingsData = userData.weight && userData.height && userData.goal && userData.allergies;
+
+  useEffect(()=>{
+    if(!isHasSettingsData){
+      navigation.navigate('SettingsScreen')
+    }
+  }, [isHasSettingsData])
 
 
   // Обработка отправки сообщения
@@ -98,18 +110,17 @@ export default function ChatScreen() {
 
   const handleSubmit2 = async () => {
     const context = {
-      weight: 55, // Assuming weight is a number
-      height: 175, // Assuming height is a number
-      goal: ['Набор веса', 'Разпозновать пищевую ценность продуктов питания'],
+      weight: userData.weight, // Assuming weight is a number
+      height: userData.height, // Assuming height is a number
+      goal: [userData.goal, 'Разпозновать пищевую ценность продуктов питания'],
       description: ['давай короткие ответы на рецепты'],
-      allergies: ['свинина'],
-      likedDishes: ['Блины'], // Add an empty array for liked dishes
+      allergies: userData.allergies,
+      likedDishes: userData.likedDishes, // Add an empty array for liked dishes
     };
 
     // For text-only input, use the gemini-pro model
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-    const prompt = 'Что можно покушать на завтрак из того что я люблю';
 
     // Добавляем сообщение пользователя в список сообщений
     setMessages(prevMessages => [
@@ -150,7 +161,7 @@ export default function ChatScreen() {
       ]}>
 
       <Markdown style={{ body: item.role === 'user' ? styles.userMessageText : styles.otherMessageText }}>
-        {item.parts[0].text}
+      {item?.parts[0]?.text?.replace(/[*]/g, "•")}
       </Markdown>
 
     </View>
@@ -162,15 +173,16 @@ export default function ChatScreen() {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+
+        <Header
+          showBack={false}
+          navigation={navigation}
+          title='Nutrition consultant GPT'
+          showSettingsIcon={true}
+        />
+
         <View style={styles.container}>
 
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 35}}>
-            <View />
-            <Text>Nutrition consultant GPT</Text>
-            <TouchableOpacity onPress={handleSubmit2}>
-              <Image style={{ width: 24, height: 24 }} source={require('./src/assets/icons/settings.png')} />
-            </TouchableOpacity>
-          </View>
 
           <FlatList
             contentInsetAdjustmentBehavior="automatic"
@@ -203,7 +215,7 @@ export default function ChatScreen() {
             />
             {/* <Button title="Send" onPress={handleSubmit2} /> */}
             <TouchableOpacity onPress={handleSubmit2}>
-              <Image style={{ width: 30, height: 30 }} source={require('./src/assets/icons/send.png')} />
+              <Image style={{ width: 30, height: 30 }} source={require('../assets/icons/send.png')} />
             </TouchableOpacity>
 
           </View>
