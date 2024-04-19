@@ -12,12 +12,18 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Animated,
 } from 'react-native';
 import Header from '../components/Header';
 import LottieView from 'lottie-react-native';
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
+
+export const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
+
+import { Flow } from 'react-native-animated-spinkit'
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -196,16 +202,10 @@ export default function ChatScreen({ navigation }) {
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
             ListFooterComponent={<View style={{ marginBottom: 10 }}>
-              {true && (
-                <LottieView
-                  style={{ width: 60, height: 30, marginBottom: 10 }} source={require('../assets/animations/writing5.json')}
-                  autoPlay
-                // loop={false}
-                resizeMode="cover"
-                renderMode='AUTOMATIC'
-                />
+              {isBotWriting && (
+                <Flow style={{ marginLeft: 15 }} size={48} color="#A1A1A1" />
               )}
-              
+
               {/* {isBotWriting && (
                 <Image style={{ width: 80, height: 50, marginBottom: 0 }} resizeMode='contain' source={require('../assets/animations/writing.gif')} />
               )} */}

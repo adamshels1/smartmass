@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
+    color: '#3E423A',
   },
   icon: {
     width: 24,
