@@ -14,6 +14,7 @@ import {
   Image,
 } from 'react-native';
 import Header from '../components/Header';
+import LottieView from 'lottie-react-native';
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
@@ -30,12 +31,13 @@ export default function ChatScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData)
+  const [isBotWriting, setIsBotWriting] = useState(false);
 
 
   const isHasSettingsData = userData.weight && userData.height && userData.goal && userData.allergies;
 
-  useEffect(()=>{
-    if(!isHasSettingsData){
+  useEffect(() => {
+    if (!isHasSettingsData) {
       navigation.navigate('SettingsScreen')
     }
   }, [isHasSettingsData])
@@ -109,6 +111,7 @@ export default function ChatScreen({ navigation }) {
 
 
   const handleSubmit2 = async () => {
+    setIsBotWriting(true)
     const context = {
       weight: userData.weight, // Assuming weight is a number
       height: userData.height, // Assuming height is a number
@@ -139,6 +142,7 @@ export default function ChatScreen({ navigation }) {
     const response = await result.response;
     const text = response.text();
     console.log(text);
+    setIsBotWriting(false);
 
     // Обновляем соответствующее сообщение с ответом модели
     setMessages(prevMessages => [
@@ -161,7 +165,7 @@ export default function ChatScreen({ navigation }) {
       ]}>
 
       <Markdown style={{ body: item.role === 'user' ? styles.userMessageText : styles.otherMessageText }}>
-      {item?.parts[0]?.text?.replace(/[*]/g, "•")}
+        {item?.parts[0]?.text?.replace(/[*]/g, "•")}
       </Markdown>
 
     </View>
@@ -191,7 +195,21 @@ export default function ChatScreen({ navigation }) {
             renderItem={renderMessage}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
-            ListFooterComponent={<View style={{ alignItems: 'center', marginBottom: 10 }}>
+            ListFooterComponent={<View style={{ marginBottom: 10 }}>
+              {true && (
+                <LottieView
+                  style={{ width: 60, height: 30, marginBottom: 10 }} source={require('../assets/animations/writing5.json')}
+                  autoPlay
+                // loop={false}
+                resizeMode="cover"
+                renderMode='AUTOMATIC'
+                />
+              )}
+              
+              {/* {isBotWriting && (
+                <Image style={{ width: 80, height: 50, marginBottom: 0 }} resizeMode='contain' source={require('../assets/animations/writing.gif')} />
+              )} */}
+
               {/* <TouchableOpacity
                 style={{ backgroundColor: '#F4F4F4', borderRadius: 10, minHeight: 40, justifyContent: 'center', alignItems: 'center', width: '80%' }}
               >
@@ -220,7 +238,9 @@ export default function ChatScreen({ navigation }) {
 
           </View>
         </View>
+
       </KeyboardAvoidingView>
+
     </SafeAreaView>
   );
 }
@@ -229,6 +249,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: '#fff'
   },
   message: {
     // paddingVertical: 10,
@@ -282,6 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     minHeight: 40,
     fontSize: 13,
-    paddingTop: 12
+    paddingTop: 12,
+    color: '#3E423A'
   },
 });

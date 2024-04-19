@@ -21,7 +21,7 @@ const Input: React.FC<InputProps> = ({icon, style, ...rest}) => {
       onPress={() => textInputRef.current?.focus()}
       style={[styles.inputContainer, style]}>
       <Image style={styles.inputIcon} source={icon} />
-      <TextInput placeholderTextColor='#E4E4E4' ref={textInputRef} style={styles.input} {...rest} />
+      <TextInput placeholderTextColor='#b5b5b5' ref={textInputRef} style={styles.input} {...rest} />
     </Pressable>
   );
 };
