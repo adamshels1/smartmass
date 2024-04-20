@@ -44,3 +44,10 @@ export const setMealtimesAction = (mealtimes) => {
         payload: mealtimes
     }
 }
+
+export const setCalories = (calories) => {
+    return {
+        type: 'SET_CALORIES',
+        payload: calories
+    }
+}

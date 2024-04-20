@@ -23,7 +23,7 @@ import Markdown from 'react-native-markdown-display';
 export const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 import { Flow } from 'react-native-animated-spinkit'
-import { setDietAction, setMealtimesAction } from '../store/userActions';
+import { setCalories, setDietAction, setMealtimesAction } from '../store/userActions';
 
 
 function sleep(ms) {
@@ -44,7 +44,7 @@ export default function ChatScreen({ navigation }) {
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData)
   const [isBotWriting, setIsBotWriting] = useState(false);
-  const [messageOptionStep, setMessageOptionStep] = useState(1)
+  const [messageOptionStep, setMessageOptionStep] = useState(0)
 
 
   const isHasSettingsData = userData.weight && userData.height && userData.goal && userData.allergies;
@@ -172,7 +172,7 @@ export default function ChatScreen({ navigation }) {
 
     // Очистка обработчика при размонтировании компонента
     return () => {
-      notifee?.offBackgroundEvent(backgroundEventHandler);
+      // notifee?.offBackgroundEvent(backgroundEventHandler);
     };
   }, []);
 
@@ -253,37 +253,29 @@ export default function ChatScreen({ navigation }) {
         weight: userData.weight, // Assuming weight is a number
         height: userData.height, // Assuming height is a number
         goal: [userData.goal, 'Разпозновать пищевую ценность продуктов питания'],
-        description: ['давай короткие ответы на рецепты'],
+        description: ['давай короткие ответы на рецепты', 'если набор массы то давай полезные калорийные продукты такие как авакадо, орехи, какао, сливки', 'если набор массы то можно использовать протеиновые порошки'],
         allergies: userData.allergies,
         likedDishes: userData.likedDishes, // Add an empty array for liked dishes
         exampleResponseDiet: `**Рацион на 1 день:**
 
 **8:00 Завтрак**
-* Овсянка с молоком (50 г овсянки, 100 мл молока)
+* Здесь блюдо, количество ккал
 
 **10:00 Перекус**
-* Банан (100 г)
+* Здесь блюдо, количество ккал
 
 **12:00 Обед**
-* Куриная грудка с бурым рисом и овощами (100 г курицы, 100 г риса, 100 г овощей)
+* Здесь блюдо, количество ккал
 
 **15:00 Перекус**
-* Яблоко (100 г)
+* Здесь блюдо, количество ккал
 
 **17:00 Ужин**
-* Рыба с картофелем и овощами (100 г рыбы, 100 г картофеля, 100 г овощей)
+* Здесь блюдо, количество ккал
+
+Итого ккал
 
 **Список продуктов для покупки:**
-
-* Овсянка: 50 г
-* Молоко: 100 мл
-* Банан: 100 г
-* Куриная грудка: 100 г
-* Бурый рис: 100 г
-* Овощи: 100 г
-* Яблоко: 100 г
-* Рыба: 100 г
-* Картофель: 100 г
 `,
         diet: userData.diet
         // diet: `**Рацион на 1 день:**
@@ -333,13 +325,15 @@ export default function ChatScreen({ navigation }) {
       console.log('response', text);
       setIsBotWriting(false);
 
-      if (messageOptionStep === 2) {
+      if (messageOptionStep === 1) {
+        dispatch(setCalories(text))
+      } else if (messageOptionStep === 2) {
         dispatch(setDietAction(text))
       } else if (messageOptionStep === 4) {
         scheduleMealtimeNotifications(text);
       }
 
-      if (text?.length > 3) {
+      if (text?.length > 3 && messageOptionStep) {
         setMessageOptionStep(messageOptionStep)
       }
 
@@ -381,11 +375,21 @@ export default function ChatScreen({ navigation }) {
 
   const messageButtons = [
     {
+      step: 0,
+      buttons: [
+        {
+          buttonText: 'Какое количество калорий необходимо в день',
+          messageText: 'Привет! Отправь точное необходимое количество калорий целой цифрой чтобы ' + userData.goal,
+          nextStep: 1
+        }
+      ]
+    },
+    {
       step: 1,
       buttons: [
         {
           buttonText: 'Получить рацион на 1 день',
-          messageText: 'Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов',
+          messageText: `Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
           nextStep: 2
         }
       ]
@@ -394,13 +398,13 @@ export default function ChatScreen({ navigation }) {
       step: 2,
       buttons: [
         {
-          buttonText: 'Хорошо, какие закупить продукты?',
+          buttonText: 'Хорошо, какие продукты нужно закупить?',
           messageText: 'Какие закупить продукты на рацион и по сколько грамм из контекста diet?',
           nextStep: 3
         },
         {
           buttonText: 'Получить другой рацион',
-          messageText: 'Напиши рацион другой на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов',
+          messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
           nextStep: 2
         }
       ]
@@ -419,7 +423,7 @@ export default function ChatScreen({ navigation }) {
       step: 4,
       buttons: [
         {
-          buttonText: 'Слудующий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
+          buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
           messageText: 'Дай из контеста diet рецепт, и как приготовить: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
           nextStep: 4
         }
@@ -434,7 +438,7 @@ export default function ChatScreen({ navigation }) {
         <View style={{ alignItems: 'center', marginBottom: 5 }}>
           <TouchableOpacity
             onPress={() => handleSubmit2(i.messageText, i.nextStep)}
-            style={{ backgroundColor: '#F4F4F4', borderRadius: 15, minHeight: 40, justifyContent: 'center', alignItems: 'center', width: '80%', borderWidth: 1, borderColor: '#67CFCF', paddingVertical: 5 }}
+            style={{ backgroundColor: '#F4F4F4', borderRadius: 15, minHeight: 40, justifyContent: 'center', alignItems: 'center', width: '80%', borderWidth: 1, borderColor: '#67CFCF', paddingVertical: 5, paddingHorizontal: 10 }}
           >
             <Text style={{ color: '#3E3E3E', fontSize: 14 }}>
               {i.buttonText}
@@ -455,13 +459,13 @@ export default function ChatScreen({ navigation }) {
         <Header
           showBack={false}
           navigation={navigation}
-          title='Nutrition consultant GPT'
+          title={userData.calories ? `Цель на сегодня: ${userData.calories}ккал` : 'Nutrition consultant GPT'}
           showSettingsIcon={true}
         />
 
-        <View>
+        {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
-        </View>
+        </View> */}
 
         <View style={styles.container}>
 
@@ -486,6 +490,25 @@ export default function ChatScreen({ navigation }) {
 
             </View>}
           />
+
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type a message..."
+              placeholderTextColor="#A1A1A1"
+              onChangeText={text => setMessageText(text)}
+              value={messageText}
+              multiline={true}
+              numberOfLines={4}
+              textAlignVertical="center"
+            />
+            {/* <Button title="Send" onPress={handleSubmit2} /> */}
+            <TouchableOpacity onPress={() => handleSubmit2(messageText)}>
+              <Image style={{ width: 30, height: 30 }} source={require('../assets/icons/send.png')} />
+            </TouchableOpacity>
+
+          </View>
 
 
 
@@ -521,7 +544,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
     alignSelf: 'flex-start',
     borderBottomLeftRadius: 0,
-    maxWidth: '99%',
+    maxWidth: '85%',
   },
   userMessageText: {
     color: '#FFFFFF',
