@@ -30,3 +30,10 @@ export const setSettingsAction = ({
         }
     }
 }
+
+export const setDietAction = (diet) => {
+    return {
+        type: 'SET_DIET',
+        payload: diet
+    }
+}

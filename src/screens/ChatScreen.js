@@ -1,4 +1,4 @@
-import { Provider, useSelector } from 'react-redux'
+import { Provider, useSelector, useDispatch } from 'react-redux'
 import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
@@ -23,6 +23,7 @@ import Markdown from 'react-native-markdown-display';
 export const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 import { Flow } from 'react-native-animated-spinkit'
+import { setDietAction } from '../store/userActions';
 
 
 function sleep(ms) {
@@ -33,11 +34,13 @@ function sleep(ms) {
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
 
 export default function ChatScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData)
   const [isBotWriting, setIsBotWriting] = useState(false);
+  const [messageOptionStep, setMessageOptionStep] = useState(3)
 
 
   const isHasSettingsData = userData.weight && userData.height && userData.goal && userData.allergies;
@@ -116,8 +119,10 @@ export default function ChatScreen({ navigation }) {
   };
 
 
-  const handleSubmit2 = async () => {
+  const handleSubmit2 = async (messageText, messageOptionStep) => {
     setIsBotWriting(true)
+    console.log('messageOptionStep', messageOptionStep)
+    setMessageOptionStep(messageOptionStep)
     const context = {
       weight: userData.weight, // Assuming weight is a number
       height: userData.height, // Assuming height is a number
@@ -125,6 +130,57 @@ export default function ChatScreen({ navigation }) {
       description: ['давай короткие ответы на рецепты'],
       allergies: userData.allergies,
       likedDishes: userData.likedDishes, // Add an empty array for liked dishes
+      exampleResponseDiet: `**Рацион на 1 день:**
+
+**8:00 Завтрак**
+* Овсянка с молоком (50 г овсянки, 100 мл молока)
+
+**10:00 Перекус**
+* Банан (100 г)
+
+**12:00 Обед**
+* Куриная грудка с бурым рисом и овощами (100 г курицы, 100 г риса, 100 г овощей)
+
+**15:00 Перекус**
+* Яблоко (100 г)
+
+**17:00 Ужин**
+* Рыба с картофелем и овощами (100 г рыбы, 100 г картофеля, 100 г овощей)
+
+**Список продуктов для покупки:**
+
+* Овсянка: 50 г
+* Молоко: 100 мл
+* Банан: 100 г
+* Куриная грудка: 100 г
+* Бурый рис: 100 г
+* Овощи: 100 г
+* Яблоко: 100 г
+* Рыба: 100 г
+* Картофель: 100 г
+`,
+      // diet: userData.diet
+      diet: `**Рацион на 1 день:**
+
+      **Время | Продукт**
+      ---|---|
+      **8:00 Завтрак** | Овсянка (50 г) с молоком (100 мл)
+      **11:00 Перекус** | Банан (100 г)
+      **13:00 Обед** | Куриная грудка (150 г) с бурым рисом (100 г) и овощами (150 г)
+      **16:00 Перекус** | Яблоко (100 г)
+      **19:00 Ужин** | Рыба (150 г) с картофелем (150 г) и овощами (150 г)
+      
+      **Список продуктов для покупки:**
+      
+      * Овсянка: 50 г
+      * Молоко: 100 мл
+      * Банан: 100 г
+      * Куриная грудка: 150 г
+      * Бурый рис: 100 г
+      * Овощи (для обеда и ужина): 300 г
+      * Яблоко: 100 г
+      * Рыба: 150 г
+      * Картофель: 150 г`
     };
 
     // For text-only input, use the gemini-pro model
@@ -149,6 +205,10 @@ export default function ChatScreen({ navigation }) {
     const text = response.text();
     console.log(text);
     setIsBotWriting(false);
+
+    if (messageOptionStep === 1) {
+      dispatch(setDietAction(text))
+    }
 
     // Обновляем соответствующее сообщение с ответом модели
     setMessages(prevMessages => [
@@ -176,6 +236,62 @@ export default function ChatScreen({ navigation }) {
 
     </View>
   );
+
+  const messageButtons = [
+    {
+      step: 1,
+      buttons: [
+        {
+          buttonText: 'Получить рацион на 1 день',
+          messageText: 'Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов',
+          nextStep: 2
+        }
+      ]
+    },
+    {
+      step: 2,
+      buttons: [
+        {
+          buttonText: 'Хорошо, какие закупить продукты?',
+          messageText: 'Какие закупить продукты на рацион и по сколько грамм из контекста?',
+          nextStep: 3
+        },
+        {
+          buttonText: 'Получить другой рацион',
+          messageText: 'Напиши рацион другой на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов',
+          nextSte: 2
+        }
+      ]
+    },
+    {
+      step: 3,
+      buttons: [
+        {
+          buttonText: 'Продукты куплены, давай поставим уведомления во времени приготовления',
+          messageText: 'Верни названия времени и время приема пиши из рациона контекста в формате json: [{time: null, name: null }]',
+          nextStep: 3
+        }
+      ]
+    }
+  ]
+
+  const renderMessageButtons = () => {
+    if (isBotWriting) return null
+    return messageButtons?.find(i => i.step === messageOptionStep)?.buttons.map(i => {
+      return (
+        <View style={{ alignItems: 'center', marginBottom: 5 }}>
+          <TouchableOpacity
+            onPress={() => handleSubmit2(i.messageText, i.nextStep)}
+            style={{ backgroundColor: '#F4F4F4', borderRadius: 15, minHeight: 40, justifyContent: 'center', alignItems: 'center', width: '80%', borderWidth: 1, borderColor: '#67CFCF', paddingVertical: 5 }}
+          >
+            <Text style={{ color: '#3E3E3E', fontSize: 14 }}>
+              {i.buttonText}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )
+    })
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -210,33 +326,14 @@ export default function ChatScreen({ navigation }) {
                 <Image style={{ width: 80, height: 50, marginBottom: 0 }} resizeMode='contain' source={require('../assets/animations/writing.gif')} />
               )} */}
 
-              {/* <TouchableOpacity
-                style={{ backgroundColor: '#F4F4F4', borderRadius: 10, minHeight: 40, justifyContent: 'center', alignItems: 'center', width: '80%' }}
-              >
-                <Text style={{ color: '#3E3E3E', fontSize: 14, textAlign: 'center' }}>
-                  Нажмите, чтобы отправить сообщение
-                </Text>
-              </TouchableOpacity> */}
+              {renderMessageButtons()}
+
             </View>}
           />
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Type a message..."
-              placeholderTextColor="#A1A1A1"
-              onChangeText={text => setMessageText(text)}
-              value={messageText}
-              multiline={true}
-              numberOfLines={4}
-              textAlignVertical="center"
-            />
-            {/* <Button title="Send" onPress={handleSubmit2} /> */}
-            <TouchableOpacity onPress={handleSubmit2}>
-              <Image style={{ width: 30, height: 30 }} source={require('../assets/icons/send.png')} />
-            </TouchableOpacity>
 
-          </View>
+
+
         </View>
 
       </KeyboardAvoidingView>
@@ -267,7 +364,8 @@ const styles = StyleSheet.create({
   otherMessage: {
     backgroundColor: '#EEEEEE',
     alignSelf: 'flex-start',
-    borderBottomLeftRadius: 0
+    borderBottomLeftRadius: 0,
+    maxWidth: '99%',
   },
   userMessageText: {
     color: '#FFFFFF',
