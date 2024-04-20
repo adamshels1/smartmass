@@ -21,7 +21,7 @@ const SettingsScreen = ({ navigation }) => {
   const userData = useSelector(state => state.userData)
   const [weight, setWeight] = useState(userData.weight);
   const [height, setHeight] = useState(userData.height);
-  const [goal, setGoal] = useState('Набрать вес');
+  const [goal, setGoal] = useState(userData.goal);
   const [allergies, setAllergies] = useState(userData.allergies);
   const [plan, setPlan] = useState('');
   const pickerRef = useRef(null);
@@ -88,6 +88,7 @@ const SettingsScreen = ({ navigation }) => {
                     inputAndroid: styles.input
                   }}
                   selectedValue={goal}
+                  value={goal}
                   onValueChange={value => setGoal(value)}
                   placeholder={{ label: 'Выберите цель', value: null }}
                   items={[

@@ -15,7 +15,6 @@ import {
   Animated,
 } from 'react-native';
 import Header from '../components/Header';
-import LottieView from 'lottie-react-native';
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
@@ -421,7 +420,7 @@ export default function ChatScreen({ navigation }) {
       step: 4,
       buttons: [
         {
-          buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
+          buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time+', Получить рецепт',
           messageText: 'Дай из контеста diet рецепт, и как приготовить: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
           nextStep: 4
         }
@@ -446,6 +445,8 @@ export default function ChatScreen({ navigation }) {
       )
     })
   }
+
+  const disabledSendButton = (messageText && !isBotWriting)
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -502,7 +503,11 @@ export default function ChatScreen({ navigation }) {
               textAlignVertical="center"
             />
             {/* <Button title="Send" onPress={handleSubmit2} /> */}
-            <TouchableOpacity onPress={() => handleSubmit2(messageText)}>
+            <TouchableOpacity
+              onPress={() => handleSubmit2(messageText)}
+              disabled={disabledSendButton}
+              style={{opacity: disabledSendButton ? 1 : 0.5}}
+            >
               <Image style={{ width: 30, height: 30 }} source={require('../assets/icons/send.png')} />
             </TouchableOpacity>
 
