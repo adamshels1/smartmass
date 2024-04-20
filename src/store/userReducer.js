@@ -6,7 +6,8 @@ const initialState = {
     goal: null,
     allergies: [],
     likedDishes: [],
-    diet: null
+    diet: null,
+    mealtimes: []
 }
 
 
@@ -31,6 +32,12 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 diet: payload,
+            }
+        case 'SET_MEALTIMES':
+            console.log('SET_MEALTIMES', payload)
+            return {
+                ...state,
+                mealtimes: payload,
             }
         default:
             return state;

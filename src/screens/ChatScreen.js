@@ -23,7 +23,7 @@ import Markdown from 'react-native-markdown-display';
 export const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 import { Flow } from 'react-native-animated-spinkit'
-import { setDietAction } from '../store/userActions';
+import { setDietAction, setMealtimesAction } from '../store/userActions';
 
 
 function sleep(ms) {
@@ -33,6 +33,10 @@ function sleep(ms) {
 // Инициализация GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
 
+import notifee, { TimestampTrigger, TriggerType } from '@notifee/react-native';
+import { getTimeStamp, getNextMeal } from '../utils/helpers';
+
+
 export default function ChatScreen({ navigation }) {
   const dispatch = useDispatch();
   const [messageText, setMessageText] = useState('');
@@ -40,10 +44,86 @@ export default function ChatScreen({ navigation }) {
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData)
   const [isBotWriting, setIsBotWriting] = useState(false);
-  const [messageOptionStep, setMessageOptionStep] = useState(3)
+  const [messageOptionStep, setMessageOptionStep] = useState(1)
 
 
   const isHasSettingsData = userData.weight && userData.height && userData.goal && userData.allergies;
+
+  async function onCreateTriggerNotification(time, title, body) {
+    try {
+      const date = new Date(Date.now());
+      date.setHours(12);
+      date.setMinutes(12);
+
+      // Create a time-based trigger
+      const trigger = {
+        type: TriggerType.TIMESTAMP,
+        // timestamp: Date.now() + (1000 * 10), // fire at 11:10am (10 minutes before meeting)
+        timestamp: getTimeStamp(time), // fire at 11:10am (10 minutes before meeting)
+      };
+
+      // Create a trigger notification
+      const res = await notifee.createTriggerNotification(
+        {
+          title,
+          body,
+          android: {
+            channelId: 'your-channel-id',
+          },
+        },
+        trigger,
+      );
+      // console.log('res', res)
+    } catch (e) {
+      console.log('e', e)
+    }
+
+
+  }
+
+
+  async function onDisplayNotification() {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission()
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: 'Notification Title',
+      body: 'Main body content of the notification',
+      android: {
+        channelId,
+        smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+        // pressAction is needed if you want the notification to open the app when pressed
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
+  }
+
+  const scheduleMealtimeNotifications = (mealtimes) => {
+    try {
+      // console.log('mealtimes', mealtimes)
+      JSON.parse(mealtimes).map(item => {
+        console.log('item', item)
+        onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
+      })
+      dispatch(setMealtimesAction(JSON.parse(mealtimes)))
+
+      // JSON.parse('[{"time": "13:12", "name": "Завтрак"}, {"time": "13:13", "name": "Перекус"}, {"time": "13:14", "name": "Обед"}, {"time": "16:00", "name": "Перекус"}, {"time": "19:00", "name": "Ужин"}]').map(item => {
+      //   // console.log('item', item)
+      //   onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
+      // })
+    } catch (e) {
+      console.log('e', e)
+    }
+  }
 
   useEffect(() => {
     if (!isHasSettingsData) {
@@ -81,11 +161,11 @@ export default function ChatScreen({ navigation }) {
       };
 
       // Запуск чата с предыдущей историей сообщений и текущим входящим сообщением
-      console.log('body', {
-        history: messages,
-        message: messageText,
-        context
-      })
+      // console.log('body', {
+      //   history: messages,
+      //   message: messageText,
+      //   context
+      // })
 
       const chat = model.startChat({
         history: messages,
@@ -100,7 +180,7 @@ export default function ChatScreen({ navigation }) {
       const response = await result.response;
       const text = await response.text();
 
-      console.log('text', text);
+      // console.log('text', text);
 
       // Обновляем соответствующее сообщение с ответом модели
       setMessages(prevMessages => [
@@ -120,17 +200,18 @@ export default function ChatScreen({ navigation }) {
 
 
   const handleSubmit2 = async (messageText, messageOptionStep) => {
-    setIsBotWriting(true)
-    console.log('messageOptionStep', messageOptionStep)
-    setMessageOptionStep(messageOptionStep)
-    const context = {
-      weight: userData.weight, // Assuming weight is a number
-      height: userData.height, // Assuming height is a number
-      goal: [userData.goal, 'Разпозновать пищевую ценность продуктов питания'],
-      description: ['давай короткие ответы на рецепты'],
-      allergies: userData.allergies,
-      likedDishes: userData.likedDishes, // Add an empty array for liked dishes
-      exampleResponseDiet: `**Рацион на 1 день:**
+    try {
+      setIsBotWriting(true)
+      // console.log('messageOptionStep', messageOptionStep)
+
+      const context = {
+        weight: userData.weight, // Assuming weight is a number
+        height: userData.height, // Assuming height is a number
+        goal: [userData.goal, 'Разпозновать пищевую ценность продуктов питания'],
+        description: ['давай короткие ответы на рецепты'],
+        allergies: userData.allergies,
+        likedDishes: userData.likedDishes, // Add an empty array for liked dishes
+        exampleResponseDiet: `**Рацион на 1 день:**
 
 **8:00 Завтрак**
 * Овсянка с молоком (50 г овсянки, 100 мл молока)
@@ -159,67 +240,81 @@ export default function ChatScreen({ navigation }) {
 * Рыба: 100 г
 * Картофель: 100 г
 `,
-      // diet: userData.diet
-      diet: `**Рацион на 1 день:**
+        diet: userData.diet
+        // diet: `**Рацион на 1 день:**
 
-      **Время | Продукт**
-      ---|---|
-      **8:00 Завтрак** | Овсянка (50 г) с молоком (100 мл)
-      **11:00 Перекус** | Банан (100 г)
-      **13:00 Обед** | Куриная грудка (150 г) с бурым рисом (100 г) и овощами (150 г)
-      **16:00 Перекус** | Яблоко (100 г)
-      **19:00 Ужин** | Рыба (150 г) с картофелем (150 г) и овощами (150 г)
-      
-      **Список продуктов для покупки:**
-      
-      * Овсянка: 50 г
-      * Молоко: 100 мл
-      * Банан: 100 г
-      * Куриная грудка: 150 г
-      * Бурый рис: 100 г
-      * Овощи (для обеда и ужина): 300 г
-      * Яблоко: 100 г
-      * Рыба: 150 г
-      * Картофель: 150 г`
-    };
+        // **Время | Продукт**
+        // ---|---|
+        // **8:00 Завтрак** | Овсянка (50 г) с молоком (100 мл)
+        // **11:00 Перекус** | Банан (100 г)
+        // **13:00 Обед** | Куриная грудка (150 г) с бурым рисом (100 г) и овощами (150 г)
+        // **16:00 Перекус** | Яблоко (100 г)
+        // **19:00 Ужин** | Рыба (150 г) с картофелем (150 г) и овощами (150 г)
 
-    // For text-only input, use the gemini-pro model
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        // **Список продуктов для покупки:**
+
+        // * Овсянка: 50 г
+        // * Молоко: 100 мл
+        // * Банан: 100 г
+        // * Куриная грудка: 150 г
+        // * Бурый рис: 100 г
+        // * Овощи (для обеда и ужина): 300 г
+        // * Яблоко: 100 г
+        // * Рыба: 150 г
+        // * Картофель: 150 г`
+      };
+
+      // For text-only input, use the gemini-pro model
+      const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 
-    // Добавляем сообщение пользователя в список сообщений
-    setMessages(prevMessages => [
-      ...prevMessages,
-      { role: 'user', parts: [{ text: messageText }] },
-    ]);
+      // Добавляем сообщение пользователя в список сообщений
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { role: 'user', parts: [{ text: messageText }] },
+      ]);
 
-    // Очистка поля ввода после отправки
-    setMessageText('');
+      // Очистка поля ввода после отправки
+      setMessageText('');
 
-    await sleep(100)
+      await sleep(100)
 
-    flatListRef.current.scrollToEnd({ animated: true });
+      flatListRef.current.scrollToEnd({ animated: true });
 
-    const result = await model.generateContent(JSON.stringify({ prompt: messageText, context }));
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-    setIsBotWriting(false);
+      const result = await model.generateContent(JSON.stringify({ prompt: messageText, context }));
+      const response = await result.response;
+      const text = response.text();
+      console.log('messageSend', messageText)
+      console.log('response', text);
+      setIsBotWriting(false);
 
-    if (messageOptionStep === 1) {
-      dispatch(setDietAction(text))
+      if (messageOptionStep === 2) {
+        dispatch(setDietAction(text))
+      } else if (messageOptionStep === 4) {
+        scheduleMealtimeNotifications(text);
+      }
+
+      if (text?.length > 3) {
+        setMessageOptionStep(messageOptionStep)
+      }
+
+
+
+
+      // Обновляем соответствующее сообщение с ответом модели
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { role: 'model', parts: [{ text }] },
+      ]);
+
+      await sleep(100)
+
+      // Прокрутка списка вниз
+      flatListRef.current.scrollToEnd({ animated: true });
+    } catch (e) {
+      setIsBotWriting(false)
+      console.error('error send message:', e);
     }
-
-    // Обновляем соответствующее сообщение с ответом модели
-    setMessages(prevMessages => [
-      ...prevMessages,
-      { role: 'model', parts: [{ text }] },
-    ]);
-
-    await sleep(100)
-
-    // Прокрутка списка вниз
-    flatListRef.current.scrollToEnd({ animated: true });
   };
 
   // Рендеринг элемента сообщения
@@ -237,6 +332,8 @@ export default function ChatScreen({ navigation }) {
     </View>
   );
 
+  const nextMealTime = getNextMeal(userData.mealtimes)
+
   const messageButtons = [
     {
       step: 1,
@@ -253,13 +350,13 @@ export default function ChatScreen({ navigation }) {
       buttons: [
         {
           buttonText: 'Хорошо, какие закупить продукты?',
-          messageText: 'Какие закупить продукты на рацион и по сколько грамм из контекста?',
+          messageText: 'Какие закупить продукты на рацион и по сколько грамм из контекста diet?',
           nextStep: 3
         },
         {
           buttonText: 'Получить другой рацион',
           messageText: 'Напиши рацион другой на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов',
-          nextSte: 2
+          nextStep: 2
         }
       ]
     },
@@ -268,8 +365,18 @@ export default function ChatScreen({ navigation }) {
       buttons: [
         {
           buttonText: 'Продукты куплены, давай поставим уведомления во времени приготовления',
-          messageText: 'Верни названия времени и время приема пиши из рациона контекста в формате json: [{time: null, name: null }]',
-          nextStep: 3
+          messageText: 'Верни названия времени и время приема пиши из рациона контекста diet в формате json: [{time: null, name: null }]',
+          nextStep: 4
+        }
+      ]
+    },
+    {
+      step: 4,
+      buttons: [
+        {
+          buttonText: 'Слудующий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
+          messageText: 'Дай из контеста diet рецепт, и как приготовить: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
+          nextStep: 4
         }
       ]
     }
@@ -306,6 +413,10 @@ export default function ChatScreen({ navigation }) {
           title='Nutrition consultant GPT'
           showSettingsIcon={true}
         />
+        {/* 
+        <View>
+          <Button title="Display Notification" onPress={() => onDisplayNotification()} />
+        </View> */}
 
         <View style={styles.container}>
 

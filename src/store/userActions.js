@@ -37,3 +37,10 @@ export const setDietAction = (diet) => {
         payload: diet
     }
 }
+
+export const setMealtimesAction = (mealtimes) => {
+    return {
+        type: 'SET_MEALTIMES',
+        payload: mealtimes
+    }
+}
