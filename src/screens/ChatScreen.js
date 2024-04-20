@@ -73,7 +73,7 @@ export default function ChatScreen({ navigation }) {
         },
         trigger,
       );
-      // console.log('res', res)
+      console.log('res', res)
     } catch (e) {
       console.log('e', e)
     }
@@ -98,7 +98,7 @@ export default function ChatScreen({ navigation }) {
       body: 'Main body content of the notification',
       android: {
         channelId,
-        smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+        smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
         // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
           id: 'default',
@@ -107,19 +107,23 @@ export default function ChatScreen({ navigation }) {
     });
   }
 
-  const scheduleMealtimeNotifications = (mealtimes) => {
+  const scheduleMealtimeNotifications = async (mealtimes) => {
     try {
+      dispatch(setMealtimesAction(JSON.parse(mealtimes)))
+
       // console.log('mealtimes', mealtimes)
       JSON.parse(mealtimes).map(item => {
         console.log('item', item)
         onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
       })
-      dispatch(setMealtimesAction(JSON.parse(mealtimes)))
 
-      // JSON.parse('[{"time": "13:12", "name": "Завтрак"}, {"time": "13:13", "name": "Перекус"}, {"time": "13:14", "name": "Обед"}, {"time": "16:00", "name": "Перекус"}, {"time": "19:00", "name": "Ужин"}]').map(item => {
+
+      // JSON.parse('[{"time": "16:06", "name": "Завтрак"}, {"time": "16:07", "name": "Перекус"}, {"time": "16:00", "name": "Обед"}, {"time": "16:00", "name": "Перекус"}, {"time": "19:00", "name": "Ужин"}]').map(item => {
       //   // console.log('item', item)
       //   onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
       // })
+      // Request permissions (required for iOS)
+      await notifee.requestPermission()
     } catch (e) {
       console.log('e', e)
     }
@@ -130,6 +134,47 @@ export default function ChatScreen({ navigation }) {
       navigation.navigate('SettingsScreen')
     }
   }, [isHasSettingsData])
+
+  useEffect(() => {
+    const backgroundEventHandler = async ({ type, detail }) => {
+      // Обработка событий фоновой работы здесь
+      console.log('Background event:', type, detail);
+
+      // **Исправление:** Не рекомендуется использовать `notifee.displayNotification`
+      //   в обработчике фонового события. Это может привести к проблемам
+      //   с отображением уведомления.
+
+      // **Рекомендуется:** Отложить отображение уведомления до того,
+      //   как приложение вернется на передний план.
+
+      await Notifications.displayNotification({
+        title: detail.notification.title,
+        body: detail.notification.body,
+        data: detail.notification.data,
+      });
+
+      // Пример обработки события
+      // if (type === 'notificationPress') {
+      //   // Handle notification press event here
+      //   console.log('Notification pressed!');
+
+      //   // **Отложить отображение уведомления:**
+      //   await Notifications.displayNotification({
+      //     title: detail.notification.title,
+      //     body: detail.notification.body,
+      //     data: detail.notification.data,
+      //   });
+      // }
+    };
+
+    // Установка обработчика событий фоновой работы
+    notifee.onBackgroundEvent(backgroundEventHandler);
+
+    // Очистка обработчика при размонтировании компонента
+    return () => {
+      notifee?.offBackgroundEvent(backgroundEventHandler);
+    };
+  }, []);
 
 
   // Обработка отправки сообщения
@@ -365,7 +410,7 @@ export default function ChatScreen({ navigation }) {
       buttons: [
         {
           buttonText: 'Продукты куплены, давай поставим уведомления во времени приготовления',
-          messageText: 'Верни названия времени и время приема пиши из рациона контекста diet в формате json: [{time: null, name: null }]',
+          messageText: 'Верни названия времени и время приема пиши из рациона контекста diet в формате чистый json: [{time: null, name: null }]',
           nextStep: 4
         }
       ]
@@ -413,10 +458,10 @@ export default function ChatScreen({ navigation }) {
           title='Nutrition consultant GPT'
           showSettingsIcon={true}
         />
-        {/* 
+
         <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
-        </View> */}
+        </View>
 
         <View style={styles.container}>
 
