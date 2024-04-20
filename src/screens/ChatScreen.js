@@ -20,8 +20,6 @@ import LottieView from 'lottie-react-native';
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
 
-export const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
-
 import { Flow } from 'react-native-animated-spinkit'
 import { setCalories, setDietAction, setMealtimesAction } from '../store/userActions';
 
@@ -545,6 +543,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     borderBottomLeftRadius: 0,
     maxWidth: '85%',
+    minWidth: '50%',
   },
   userMessageText: {
     color: '#FFFFFF',
