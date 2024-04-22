@@ -249,7 +249,7 @@ export default function ChatScreen({ navigation }) {
   };
 
 
-  const handleSubmit2 = async (messageText, step) => {
+  const handleSubmit2 = async (messageText, step = null) => {
     try {
       setIsBotWriting(true)
       // console.log('messageOptionStep', messageOptionStep)
@@ -439,6 +439,11 @@ export default function ChatScreen({ navigation }) {
           buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time + ', Получить рецепт',
           messageText: 'Дай из контеста diet рецепт, и как приготовить: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
           nextStep: 4
+        },
+        {
+          buttonText: 'Получить другой рацион',
+          messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          nextStep: 2
         }
       ]
     }
@@ -521,7 +526,7 @@ export default function ChatScreen({ navigation }) {
             {/* <Button title="Send" onPress={handleSubmit2} /> */}
             <TouchableOpacity
               onPress={() => handleSubmit2(messageText)}
-              disabled={disabledSendButton}
+              disabled={!disabledSendButton}
               style={{ opacity: disabledSendButton ? 1 : 0.5 }}
             >
               <Image style={{ width: 30, height: 30 }} source={require('../assets/icons/send.png')} />

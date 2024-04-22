@@ -105,7 +105,7 @@ const SettingsScreen = ({ navigation }) => {
             <Input
               icon={require('../assets/icons/danger.png')}
               style={styles.input}
-              placeholder="Аллергии (через запятую)"
+              placeholder="Какие продукты исключить"
               value={allergies}
               onChangeText={text => setAllergies(text)}
               multiline={true}
