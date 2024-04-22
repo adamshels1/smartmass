@@ -345,6 +345,7 @@ export default function ChatScreen({ navigation }) {
         dispatch(setDietAction(text))
       } else if (step === 4) {
         scheduleMealtimeNotifications(text);
+        text = 'Нотификации успешно запланированы'
       }
 
       if (text?.length > 3 && step) {
@@ -491,6 +492,10 @@ export default function ChatScreen({ navigation }) {
         {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
         </View> */}
+
+        <View>
+          <Button title="Clear all messages" onPress={() => dispatch(setMessagesAction([]))} />
+        </View>
 
         <View style={styles.container}>
 
