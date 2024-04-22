@@ -69,7 +69,7 @@ export default function ChatScreen({ navigation }) {
           title,
           body,
           android: {
-            channelId: 'your-channel-id',
+            channelId: 'default',
           },
         },
         trigger,
@@ -115,11 +115,11 @@ export default function ChatScreen({ navigation }) {
       // console.log('mealtimes', mealtimes)
       JSON.parse(mealtimes).map(item => {
         console.log('item', item)
-        onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
+        onCreateTriggerNotification(item.time, item.name + ' в ' + item.time, 'Настало время приема пищи')
       })
 
 
-      // JSON.parse('[{"time": "16:06", "name": "Завтрак"}, {"time": "16:07", "name": "Перекус"}, {"time": "16:00", "name": "Обед"}, {"time": "16:00", "name": "Перекус"}, {"time": "19:00", "name": "Ужин"}]').map(item => {
+      // JSON.parse('[{"time": "14:27", "name": "Завтрак"}, {"time": "14:28", "name": "Перекус"}, {"time": "14:29", "name": "Обед"}, {"time": "16:00", "name": "Перекус"}, {"time": "19:00", "name": "Ужин"}]').map(item => {
       //   // console.log('item', item)
       //   onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
       // })
