@@ -125,6 +125,11 @@ export default function ChatScreen({ navigation }) {
       // })
       // Request permissions (required for iOS)
       await notifee.requestPermission()
+      //create channel for android
+      await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+      });
     } catch (e) {
       console.log('e', e)
     }
