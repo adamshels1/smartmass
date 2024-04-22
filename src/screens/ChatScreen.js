@@ -20,7 +20,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
 
 import { Flow } from 'react-native-animated-spinkit'
-import { setCalories, setDietAction, setMealtimesAction } from '../store/userActions';
+import { setCalories, setDietAction, setMealtimesAction, setMessagesAction, setStepAction } from '../store/userActions';
 
 
 function sleep(ms) {
@@ -37,9 +37,13 @@ import { getTimeStamp, getNextMeal } from '../utils/helpers';
 export default function ChatScreen({ navigation }) {
   const dispatch = useDispatch();
   const [messageText, setMessageText] = useState('');
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData)
+  const messages = useSelector(state => state.userData.messages)
+  const step = useSelector(state => state.userData.step)
+  console.log('step', step)
+  console.log('messages', messages)
   const [isBotWriting, setIsBotWriting] = useState(false);
   const [messageOptionStep, setMessageOptionStep] = useState(0)
 
@@ -182,10 +186,14 @@ export default function ChatScreen({ navigation }) {
       const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
       // Добавляем сообщение пользователя в список сообщений
-      setMessages(prevMessages => [
-        ...prevMessages,
+      setMessagesAction([
+        ...messages,
         { role: 'user', parts: [{ text: messageText }] },
-      ]);
+      ])
+      // setMessages(prevMessages => [
+      //   ...prevMessages,
+      //   { role: 'user', parts: [{ text: messageText }] },
+      // ]);
 
       // Очистка поля ввода после отправки
       setMessageText('');
@@ -241,7 +249,7 @@ export default function ChatScreen({ navigation }) {
   };
 
 
-  const handleSubmit2 = async (messageText, messageOptionStep) => {
+  const handleSubmit2 = async (messageText, step) => {
     try {
       setIsBotWriting(true)
       // console.log('messageOptionStep', messageOptionStep)
@@ -303,10 +311,14 @@ export default function ChatScreen({ navigation }) {
 
 
       // Добавляем сообщение пользователя в список сообщений
-      setMessages(prevMessages => [
-        ...prevMessages,
+      // setMessages(prevMessages => [
+      //   ...prevMessages,
+      //   { role: 'user', parts: [{ text: messageText }] },
+      // ]);
+      dispatch(setMessagesAction([
+        ...messages,
         { role: 'user', parts: [{ text: messageText }] },
-      ]);
+      ]))
 
       // Очистка поля ввода после отправки
       setMessageText('');
@@ -322,26 +334,30 @@ export default function ChatScreen({ navigation }) {
       console.log('response', text);
       setIsBotWriting(false);
 
-      if (messageOptionStep === 1) {
+      if (step === 1) {
         dispatch(setCalories(text))
-      } else if (messageOptionStep === 2) {
+      } else if (step === 2) {
         dispatch(setDietAction(text))
-      } else if (messageOptionStep === 4) {
+      } else if (step === 4) {
         scheduleMealtimeNotifications(text);
       }
 
-      if (text?.length > 3 && messageOptionStep) {
-        setMessageOptionStep(messageOptionStep)
+      if (text?.length > 3 && step) {
+        dispatch(setStepAction(step))
       }
 
 
 
 
       // Обновляем соответствующее сообщение с ответом модели
-      setMessages(prevMessages => [
-        ...prevMessages,
+      // setMessages(prevMessages => [
+      //   ...prevMessages,
+      //   { role: 'model', parts: [{ text }] },
+      // ]);
+      dispatch(setMessagesAction([
+        ...messages,
         { role: 'model', parts: [{ text }] },
-      ]);
+      ]))
 
       await sleep(100)
 
@@ -420,7 +436,7 @@ export default function ChatScreen({ navigation }) {
       step: 4,
       buttons: [
         {
-          buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time+', Получить рецепт',
+          buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time + ', Получить рецепт',
           messageText: 'Дай из контеста diet рецепт, и как приготовить: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
           nextStep: 4
         }
@@ -430,7 +446,7 @@ export default function ChatScreen({ navigation }) {
 
   const renderMessageButtons = () => {
     if (isBotWriting) return null
-    return messageButtons?.find(i => i.step === messageOptionStep)?.buttons.map(i => {
+    return messageButtons?.find(i => i.step === step)?.buttons.map(i => {
       return (
         <View style={{ alignItems: 'center', marginBottom: 5 }}>
           <TouchableOpacity
@@ -506,7 +522,7 @@ export default function ChatScreen({ navigation }) {
             <TouchableOpacity
               onPress={() => handleSubmit2(messageText)}
               disabled={disabledSendButton}
-              style={{opacity: disabledSendButton ? 1 : 0.5}}
+              style={{ opacity: disabledSendButton ? 1 : 0.5 }}
             >
               <Image style={{ width: 30, height: 30 }} source={require('../assets/icons/send.png')} />
             </TouchableOpacity>

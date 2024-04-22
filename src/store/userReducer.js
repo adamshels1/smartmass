@@ -8,7 +8,9 @@ const initialState = {
     likedDishes: [],
     diet: null,
     mealtimes: [],
-    calories: null
+    calories: null,
+    messages: [],
+    step: 0,
 }
 
 
@@ -45,6 +47,18 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 calories: payload,
+            }
+        case 'SET_MESSAGES':
+            console.log('SET_MESSAGES', payload)
+            return {
+                ...state,
+                messages: payload,
+            }
+        case 'SET_STEP':
+            console.log('SET_STEP', payload)
+            return {
+                ...state,
+                step: payload,
             }
         default:
             return state;

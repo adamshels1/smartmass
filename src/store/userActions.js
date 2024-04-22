@@ -51,3 +51,17 @@ export const setCalories = (calories) => {
         payload: calories
     }
 }
+
+export const setMessagesAction = (messages) => {
+    return {
+        type: 'SET_MESSAGES',
+        payload: messages
+    }
+}
+
+export const setStepAction = (step) => {
+    return {
+        type: 'SET_STEP',
+        payload: step
+    }
+}
