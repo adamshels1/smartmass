@@ -13,8 +13,7 @@ export function getTimeStamp(timeString) {
 }
 
 export function getNextMeal(mealTimes) {
-    console.log('Getting next', mealTimes)
-    if(!mealTimes?.length) return null
+    if (!mealTimes?.length) return null
     // Получаем текущее время
     const currentTime = moment();
 
@@ -32,8 +31,6 @@ export function getNextMeal(mealTimes) {
             return sortedMeals[i];
         }
     }
-
-    console.log('sortedMeals', sortedMeals)
 
     // Если текущее время позже всех приемов пищи, возвращаем первый прием пищи на следующий день
     return sortedMeals[0];

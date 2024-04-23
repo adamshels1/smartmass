@@ -1,4 +1,4 @@
-import { Provider, useSelector, useDispatch } from 'react-redux'
+import { Provider, useSelector, useDispatch, useStore } from 'react-redux'
 import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
@@ -36,14 +36,14 @@ import { getTimeStamp, getNextMeal } from '../utils/helpers';
 
 export default function ChatScreen({ navigation }) {
   const dispatch = useDispatch();
+  const store = useStore();
   const [messageText, setMessageText] = useState('');
   // const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData)
   const messages = useSelector(state => state.userData.messages)
-  const step = useSelector(state => state.userData.step)
-  console.log('step', step)
   console.log('messages', messages)
+  const step = useSelector(state => state.userData.step)
   const [isBotWriting, setIsBotWriting] = useState(false);
   const [messageOptionStep, setMessageOptionStep] = useState(0)
 
@@ -114,7 +114,6 @@ export default function ChatScreen({ navigation }) {
 
       // console.log('mealtimes', mealtimes)
       JSON.parse(mealtimes).map(item => {
-        console.log('item', item)
         onCreateTriggerNotification(item.time, item.name + ' в ' + item.time, 'Настало время приема пищи')
       })
 
@@ -183,81 +182,13 @@ export default function ChatScreen({ navigation }) {
   }, []);
 
 
-  // Обработка отправки сообщения
-  const handleSubmit = async () => {
-    if (messageText.trim() === '') return; // Не отправляем пустые сообщения
-    try {
-      // Получение модели для генерации ответа
-      const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-      // Добавляем сообщение пользователя в список сообщений
-      setMessagesAction([
-        ...messages,
-        { role: 'user', parts: [{ text: messageText }] },
-      ])
-      // setMessages(prevMessages => [
-      //   ...prevMessages,
-      //   { role: 'user', parts: [{ text: messageText }] },
-      // ]);
-
-      // Очистка поля ввода после отправки
-      setMessageText('');
-
-      await sleep(100)
-
-      flatListRef.current.scrollToEnd({ animated: true });
-
-      const context = {
-        weight: 55, // Assuming weight is a number
-        height: 175, // Assuming height is a number
-        goal: 'Набрать вес',
-        allergies: ['свинина'],
-        likedDishes: ['Блины'], // Add an empty array for liked dishes
-      };
-
-      // Запуск чата с предыдущей историей сообщений и текущим входящим сообщением
-      // console.log('body', {
-      //   history: messages,
-      //   message: messageText,
-      //   context
-      // })
-
-      const chat = model.startChat({
-        history: messages,
-        message: messageText,
-        generationConfig: {
-          maxOutputTokens: 100,
-        },
-      });
-
-      // Отправка сообщения и получение ответа
-      const result = await chat.sendMessage(messageText);
-      const response = await result.response;
-      const text = await response.text();
-
-      // console.log('text', text);
-
-      // Обновляем соответствующее сообщение с ответом модели
-      setMessages(prevMessages => [
-        ...prevMessages,
-        { role: 'model', parts: [{ text }] },
-      ]);
-
-      await sleep(100)
-
-      // Прокрутка списка вниз
-      flatListRef.current.scrollToEnd({ animated: true });
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-
-  const handleSubmit2 = async (messageText, step = null) => {
+  const handleSendMessage = async ({
+    messageText,
+    messageTextVisible,
+    step = null
+  }) => {
     try {
       setIsBotWriting(true)
-      // console.log('messageOptionStep', messageOptionStep)
 
       const context = {
         weight: userData.weight, // Assuming weight is a number
@@ -321,8 +252,8 @@ export default function ChatScreen({ navigation }) {
       //   { role: 'user', parts: [{ text: messageText }] },
       // ]);
       dispatch(setMessagesAction([
-        ...messages,
-        { role: 'user', parts: [{ text: messageText }] },
+        ...store.getState().userData.messages,
+        { role: 'user', parts: [{ text: messageTextVisible ? messageTextVisible : messageText }] },
       ]))
 
       // Очистка поля ввода после отправки
@@ -334,13 +265,15 @@ export default function ChatScreen({ navigation }) {
 
       const result = await model.generateContent(JSON.stringify({ prompt: messageText, context }));
       const response = await result.response;
-      const text = response.text();
+      let text = response.text();
       console.log('messageSend', messageText)
       console.log('response', text);
+      console.log(`/n`)
       setIsBotWriting(false);
-
+      console.log('step', step)
       if (step === 1) {
         dispatch(setCalories(text))
+        text = `Вам необходимо набрать ${text} калорий за один день.`;
       } else if (step === 2) {
         dispatch(setDietAction(text))
       } else if (step === 4) {
@@ -361,7 +294,7 @@ export default function ChatScreen({ navigation }) {
       //   { role: 'model', parts: [{ text }] },
       // ]);
       dispatch(setMessagesAction([
-        ...messages,
+        ...store.getState().userData.messages,
         { role: 'model', parts: [{ text }] },
       ]))
 
@@ -399,6 +332,7 @@ export default function ChatScreen({ navigation }) {
         {
           buttonText: 'Какое количество калорий необходимо в день',
           messageText: 'Привет! Отправь точное необходимое количество калорий целой цифрой чтобы ' + userData.goal,
+          messageTextVisible: 'Привет! Отправь точное необходимое количество калорий',
           nextStep: 1
         }
       ]
@@ -409,6 +343,7 @@ export default function ChatScreen({ navigation }) {
         {
           buttonText: 'Получить рацион на 1 день',
           messageText: `Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          messageTextVisible: 'Напиши рацион на 1 день со временем и какие продукты нужно купить',
           nextStep: 2
         }
       ]
@@ -418,12 +353,14 @@ export default function ChatScreen({ navigation }) {
       buttons: [
         {
           buttonText: 'Хорошо, какие продукты нужно закупить?',
-          messageText: 'Какие закупить продукты на рацион и по сколько грамм из контекста diet?',
+          messageText: 'Какие продукты закупить  на рацион и по сколько грамм из контекста diet?',
+          messageTextVisible: 'Какие продукты закупить',
           nextStep: 3
         },
         {
           buttonText: 'Получить другой рацион',
           messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          messageTextVisible: 'Получить другой рацион',
           nextStep: 2
         }
       ]
@@ -434,6 +371,7 @@ export default function ChatScreen({ navigation }) {
         {
           buttonText: 'Продукты куплены, давай поставим уведомления во времени приготовления',
           messageText: 'Верни названия времени и время приема пиши из рациона контекста diet в формате чистый json: [{time: null, name: null }]',
+          messageTextVisible: 'Продукты куплены, давай поставим уведомления во времени приготовления',
           nextStep: 4
         }
       ]
@@ -444,7 +382,8 @@ export default function ChatScreen({ navigation }) {
         {
           buttonText: 'Следущий прием пищи: ' + nextMealTime?.name + ' в ' + nextMealTime?.time + ', Получить рецепт',
           messageText: 'Дай из контеста diet рецепт, и как приготовить: ' + nextMealTime?.name + ' в ' + nextMealTime?.time,
-          nextStep: 4
+          messageTextVisible: nextMealTime?.name + ' в ' + nextMealTime?.time + ', Получить рецепт',
+          nextStep: 5
         },
         {
           buttonText: 'Получить другой рацион',
@@ -461,7 +400,11 @@ export default function ChatScreen({ navigation }) {
       return (
         <View style={{ alignItems: 'center', marginBottom: 5 }}>
           <TouchableOpacity
-            onPress={() => handleSubmit2(i.messageText, i.nextStep)}
+            onPress={() => handleSendMessage({
+              messageText: i.messageText,
+              messageTextVisible: i.messageTextVisible,
+              step: i.nextStep
+            })}
             style={{ backgroundColor: '#F4F4F4', borderRadius: 15, minHeight: 40, justifyContent: 'center', alignItems: 'center', width: '80%', borderWidth: 1, borderColor: '#67CFCF', paddingVertical: 5, paddingHorizontal: 10 }}
           >
             <Text style={{ color: '#3E3E3E', fontSize: 14 }}>
@@ -494,7 +437,10 @@ export default function ChatScreen({ navigation }) {
         </View> */}
 
         <View>
-          <Button title="Clear all messages" onPress={() => dispatch(setMessagesAction([]))} />
+          <Button title="Clear all" onPress={() => {
+            dispatch(setMessagesAction([]))
+            dispatch(setStepAction(0))
+          }} />
         </View>
 
         <View style={styles.container}>
@@ -533,9 +479,10 @@ export default function ChatScreen({ navigation }) {
               numberOfLines={4}
               textAlignVertical="center"
             />
-            {/* <Button title="Send" onPress={handleSubmit2} /> */}
             <TouchableOpacity
-              onPress={() => handleSubmit2(messageText)}
+              onPress={() => handleSendMessage({
+                messageText
+              })}
               disabled={!disabledSendButton}
               style={{ opacity: disabledSendButton ? 1 : 0.5 }}
             >
