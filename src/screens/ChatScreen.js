@@ -328,20 +328,34 @@ export default function ChatScreen({navigation}) {
 
   // Рендеринг элемента сообщения
   const renderMessage = ({item}) => (
+    // <View
+    //   style={[
+    //     styles.message,
+    //     item.role === 'user' ? styles.userMessage : styles.otherMessage,
+    //   ]}>
+    //   <Markdown
+    //     style={{
+    //       body:
+    //         item.role === 'user'
+    //           ? styles.userMessageText
+    //           : styles.otherMessageText,
+    //     }}>
+    //     {item?.parts[0]?.text?.replace(/[*]/g, '•')}
+    //   </Markdown>
+    // </View>
     <View
       style={[
         styles.message,
         item.role === 'user' ? styles.userMessage : styles.otherMessage,
       ]}>
-      <Markdown
-        style={{
-          body:
-            item.role === 'user'
-              ? styles.userMessageText
-              : styles.otherMessageText,
-        }}>
+      <Text
+        style={
+          item.role === 'user'
+            ? styles.userMessageText
+            : styles.otherMessageText
+        }>
         {item?.parts[0]?.text?.replace(/[*]/g, '•')}
-      </Markdown>
+      </Text>
     </View>
   );
 
@@ -410,22 +424,25 @@ export default function ChatScreen({navigation}) {
       step: 4,
       buttons: [
         {
-          buttonText:
-            'Следущий прием пищи: ' +
-            nextMealTime?.name +
-            ' в ' +
-            nextMealTime?.time +
-            ', Получить рецепт',
-          messageText:
-            'Дай из контеста diet рецепт, и как приготовить: ' +
-            nextMealTime?.name +
-            ' в ' +
-            nextMealTime?.time,
-          messageTextVisible:
-            nextMealTime?.name +
-            ' в ' +
-            nextMealTime?.time +
-            ', Получить рецепт',
+          buttonText: `Следущий прием пищи: ${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
+          messageText: `Дай из контеста diet рецепт, и как приготовить: ${nextMealTime?.name}} в ${nextMealTime?.time}`,
+          messageTextVisible: `${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
+          nextStep: 5,
+        },
+        {
+          buttonText: 'Получить другой рацион',
+          messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          nextStep: 2,
+        },
+      ],
+    },
+    {
+      step: 5,
+      buttons: [
+        {
+          buttonText: `Следущий прием пищи: ${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
+          messageText: `Дай из контеста diet рецепт, и как приготовить: ${nextMealTime?.name}} в ${nextMealTime?.time}`,
+          messageTextVisible: `${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
           nextStep: 5,
         },
         {
@@ -577,7 +594,7 @@ const styles = StyleSheet.create({
   },
   message: {
     // paddingVertical: 10,
-    paddingHorizontal: 10,
+    padding: 10,
     borderRadius: 10,
     marginBottom: 10,
     maxWidth: '80%',
