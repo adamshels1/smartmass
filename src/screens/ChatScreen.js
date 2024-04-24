@@ -411,11 +411,11 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText:
-            'Продукты куплены, давай поставим уведомления во времени приготовления',
+            'Продукты куплены, давай установим уведомления на время приготовления',
           messageText:
             'Верни названия времени и время приема пиши из рациона контекста diet в формате чистый json: [{time: null, name: null }]',
           messageTextVisible:
-            'Продукты куплены, давай поставим уведомления во времени приготовления',
+            'Продукты куплены, давай установим уведомления на время приготовления',
           nextStep: 4,
         },
       ],
@@ -514,23 +514,25 @@ export default function ChatScreen({navigation}) {
         {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
         </View> */}
-
-        <View>
-          <Button
-            title="Clear all"
-            onPress={() => {
-              dispatch(setMessagesAction([]));
-              dispatch(setStepAction(0));
-            }}
-          />
-        </View>
-
-        <View>
-          <Button
-            title="Schedule Notification"
-            onPress={() => onCreateTriggerNotification('aaa', 'bbbb')}
-          />
-        </View>
+        {__DEV__ && (
+          <View>
+            <Button
+              title="Clear all"
+              onPress={() => {
+                dispatch(setMessagesAction([]));
+                dispatch(setStepAction(0));
+              }}
+            />
+          </View>
+        )}
+        {__DEV__ && (
+          <View>
+            <Button
+              title="Schedule Notification"
+              onPress={() => onCreateTriggerNotification('aaa', 'bbbb')}
+            />
+          </View>
+        )}
 
         <View style={styles.container}>
           <FlatList
