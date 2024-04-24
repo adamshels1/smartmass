@@ -205,32 +205,24 @@ export default function ChatScreen({navigation}) {
       const context = {
         weight: userData.weight, // Assuming weight is a number
         height: userData.height, // Assuming height is a number
+        dailyMealStartTime: userData.dailyMealStartTime,
+        dailyMealEndTime: userData.dailyMealEndTime,
         goal: [
           userData.goal,
           'Разпозновать пищевую ценность продуктов питания',
         ],
+        maxMealPerDay: userData.maxMealPerDay,
         description: [
           'давай короткие ответы на рецепты',
           'если набор массы то давай полезные калорийные продукты такие как авакадо, орехи, какао, сливки',
           'если набор массы то можно использовать протеиновые порошки',
         ],
         allergies: userData.allergies,
+        preferredProducts: userData.preferredProducts,
         likedDishes: userData.likedDishes, // Add an empty array for liked dishes
         exampleResponseDiet: `**Рацион на 1 день:**
 
-**8:00 Завтрак**
-* Здесь блюдо, количество ккал
-
-**10:00 Перекус**
-* Здесь блюдо, количество ккал
-
-**12:00 Обед**
-* Здесь блюдо, количество ккал
-
-**15:00 Перекус**
-* Здесь блюдо, количество ккал
-
-**17:00 Ужин**
+**Здесь время**
 * Здесь блюдо, количество ккал
 
 Итого ккал
@@ -375,7 +367,7 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: 'Получить рацион на 1 день',
-          messageText: `Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          messageText: `Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime}, общее количество приемов пищи ${userData.maxMealPerDay}.`,
           messageTextVisible:
             'Напиши рацион на 1 день со временем и какие продукты нужно купить',
           nextStep: 2,
