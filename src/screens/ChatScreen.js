@@ -63,6 +63,12 @@ export default function ChatScreen({navigation}) {
         timestamp: getTimeStamp(time), // fire at 11:10am (10 minutes before meeting)
       };
 
+      await notifee.createChannel({
+        id: 'mealtime',
+        name: 'Default Channel',
+        sound: 'doorbell',
+      });
+
       // Create a trigger notification
       const res = await notifee.createTriggerNotification(
         {
@@ -71,6 +77,10 @@ export default function ChatScreen({navigation}) {
           android: {
             channelId: 'mealtime',
             sound: 'doorbell',
+            pressAction: {
+              id: 'default', // Уникальный идентификатор действия
+              // launchActivity: 'com.example.MainActivity', // Замените на активность вашего приложения, которая должна быть запущена при нажатии
+            },
           },
         },
         trigger,
