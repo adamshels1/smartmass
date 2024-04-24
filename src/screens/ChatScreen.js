@@ -14,6 +14,7 @@ import {
   Image,
   Animated,
 } from 'react-native';
+import notifee, { TriggerType } from '@notifee/react-native';
 import Header from '../components/Header';
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
@@ -29,8 +30,6 @@ function sleep(ms) {
 
 // Инициализация GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
-
-import notifee, { TimestampTrigger, TriggerType } from '@notifee/react-native';
 import { getTimeStamp, getNextMeal } from '../utils/helpers';
 
 
@@ -69,7 +68,8 @@ export default function ChatScreen({ navigation }) {
           title,
           body,
           android: {
-            channelId: 'default',
+            channelId: 'mealtime',
+            sound: 'doorbell',
           },
         },
         trigger,
@@ -89,8 +89,9 @@ export default function ChatScreen({ navigation }) {
 
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
-      id: 'default',
+      id: 'mealtime',
       name: 'Default Channel',
+      sound: 'doorbell'
     });
 
     // Display a notification
@@ -126,8 +127,9 @@ export default function ChatScreen({ navigation }) {
       await notifee.requestPermission()
       //create channel for android
       await notifee.createChannel({
-        id: 'default',
+        id: 'mealtime',
         name: 'Default Channel',
+        sound: 'doorbell'
       });
     } catch (e) {
       console.log('e', e)
@@ -441,6 +443,10 @@ export default function ChatScreen({ navigation }) {
             dispatch(setMessagesAction([]))
             dispatch(setStepAction(0))
           }} />
+        </View>
+
+        <View>
+          <Button title="Schedule Notification" onPress={()=>onCreateTriggerNotification('aaa', 'bbbb')} />
         </View>
 
         <View style={styles.container}>
