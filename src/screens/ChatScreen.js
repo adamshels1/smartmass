@@ -361,6 +361,8 @@ export default function ChatScreen({navigation}) {
 
   const nextMealTime = getNextMeal(userData.mealtimes);
 
+  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
+
   const messageButtons = [
     {
       step: 0,
@@ -381,7 +383,7 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: 'Получить рацион на 1 день',
-          messageText: `Напиши рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime}, общее количество приемов пищи ${userData.maxMealPerDay}.`,
+          messageText: `Напиши рацион ${dietPromt}`,
           messageTextVisible:
             'Напиши рацион на 1 день со временем и какие продукты нужно купить',
           nextStep: 2,
@@ -400,7 +402,7 @@ export default function ChatScreen({navigation}) {
         },
         {
           buttonText: 'Получить другой рацион',
-          messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          messageText: `Напиши другой рацион ${dietPromt}`,
           messageTextVisible: 'Получить другой рацион',
           nextStep: 2,
         },
@@ -431,7 +433,7 @@ export default function ChatScreen({navigation}) {
         },
         {
           buttonText: 'Получить другой рацион',
-          messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          messageText: `Напиши другой рацион ${dietPromt}`,
           nextStep: 2,
         },
       ],
@@ -447,7 +449,7 @@ export default function ChatScreen({navigation}) {
         },
         {
           buttonText: 'Получить другой рацион',
-          messageText: `Напиши другой рацион на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал`,
+          messageText: `Напиши другой рацион ${dietPromt}`,
           nextStep: 2,
         },
       ],
