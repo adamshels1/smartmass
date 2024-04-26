@@ -60,7 +60,7 @@ export default function ChatScreen({navigation}) {
       const trigger = {
         type: TriggerType.TIMESTAMP,
         // timestamp: Date.now() + (1000 * 10), // fire at 11:10am (10 minutes before meeting)
-        timestamp: getTimeStamp(time), // fire at 11:10am (10 minutes before meeting)
+        timestamp: getTimeStamp(time) - 1000 * 30, //  (30 minutes before mealtime)
       };
 
       await notifee.createChannel({
