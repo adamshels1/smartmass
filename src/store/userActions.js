@@ -39,17 +39,17 @@ export const setSettingsAction = ({
   };
 };
 
-export const setDietAction = diet => {
+export const setDietAction = (diet, date) => {
   return {
     type: 'SET_DIET',
-    payload: diet,
+    payload: {diet, date},
   };
 };
 
-export const setMealtimesAction = mealtimes => {
+export const setMealtimesAction = (mealtimes, date) => {
   return {
     type: 'SET_MEALTIMES',
-    payload: mealtimes,
+    payload: {mealtimes, date},
   };
 };
 
@@ -60,16 +60,25 @@ export const setCalories = calories => {
   };
 };
 
-export const setMessagesAction = messages => {
+export const setMessagesAction = (messages, date) => {
   return {
     type: 'SET_MESSAGES',
-    payload: messages,
+    payload: {
+      messages,
+      date,
+    },
   };
 };
 
-export const setStepAction = step => {
+export const setStepAction = (step, date) => {
   return {
     type: 'SET_STEP',
-    payload: step,
+    payload: {step, date},
+  };
+};
+
+export const clearDays = () => {
+  return {
+    type: 'CLEAR_DAYS',
   };
 };

@@ -10,6 +10,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage, // Укажите AsyncStorage как хранилище
   whitelist: ['userData'], // Укажите, какие данные хотите сохранить в "белом списке"
+  blacklist: [''],
 };
 
 const rootReducer = combineReducers({

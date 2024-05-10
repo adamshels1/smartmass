@@ -15,18 +15,21 @@ import {
 } from 'react-native';
 import notifee, {TriggerType} from '@notifee/react-native';
 import Header from '../components/Header';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
 import Markdown from 'react-native-markdown-display';
 
 import {Flow} from 'react-native-animated-spinkit';
 import {
+  clearDays,
   setCalories,
   setDietAction,
   setMealtimesAction,
   setMessagesAction,
   setStepAction,
 } from '../store/userActions';
+import AgendaComponent from '../components/AgendaComponent';
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -35,20 +38,48 @@ function sleep(ms) {
 // Инициализация GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
 import {getTimeStamp, getNextMeal} from '../utils/helpers';
-
+import moment from 'moment/moment';
+import CalendarModal from '../components/CalendarModal';
+const today = moment();
+import CurrentWeek from '../components/CurrentWeek';
 export default function ChatScreen({navigation}) {
   const dispatch = useDispatch();
-  const store = useStore();
+  const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
   const [messageText, setMessageText] = useState('');
   // const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData);
-  const messages = useSelector(state => state.userData.messages);
+  const days = useSelector(state => state.userData.days);
+  console.log('days', days);
+  const day = useSelector(state =>
+    state.userData?.days?.find(day =>
+      moment(day.date).isSame(moment(selectedDate), 'day'),
+    ),
+  );
+  const lastDay = days?.[days?.length - 1];
+  console.log('userData', userData);
+  const messages = day?.messages || [];
   console.log('messages', messages);
-  const step = useSelector(state => state.userData.step);
+  // const step = useSelector(state => state.userData.step);
+  let step = 1;
+  console.log('step', step);
+  if (!userData?.calories) {
+    step = 0;
+  } else if (day?.step > 1) {
+    step = day?.step;
+  }
   const [isBotWriting, setIsBotWriting] = useState(false);
   const isHasSettingsData =
     userData.weight && userData.height && userData.goal && userData.allergies;
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+  const handleDateSelect = date => {
+    setSelectedDate(date);
+    closeModal();
+  };
 
   async function onCreateTriggerNotification(time, title, body) {
     try {
@@ -117,9 +148,9 @@ export default function ChatScreen({navigation}) {
   //   });
   // }
 
-  const scheduleMealtimeNotifications = async mealtimes => {
+  const scheduleMealtimeNotifications = async (mealtimes, date) => {
     try {
-      dispatch(setMealtimesAction(JSON.parse(mealtimes)));
+      dispatch(setMealtimesAction(JSON.parse(mealtimes), date));
 
       // console.log('mealtimes', mealtimes)
       JSON.parse(mealtimes).map(item => {
@@ -202,9 +233,28 @@ export default function ChatScreen({navigation}) {
     try {
       setIsBotWriting(true);
 
+      // let messages =
+      //   store
+      //     .getState()
+      //     .userData.days?.find(day => moment(day.date).isSame(today, 'day'))
+      //     ?.messages || [];
+
+      const newUserMessage = {
+        role: 'user',
+        parts: [{text: messageTextVisible ? messageTextVisible : messageText}],
+      };
+
+      dispatch(setMessagesAction([...messages, newUserMessage], selectedDate));
+
+      setMessageText('');
+
+      await sleep(100);
+
+      flatListRef.current.scrollToEnd({animated: true});
+
       const context = {
-        weight: userData.weight, // Assuming weight is a number
-        height: userData.height, // Assuming height is a number
+        weight: userData.weight,
+        height: userData.height,
         dailyMealStartTime: userData.dailyMealStartTime,
         dailyMealEndTime: userData.dailyMealEndTime,
         goal: [
@@ -219,110 +269,51 @@ export default function ChatScreen({navigation}) {
         ],
         allergies: userData.allergies,
         preferredProducts: userData.preferredProducts,
-        likedDishes: userData.likedDishes, // Add an empty array for liked dishes
+        likedDishes: userData.likedDishes,
         exampleResponseDiet: `**Рацион на 1 день:**
-
-**Здесь время**
-* Здесь блюдо, количество ккал
-
-Итого ккал
-
-**Список продуктов для покупки:**
-`,
-        diet: userData.diet,
-        // diet: `**Рацион на 1 день:**
-
-        // **Время | Продукт**
-        // ---|---|
-        // **8:00 Завтрак** | Овсянка (50 г) с молоком (100 мл)
-        // **11:00 Перекус** | Банан (100 г)
-        // **13:00 Обед** | Куриная грудка (150 г) с бурым рисом (100 г) и овощами (150 г)
-        // **16:00 Перекус** | Яблоко (100 г)
-        // **19:00 Ужин** | Рыба (150 г) с картофелем (150 г) и овощами (150 г)
-
-        // **Список продуктов для покупки:**
-
-        // * Овсянка: 50 г
-        // * Молоко: 100 мл
-        // * Банан: 100 г
-        // * Куриная грудка: 150 г
-        // * Бурый рис: 100 г
-        // * Овощи (для обеда и ужина): 300 г
-        // * Яблоко: 100 г
-        // * Рыба: 150 г
-        // * Картофель: 150 г`
+      **Здесь время**
+      * Здесь блюдо, количество ккал
+      Итого ккал
+      **Список продуктов для покупки:**`,
+        diet: day?.diet,
       };
 
-      // For text-only input, use the gemini-pro model
       const model = genAI.getGenerativeModel({model: 'gemini-pro'});
-
-      // Добавляем сообщение пользователя в список сообщений
-      // setMessages(prevMessages => [
-      //   ...prevMessages,
-      //   { role: 'user', parts: [{ text: messageText }] },
-      // ]);
-      dispatch(
-        setMessagesAction([
-          ...store.getState().userData.messages,
-          {
-            role: 'user',
-            parts: [
-              {text: messageTextVisible ? messageTextVisible : messageText},
-            ],
-          },
-        ]),
-      );
-
-      // Очистка поля ввода после отправки
-      setMessageText('');
-
-      await sleep(100);
-
-      flatListRef.current.scrollToEnd({animated: true});
-
       const result = await model.generateContent(
         JSON.stringify({prompt: messageText, context}),
       );
       const response = await result.response;
       let text = response.text();
-      console.log('messageSend', messageText);
-      console.log('response', text);
-      console.log('/n');
       setIsBotWriting(false);
-      console.log('step', step);
+
       if (step === 1) {
         dispatch(setCalories(text));
         text = `Вам необходимо набрать ${text} калорий за один день.`;
       } else if (step === 2) {
-        dispatch(setDietAction(text));
+        dispatch(setDietAction(text, selectedDate));
       } else if (step === 4) {
-        scheduleMealtimeNotifications(text);
+        await scheduleMealtimeNotifications(text, selectedDate);
         text = 'Нотификации успешно запланированы';
       }
 
       if (text?.length > 3 && step) {
-        dispatch(setStepAction(step));
+        dispatch(setStepAction(step + 1, selectedDate));
       }
 
-      // Обновляем соответствующее сообщение с ответом модели
-      // setMessages(prevMessages => [
-      //   ...prevMessages,
-      //   { role: 'model', parts: [{ text }] },
-      // ]);
+      const newBotMessage = {role: 'model', parts: [{text}]};
       dispatch(
-        setMessagesAction([
-          ...store.getState().userData.messages,
-          {role: 'model', parts: [{text}]},
-        ]),
+        setMessagesAction(
+          [...messages, newUserMessage, newBotMessage],
+          selectedDate,
+        ),
       );
 
       await sleep(100);
 
-      // Прокрутка списка вниз
       flatListRef.current.scrollToEnd({animated: true});
-    } catch (e) {
+    } catch (error) {
       setIsBotWriting(false);
-      console.error('error send message:', e);
+      console.error('Ошибка при отправке сообщения:', error);
     }
   };
 
@@ -359,7 +350,7 @@ export default function ChatScreen({navigation}) {
     </View>
   );
 
-  const nextMealTime = getNextMeal(userData.mealtimes);
+  const nextMealTime = getNextMeal(day?.mealtimes);
 
   const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
 
@@ -382,7 +373,7 @@ export default function ChatScreen({navigation}) {
       step: 1,
       buttons: [
         {
-          buttonText: 'Получить рацион на 1 день',
+          buttonText: 'Получить рацион на этот день',
           messageText: `Напиши рацион ${dietPromt}`,
           messageTextVisible:
             'Напиши рацион на 1 день со временем и какие продукты нужно купить',
@@ -495,23 +486,38 @@ export default function ChatScreen({navigation}) {
   };
 
   const disabledSendButton = messageText && !isBotWriting;
-
+  console.log('lastDay', lastDay);
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+        {/*<AgendaComponent onDayPress={d => handleDateSelect(d.dateString)} />*/}
         <Header
           showBack={false}
           navigation={navigation}
           title={
             userData.calories
-              ? `Цель на сегодня: ${userData.calories}ккал`
+              ? `Цель на ${moment(selectedDate).format('DD.MM.YYYY')}: ${
+                  userData.calories
+                }ккал`
               : 'Nutrition consultant GPT'
           }
           showSettingsIcon={true}
         />
+        <CurrentWeek
+          onDateSelect={handleDateSelect}
+          selectedDate={selectedDate}
+        />
+        <CalendarModal
+          minDate={new Date()}
+          maxDate={moment(lastDay?.date).add(1, 'day').toDate()}
+          visible={modalVisible}
+          closeModal={closeModal}
+          onDateSelect={handleDateSelect}
+        />
+        {/*<Button title="изменить дату" onPress={openModal} />*/}
 
         {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
@@ -522,19 +528,20 @@ export default function ChatScreen({navigation}) {
               title="Clear all"
               onPress={() => {
                 dispatch(setMessagesAction([]));
-                dispatch(setStepAction(0));
+                dispatch(setStepAction(0, selectedDate));
+                dispatch(clearDays());
               }}
             />
           </View>
         )}
-        {__DEV__ && (
-          <View>
-            <Button
-              title="Schedule Notification"
-              onPress={() => onCreateTriggerNotification('aaa', 'bbbb')}
-            />
-          </View>
-        )}
+        {/*{__DEV__ && (*/}
+        {/*  <View>*/}
+        {/*    <Button*/}
+        {/*      title="Schedule Notification"*/}
+        {/*      onPress={() => onCreateTriggerNotification('aaa', 'bbbb')}*/}
+        {/*    />*/}
+        {/*  </View>*/}
+        {/*)}*/}
 
         <View style={styles.container}>
           <FlatList

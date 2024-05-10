@@ -22,6 +22,7 @@
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-animated-spinkit": "^1.5.2",
+    "react-native-calendars": "^1.1304.1",
     "react-native-gifted-chat": "^2.4.0",
     "react-native-markdown-display": "^7.0.2",
     "react-native-modal": "^13.0.1",
