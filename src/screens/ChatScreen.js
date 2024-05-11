@@ -43,7 +43,7 @@ import moment from 'moment/moment';
 import CalendarModal from '../components/CalendarModal';
 const today = moment();
 import CurrentWeek from '../components/CurrentWeek';
-import {jsonParse} from '../utils/format';
+import {formatDietDataToString, jsonParse} from '../utils/format';
 export default function ChatScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
@@ -65,7 +65,7 @@ export default function ChatScreen({navigation}) {
   // const step = useSelector(state => state.userData.step);
   let step = 1;
   // console.log('step', step);
-  if (!userData?.calories) {
+  if (!userData?.calories || userData?.calories === '0') {
     step = 0;
   } else if (day?.step > 1) {
     step = day?.step;
@@ -151,12 +151,12 @@ export default function ChatScreen({navigation}) {
   //   });
   // }
 
-  const scheduleMealtimeNotifications = async (mealtimes, date) => {
+  const scheduleMealtimeNotifications = async (diet, date) => {
     try {
-      dispatch(setMealtimesAction(jsonParse(mealtimes), date));
+      // dispatch(setMealtimesAction(jsonParse(mealtimes), date));
 
       // console.log('mealtimes', mealtimes)
-      jsonParse(mealtimes).map(item => {
+      diet.map(item => {
         console.log('item.time', item.time);
 
         const datetime = moment(
@@ -166,10 +166,13 @@ export default function ChatScreen({navigation}) {
 
         console.log('datetime', datetime);
 
+        console.log('title', item.name + ' в ' + item.time);
+        console.log('desc', item.dish + ' - ' + item.dishCalories);
+
         onCreateTriggerNotification(
           datetime.valueOf(),
           item.name + ' в ' + item.time,
-          'Настало время приема пищи',
+          item.dish + ' - ' + item.dishCalories,
         );
       });
 
@@ -282,11 +285,24 @@ export default function ChatScreen({navigation}) {
         allergies: userData.allergies,
         preferredProducts: userData.preferredProducts,
         likedDishes: userData.likedDishes,
-        exampleResponseDiet: `{diet: '**Рацион на 1 день:**
-      **Здесь время, здесь название приема пищи**
-      * Здесь блюдо, количество ккал
-      Итого ккал', products: {'название продукта', 'количество'}}
-      `,
+        exampleResponseDiet: `{
+  diet: [
+    {
+      time: 'здесь время',
+      name: 'здесь название приема пищи',
+      dish: 'здесь название блюда',
+      dishEn: 'здесь название данного блюда переведи на en',
+      dishCalories: 'здесь количество колорий этого блюда в конце ккал'
+    }
+  ],
+  dietTotalCalories: 'здесь общее количество калорий в рационе',
+  products: [{
+    name: 'здесь название продукта',
+    amount: 'здесь количество только цифра',
+    units: 'Единица измерения (г, кг, мл, л, шт)',
+  }]
+}
+`,
         diet: day?.diet,
       };
       console.log('sendMessage', messageText);
@@ -305,11 +321,12 @@ export default function ChatScreen({navigation}) {
         text = `Вам необходимо набрать ${text} калорий за один день.`;
       } else if (step === 2) {
         const diet = jsonParse(text);
-        console.log('diet.diet', diet.diet);
+        const dietString = formatDietDataToString(diet.diet);
+        console.log('formatDietDataToString', dietString);
         dispatch(setDietAction(diet.diet, diet.products, selectedDate));
-        text = diet.diet;
+        text = dietString + 'Итого каллорий: ' + diet.dietTotalCalories;
       } else if (step === 4) {
-        await scheduleMealtimeNotifications(text, selectedDate);
+        await scheduleMealtimeNotifications(day?.diet, selectedDate);
         text = 'Нотификации успешно запланированы';
       }
 
@@ -367,7 +384,7 @@ export default function ChatScreen({navigation}) {
     </View>
   );
 
-  const nextMealTime = getNextMeal(day?.mealtimes);
+  const nextMealTime = getNextMeal(day?.diet);
 
   const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в чистом формате JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
 
@@ -422,7 +439,7 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText:
-            'Продукты куплены, давай установим уведомления на время приготовления',
+            'Продукты куплены. Давай установим уведомления на время приготовления.',
           messageText: `Верни названия времени и время приема пиши из рациона ${day?.diet} в формате чистый json: [{time: null, name: null }]`,
           messageTextVisible:
             'Продукты куплены, давай установим уведомления на время приготовления',
@@ -435,7 +452,7 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: `Следущий прием пищи: ${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
-          messageText: `Дай из контеста diet рецепт, и как приготовить: ${nextMealTime?.name}} в ${nextMealTime?.time}`,
+          messageText: `Дай рецепт: ${nextMealTime?.dish} - ${nextMealTime?.dishCalories} в ${nextMealTime?.time}`,
           messageTextVisible: `${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
           nextStep: 5,
         },
@@ -451,13 +468,14 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: `Следущий прием пищи: ${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
-          messageText: `Дай из контеста diet рецепт, и как приготовить: ${nextMealTime?.name}} в ${nextMealTime?.time}`,
+          messageText: `Дай рецепт: ${nextMealTime?.dish} - ${nextMealTime?.dishCalories} в ${nextMealTime?.time}`,
           messageTextVisible: `${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
           nextStep: 5,
         },
         {
           buttonText: 'Получить другой рацион',
           messageText: `Напиши другой рацион ${dietPromt}`,
+          messageTextVisible: 'Получить другой рацион',
           nextStep: 2,
         },
       ],

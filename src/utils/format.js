@@ -13,3 +13,13 @@ export const jsonParse = text => {
     return null;
   }
 };
+
+export function formatDietDataToString(data) {
+  let message = '';
+
+  data.forEach(item => {
+    message += `${item.time} - ${item.name}\n* ${item.dish} - ${item.dishCalories}\n\n`;
+  });
+
+  return message;
+}
