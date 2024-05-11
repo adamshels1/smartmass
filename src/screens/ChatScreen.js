@@ -283,9 +283,9 @@ export default function ChatScreen({navigation}) {
         preferredProducts: userData.preferredProducts,
         likedDishes: userData.likedDishes,
         exampleResponseDiet: `{diet: '**Рацион на 1 день:**
-      **Здесь время**
+      **Здесь время, здесь название приема пищи**
       * Здесь блюдо, количество ккал
-      Итого ккал', products: {productName, productAmount}}
+      Итого ккал', products: {'название продукта', 'количество'}}
       `,
         diet: day?.diet,
       };
@@ -369,7 +369,7 @@ export default function ChatScreen({navigation}) {
 
   const nextMealTime = getNextMeal(day?.mealtimes);
 
-  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в формате чистом JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
+  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в чистом формате JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
 
   const messageButtons = [
     {
