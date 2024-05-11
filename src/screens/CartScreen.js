@@ -526,31 +526,32 @@ export default function CartScreen({navigation}) {
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
         </View> */}
 
-        {__DEV__ && (
-          <View>
-            <Button
-              title="Сгенерировать корзину продуктов"
-              onPress={() => {
-                const mergedData = days
-                  .map(i => i.products)
-                  .reduce((acc, obj) => {
-                    Object.keys(obj).forEach(key => {
-                      acc.push({[key]: obj[key]});
-                    });
-                    return acc;
-                  }, []);
-                const message =
-                  'Объедени одинаковые продукты, сформируй корзину для покупок, верни формате чистого JSON: ' +
-                  JSON.stringify(mergedData);
-                handleSendMessage({
-                  messageText: message,
-                  messageTextVisible: message,
-                  step: 99,
-                });
-              }}
-            />
-          </View>
-        )}
+        {/*{__DEV__ && (*/}
+        <View>
+          <Button
+            title="Сгенерировать корзину продуктов"
+            onPress={() => {
+              const mergedData = days
+                .map(i => i.products)
+                .reduce((acc, obj) => {
+                  Object.keys(obj).forEach(key => {
+                    acc.push({[key]: obj[key]});
+                  });
+                  return acc;
+                }, []);
+              console.log('mergedData', mergedData);
+              const message =
+                'Объедени одинаковые продукты, сформируй корзину для покупок, верни формате чистого JSON: ' +
+                JSON.stringify(mergedData);
+              handleSendMessage({
+                messageText: message,
+                messageTextVisible: message,
+                step: 99,
+              });
+            }}
+          />
+        </View>
+        {/*)}*/}
 
         {/*{__DEV__ && (*/}
         {/*  <View>*/}

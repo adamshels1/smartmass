@@ -24,6 +24,7 @@ import {Flow} from 'react-native-animated-spinkit';
 import {
   clearDays,
   setCalories,
+  setCart,
   setDietAction,
   setMealtimesAction,
   setMessagesAction,
@@ -82,17 +83,18 @@ export default function ChatScreen({navigation}) {
     closeModal();
   };
 
-  async function onCreateTriggerNotification(time, title, body) {
+  async function onCreateTriggerNotification(timestamp, title, body) {
+    console.log('timestamp', timestamp);
     try {
-      const date = new Date(Date.now());
-      date.setHours(12);
-      date.setMinutes(12);
+      // const date = new Date(Date.now());
+      // date.setHours(12);
+      // date.setMinutes(12);
 
       // Create a time-based trigger
       const trigger = {
         type: TriggerType.TIMESTAMP,
         // timestamp: Date.now() + (1000 * 10), // fire at 11:10am (10 minutes before meeting)
-        timestamp: getTimeStamp(time) - 1000 * 30, //  (30 minutes before mealtime)
+        timestamp: timestamp - 1000 * 30, //  (30 minutes before mealtime)
       };
 
       await notifee.createChannel({
@@ -117,7 +119,7 @@ export default function ChatScreen({navigation}) {
         },
         trigger,
       );
-      // console.log('res', res);
+      console.log('createTriggerNotification', res);
     } catch (e) {
       console.log('e', e);
     }
@@ -151,12 +153,21 @@ export default function ChatScreen({navigation}) {
 
   const scheduleMealtimeNotifications = async (mealtimes, date) => {
     try {
-      dispatch(setMealtimesAction(JSON.parse(mealtimes), date));
+      dispatch(setMealtimesAction(jsonParse(mealtimes), date));
 
       // console.log('mealtimes', mealtimes)
-      JSON.parse(mealtimes).map(item => {
+      jsonParse(mealtimes).map(item => {
+        console.log('item.time', item.time);
+
+        const datetime = moment(
+          moment(date).format('YYYY-MM-DD') + ' ' + item.time,
+          'YYYY-MM-DD HH:mm',
+        );
+
+        console.log('datetime', datetime);
+
         onCreateTriggerNotification(
-          item.time,
+          datetime.valueOf(),
           item.name + ' в ' + item.time,
           'Настало время приема пищи',
         );
@@ -274,7 +285,7 @@ export default function ChatScreen({navigation}) {
         exampleResponseDiet: `{diet: '**Рацион на 1 день:**
       **Здесь время**
       * Здесь блюдо, количество ккал
-      Итого ккал', products: {productName, productAmountAndUnits}}
+      Итого ккал', products: {productName, productAmount}}
       `,
         diet: day?.diet,
       };
@@ -294,14 +305,16 @@ export default function ChatScreen({navigation}) {
         text = `Вам необходимо набрать ${text} калорий за один день.`;
       } else if (step === 2) {
         const diet = jsonParse(text);
+        console.log('diet.diet', diet.diet);
         dispatch(setDietAction(diet.diet, diet.products, selectedDate));
+        text = diet.diet;
       } else if (step === 4) {
         await scheduleMealtimeNotifications(text, selectedDate);
         text = 'Нотификации успешно запланированы';
       }
 
       if (text?.length > 3 && step) {
-        dispatch(setStepAction(step + 1, selectedDate));
+        dispatch(setStepAction(step, selectedDate));
       }
 
       const newBotMessage = {role: 'model', parts: [{text}]};
@@ -356,7 +369,7 @@ export default function ChatScreen({navigation}) {
 
   const nextMealTime = getNextMeal(day?.mealtimes);
 
-  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в формате JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
+  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в формате чистом JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
 
   const messageButtons = [
     {
@@ -390,8 +403,9 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: 'Хорошо, какие продукты нужно закупить?',
-          messageText:
-            'Какие продукты закупить  на рацион и по сколько грамм из контекста diet?',
+          messageText: `Сделай продукты для закупки списком: ${JSON.stringify(
+            day?.products,
+          )}?`,
           messageTextVisible: 'Какие продукты закупить',
           nextStep: 3,
         },
@@ -409,8 +423,7 @@ export default function ChatScreen({navigation}) {
         {
           buttonText:
             'Продукты куплены, давай установим уведомления на время приготовления',
-          messageText:
-            'Верни названия времени и время приема пиши из рациона контекста diet в формате чистый json: [{time: null, name: null }]',
+          messageText: `Верни названия времени и время приема пиши из рациона ${day?.diet} в формате чистый json: [{time: null, name: null }]`,
           messageTextVisible:
             'Продукты куплены, давай установим уведомления на время приготовления',
           nextStep: 4,
@@ -455,6 +468,7 @@ export default function ChatScreen({navigation}) {
     if (isBotWriting) {
       return null;
     }
+    console.log('step ---->', step);
     return messageButtons
       ?.find(i => i.step === step)
       ?.buttons.map(i => {
@@ -526,18 +540,19 @@ export default function ChatScreen({navigation}) {
         {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
         </View> */}
-        {__DEV__ && (
-          <View>
-            <Button
-              title="Clear all"
-              onPress={() => {
-                dispatch(setMessagesAction([]));
-                dispatch(setStepAction(0, selectedDate));
-                dispatch(clearDays());
-              }}
-            />
-          </View>
-        )}
+        {/*{__DEV__ && (*/}
+        <View>
+          <Button
+            title="Clear all"
+            onPress={() => {
+              dispatch(setMessagesAction([]));
+              dispatch(setStepAction(0, selectedDate));
+              dispatch(clearDays());
+              dispatch(setCart([]));
+            }}
+          />
+        </View>
+        {/*)}*/}
         {/*{__DEV__ && (*/}
         {/*  <View>*/}
         {/*    <Button*/}
