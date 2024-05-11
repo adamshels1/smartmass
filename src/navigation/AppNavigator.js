@@ -8,6 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import ChatScreen from '../screens/ChatScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import CartScreen from '../screens/CartScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,11 @@ const AppNavigator = () => {
           <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="CartScreen"
+            component={CartScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

@@ -10,7 +10,8 @@ const CurrentWeek = ({onDateSelect, selectedDate}) => {
   // const currentDate = moment('2024-04-25');
 
   // Получаем начало текущей недели (воскресенье)
-  const startOfWeek = currentDate.clone().startOf('week');
+  // const startOfWeek = currentDate.clone().startOf('week');
+  const startOfWeek = currentDate.clone();
 
   // Создаем массив с датами текущей недели и названиями дней недели
   const weekDays = [];
@@ -21,7 +22,7 @@ const CurrentWeek = ({onDateSelect, selectedDate}) => {
     const dayData = days.find(i => day.isSame(i.date, 'day'));
     weekDays.push({day, name: dayNames[i], ...dayData});
   }
-  console.log('weekDays', weekDays);
+  // console.log('weekDays', weekDays);
 
   // Функция для проверки, является ли день будущим
   const isSameFutureDay = day => {
@@ -59,7 +60,7 @@ const CurrentWeek = ({onDateSelect, selectedDate}) => {
                 source={
                   diet
                     ? require('../assets/icons/cutlery.png')
-                    : require('../assets/icons/cart_inactive.png')
+                    : require('../assets/icons/cutlery-inactive.png')
                 }
               />
 

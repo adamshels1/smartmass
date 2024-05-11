@@ -19,6 +19,7 @@ const initialState = {
   messages: [],
   step: 0,
   days: [],
+  cart: [],
 };
 
 export default (state = initialState, {type, payload}) => {
@@ -29,7 +30,7 @@ export default (state = initialState, {type, payload}) => {
         isSignedIn: payload,
       };
     case 'SET_SETTINGS':
-      console.log('SET_SETTINGS', payload);
+      // console.log('SET_SETTINGS', payload);
       return {
         ...state,
         weight: payload.weight,
@@ -42,33 +43,35 @@ export default (state = initialState, {type, payload}) => {
         maxMealPerDay: payload.maxMealPerDay,
       };
     case 'SET_DIET':
-      console.log('SET_DIET', payload);
+      // console.log('SET_DIET', payload);
 
       const updatedDays2 = state.days?.map(day => {
         const isSameDay = moment(day.date).isSame(payload.date, 'day');
-        return isSameDay ? {...day, diet: payload.diet} : day;
+        return isSameDay
+          ? {...day, diet: payload.diet, products: payload.products}
+          : day;
       });
 
-      console.log('updatedDays2', updatedDays2);
+      // console.log('updatedDays2', updatedDays2);
 
       return {
         ...state,
         days: updatedDays2,
       };
     case 'SET_MEALTIMES':
-      console.log('SET_MEALTIMES', payload);
+      // console.log('SET_MEALTIMES', payload);
 
       const updatedDays3 = state.days?.map(day => {
         const isSameDay = moment(day.date).isSame(payload.date, 'day');
         return isSameDay ? {...day, mealtimes: payload.mealtimes} : day;
       });
-      console.log('updatedDays3', updatedDays3);
+      // console.log('updatedDays3', updatedDays3);
       return {
         ...state,
         days: updatedDays3,
       };
     case 'SET_CALORIES':
-      console.log('SET_CALORIES', payload);
+      // console.log('SET_CALORIES', payload);
       return {
         ...state,
         calories: payload,
@@ -78,15 +81,15 @@ export default (state = initialState, {type, payload}) => {
         moment(day.date).isSame(payload.date, 'day'),
       );
 
-      console.log('foundToday', found);
-      console.log('payload', payload);
+      // console.log('foundToday', found);
+      // console.log('payload', payload);
 
       const updatedDays = state.days?.map(day => {
         const isSameDay = moment(day.date).isSame(payload.date, 'day');
         return isSameDay ? {...day, messages: payload.messages} : day;
       });
 
-      console.log('updatedDays', updatedDays);
+      // console.log('updatedDays', updatedDays);
 
       if (!found) {
         updatedDays.push({
@@ -95,19 +98,19 @@ export default (state = initialState, {type, payload}) => {
         });
       }
 
-      console.log('updatedDays2', updatedDays);
+      // console.log('updatedDays2', updatedDays);
 
       return {
         ...state,
         days: updatedDays,
       };
     case 'SET_STEP':
-      console.log('SET_STEP', payload);
+      // console.log('SET_STEP', payload);
       const updatedDays4 = state.days?.map(day => {
         const isSameDay = moment(day.date).isSame(payload.date, 'day');
         return isSameDay ? {...day, step: payload.step} : day;
       });
-      console.log('updatedDays4', updatedDays4);
+      // console.log('updatedDays4', updatedDays4);
       return {
         ...state,
         days: updatedDays4,
@@ -116,6 +119,13 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         days: [],
+      };
+    case 'SET_CART':
+      console.log('set_cart', payload);
+
+      return {
+        ...state,
+        cart: payload,
       };
     default:
       return state;

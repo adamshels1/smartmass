@@ -42,16 +42,30 @@ const Header: React.FC<HeaderProps> = ({
 
       <Text style={[styles.title, titleStyle]}>{title}</Text>
 
-      {showSettingsIcon ? (
-        <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/icons/settings.png')}
-          />
-        </TouchableOpacity>
-      ) : (
-        <View />
-      )}
+      <View style={{flexDirection: 'row'}}>
+        {showSettingsIcon ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SettingsScreen')}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/icons/settings.png')}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
+
+        {showSettingsIcon ? (
+          <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/icons/cart_inactive.png')}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
+      </View>
     </View>
   );
 };

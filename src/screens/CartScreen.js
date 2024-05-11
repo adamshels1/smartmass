@@ -28,8 +28,10 @@ import {
   setMealtimesAction,
   setMessagesAction,
   setStepAction,
+  setCart,
 } from '../store/userActions';
 import AgendaComponent from '../components/AgendaComponent';
+import LottieView from 'lottie-react-native';
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -43,7 +45,7 @@ import CalendarModal from '../components/CalendarModal';
 const today = moment();
 import CurrentWeek from '../components/CurrentWeek';
 import {jsonParse} from '../utils/format';
-export default function ChatScreen({navigation}) {
+export default function CartScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
   const [messageText, setMessageText] = useState('');
@@ -251,7 +253,7 @@ export default function ChatScreen({navigation}) {
 
       await sleep(100);
 
-      flatListRef.current.scrollToEnd({animated: true});
+      flatListRef?.current?.scrollToEnd({animated: true});
 
       const context = {
         weight: userData.weight,
@@ -271,14 +273,14 @@ export default function ChatScreen({navigation}) {
         allergies: userData.allergies,
         preferredProducts: userData.preferredProducts,
         likedDishes: userData.likedDishes,
-        exampleResponseDiet: `{diet: '**Рацион на 1 день:**
+        exampleResponseDiet: `**Рацион на 1 день:**
       **Здесь время**
       * Здесь блюдо, количество ккал
-      Итого ккал', products: {productName, productAmountAndUnits}}
-      `,
+      Итого ккал
+      **Список продуктов для покупки:**`,
         diet: day?.diet,
       };
-      console.log('sendMessage', messageText);
+
       const model = genAI.getGenerativeModel({model: 'gemini-pro'});
       const result = await model.generateContent(
         JSON.stringify({prompt: messageText, context}),
@@ -287,17 +289,25 @@ export default function ChatScreen({navigation}) {
       let text = response.text();
       setIsBotWriting(false);
 
-      console.log('response', text);
+      console.log('step', step, text);
 
       if (step === 1) {
         dispatch(setCalories(text));
         text = `Вам необходимо набрать ${text} калорий за один день.`;
       } else if (step === 2) {
-        const diet = jsonParse(text);
-        dispatch(setDietAction(diet.diet, diet.products, selectedDate));
+        dispatch(setDietAction(text, selectedDate));
       } else if (step === 4) {
         await scheduleMealtimeNotifications(text, selectedDate);
         text = 'Нотификации успешно запланированы';
+      } else if (step === 99) {
+        console.log('text', text);
+        const cart = jsonParse(text).map(item => {
+          const key = Object.keys(item)[0]; // Получаем ключ
+          const value = item[key]; // Получаем значение по ключу
+          return {name: key, amount: value};
+        });
+        dispatch(setCart(cart));
+        // text = 'Нотификации успешно запланированы';
       }
 
       if (text?.length > 3 && step) {
@@ -314,7 +324,7 @@ export default function ChatScreen({navigation}) {
 
       await sleep(100);
 
-      flatListRef.current.scrollToEnd({animated: true});
+      flatListRef?.current?.scrollToEnd({animated: true});
     } catch (error) {
       setIsBotWriting(false);
       console.error('Ошибка при отправке сообщения:', error);
@@ -356,7 +366,7 @@ export default function ChatScreen({navigation}) {
 
   const nextMealTime = getNextMeal(day?.mealtimes);
 
-  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в формате JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
+  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
 
   const messageButtons = [
     {
@@ -498,18 +508,7 @@ export default function ChatScreen({navigation}) {
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
         {/*<AgendaComponent onDayPress={d => handleDateSelect(d.dateString)} />*/}
-        <Header
-          showBack={false}
-          navigation={navigation}
-          title={
-            userData.calories
-              ? `Цель на ${moment(selectedDate).format('DD.MM.YYYY')}: ${
-                  userData.calories
-                }ккал`
-              : 'Nutrition consultant GPT'
-          }
-          showSettingsIcon={true}
-        />
+        <Header showBack={true} navigation={navigation} title={'Корзина'} />
         <CurrentWeek
           onDateSelect={handleDateSelect}
           selectedDate={selectedDate}
@@ -526,18 +525,33 @@ export default function ChatScreen({navigation}) {
         {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
         </View> */}
+
         {__DEV__ && (
           <View>
             <Button
-              title="Clear all"
+              title="Сгенерировать корзину продуктов"
               onPress={() => {
-                dispatch(setMessagesAction([]));
-                dispatch(setStepAction(0, selectedDate));
-                dispatch(clearDays());
+                const mergedData = days
+                  .map(i => i.products)
+                  .reduce((acc, obj) => {
+                    Object.keys(obj).forEach(key => {
+                      acc.push({[key]: obj[key]});
+                    });
+                    return acc;
+                  }, []);
+                const message =
+                  'Объедени одинаковые продукты, сформируй корзину для покупок, верни формате чистого JSON: ' +
+                  JSON.stringify(mergedData);
+                handleSendMessage({
+                  messageText: message,
+                  messageTextVisible: message,
+                  step: 99,
+                });
               }}
             />
           </View>
         )}
+
         {/*{__DEV__ && (*/}
         {/*  <View>*/}
         {/*    <Button*/}
@@ -547,55 +561,102 @@ export default function ChatScreen({navigation}) {
         {/*  </View>*/}
         {/*)}*/}
 
-        <View style={styles.container}>
-          <FlatList
-            contentInsetAdjustmentBehavior="automatic"
-            ref={flatListRef} // Передача рефа
-            data={messages}
-            renderItem={renderMessage}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}
-            ListFooterComponent={
-              <View style={{marginBottom: 10}}>
-                {isBotWriting && (
-                  <Flow style={{marginLeft: 15}} size={48} color="#A1A1A1" />
-                )}
-
-                {/* {isBotWriting && (
-                <Image style={{ width: 80, height: 50, marginBottom: 0 }} resizeMode='contain' source={require('../assets/animations/writing.gif')} />
-              )} */}
-
-                {renderMessageButtons()}
-              </View>
-            }
+        {isBotWriting ? (
+          <LottieView
+            style={{width: 300, height: 300, alignSelf: 'center'}}
+            source={require('../assets/animations/Animation - 1715423113634.json')} // Путь к файлу анимации
+            autoPlay
+            loop
           />
+        ) : (
+          <FlatList
+            style={{height: 20, paddingHorizontal: 10}}
+            ref={flatListRef} // Передача рефа
+            data={userData.cart}
+            renderItem={({item, key}) => {
+              return (
+                <TouchableOpacity
+                  style={{flexDirection: 'row', alignItems: 'center'}}
+                  onPress={() => {
+                    const cart = userData.cart.map(i => {
+                      if (i.name === item.name) {
+                        i.purchased = !i.purchased;
+                      }
+                      return i;
+                    });
+                    dispatch(setCart(cart));
+                  }}>
+                  <Image
+                    style={{width: 25, height: 25, top: 6, marginRight: 7}}
+                    source={
+                      item?.purchased
+                        ? require('../assets/icons/checklist.png')
+                        : require('../assets/icons/eclipse.png')
+                    }
+                  />
+                  <Text style={{marginTop: 10, fontSize: 15, color: '#505050'}}>
+                    {item.name + ' - ' + item.amount}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+            ListHeaderComponent={() => (
+              <Text>Продукты которые необходимо купить:</Text>
+            )}
+            ListFooterComponent={() => <Button title={'Продукты куплены'} />}
+          />
+        )}
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Type a message..."
-              placeholderTextColor="#A1A1A1"
-              onChangeText={text => setMessageText(text)}
-              value={messageText}
-              multiline={true}
-              numberOfLines={4}
-              textAlignVertical="center"
-            />
-            <TouchableOpacity
-              onPress={() =>
-                handleSendMessage({
-                  messageText,
-                })
-              }
-              disabled={!disabledSendButton}
-              style={{opacity: disabledSendButton ? 1 : 0.5}}>
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('../assets/icons/send.png')}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+        {/*<View style={styles.container}>*/}
+        {/*  <FlatList*/}
+        {/*    contentInsetAdjustmentBehavior="automatic"*/}
+        {/*    ref={flatListRef} // Передача рефа*/}
+        {/*    data={messages}*/}
+        {/*    renderItem={renderMessage}*/}
+        {/*    keyExtractor={(item, index) => index.toString()}*/}
+        {/*    contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}*/}
+        {/*    ListFooterComponent={*/}
+        {/*      <View style={{marginBottom: 10}}>*/}
+        {/*        {isBotWriting && (*/}
+        {/*          <Flow style={{marginLeft: 15}} size={48} color="#A1A1A1" />*/}
+        {/*        )}*/}
+
+        {/*        /!* {isBotWriting && (*/}
+        {/*        <Image style={{ width: 80, height: 50, marginBottom: 0 }} resizeMode='contain' source={require('../assets/animations/writing.gif')} />*/}
+        {/*      )} *!/*/}
+
+        {/*        {renderMessageButtons()}*/}
+        {/*      </View>*/}
+        {/*    }*/}
+        {/*  />*/}
+
+        {/*  <View style={styles.inputContainer}>*/}
+        {/*    <TextInput*/}
+        {/*      style={styles.input}*/}
+        {/*      placeholder="Type a message..."*/}
+        {/*      placeholderTextColor="#A1A1A1"*/}
+        {/*      onChangeText={text => setMessageText(text)}*/}
+        {/*      value={messageText}*/}
+        {/*      multiline={true}*/}
+        {/*      numberOfLines={4}*/}
+        {/*      textAlignVertical="center"*/}
+        {/*    />*/}
+        {/*    <TouchableOpacity*/}
+        {/*      onPress={() =>*/}
+        {/*        handleSendMessage({*/}
+        {/*          messageText,*/}
+        {/*        })*/}
+        {/*      }*/}
+        {/*      disabled={!disabledSendButton}*/}
+        {/*      style={{opacity: disabledSendButton ? 1 : 0.5}}>*/}
+        {/*      <Image*/}
+        {/*        style={{width: 30, height: 30}}*/}
+        {/*        source={require('../assets/icons/send.png')}*/}
+        {/*      />*/}
+        {/*    </TouchableOpacity>*/}
+        {/*  </View>*/}
+        {/*</View>*/}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

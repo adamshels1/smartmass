@@ -39,10 +39,10 @@ export const setSettingsAction = ({
   };
 };
 
-export const setDietAction = (diet, date) => {
+export const setDietAction = (diet, products, date) => {
   return {
     type: 'SET_DIET',
-    payload: {diet, date},
+    payload: {diet, products, date},
   };
 };
 
@@ -80,5 +80,12 @@ export const setStepAction = (step, date) => {
 export const clearDays = () => {
   return {
     type: 'CLEAR_DAYS',
+  };
+};
+
+export const setCart = cart => {
+  return {
+    type: 'SET_CART',
+    payload: cart,
   };
 };
