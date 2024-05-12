@@ -17,7 +17,7 @@ export function getTimeStamp(timeString) {
   return time.getTime();
 }
 
-export function getNextMeal(mealTimes) {
+export function getNextMeal(mealTimes, date) {
   if (!mealTimes?.length) {
     return null;
   }
@@ -33,7 +33,11 @@ export function getNextMeal(mealTimes) {
 
   // Находим следующий прием пищи после текущего времени
   for (let i = 0; i < sortedMeals.length; i++) {
-    const mealTime = moment(sortedMeals[i].time, 'HH:mm');
+    const mealTime = moment(
+      moment(date).format('YYYY-MM-DD') + ' ' + sortedMeals[i].time,
+      'YYYY-MM-DD HH:mm',
+    );
+    // const mealTime = moment(sortedMeals[i].time, 'HH:mm');
     if (mealTime.isAfter(currentTime)) {
       return sortedMeals[i];
     }

@@ -56,7 +56,9 @@ const Header: React.FC<HeaderProps> = ({
         )}
 
         {showSettingsIcon ? (
-          <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
+          <TouchableOpacity
+            style={{marginLeft: 10}}
+            onPress={() => navigation.navigate('CartScreen')}>
             <Image
               style={styles.icon}
               source={require('../assets/icons/cart_inactive.png')}
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 35,
-    paddingHorizontal: 24,
+    paddingHorizontal: 14,
     marginTop: 10,
   },
   title: {

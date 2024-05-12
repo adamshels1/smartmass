@@ -44,7 +44,7 @@ import moment from 'moment/moment';
 import CalendarModal from '../components/CalendarModal';
 const today = moment();
 import CurrentWeek from '../components/CurrentWeek';
-import {jsonParse} from '../utils/format';
+import {jsonParse, sumAmountByName} from '../utils/format';
 export default function CartScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
@@ -273,11 +273,24 @@ export default function CartScreen({navigation}) {
         allergies: userData.allergies,
         preferredProducts: userData.preferredProducts,
         likedDishes: userData.likedDishes,
-        exampleResponseDiet: `**Рацион на 1 день:**
-      **Здесь время**
-      * Здесь блюдо, количество ккал
-      Итого ккал
-      **Список продуктов для покупки:**`,
+        exampleResponseDiet: `{
+  diet: [
+    {
+      time: 'здесь время',
+      name: 'здесь название приема пищи',
+      dish: 'здесь название блюда',
+      dishEn: 'здесь название данного блюда переведи на en',
+      dishCalories: 'здесь количество колорий этого блюда в конце ккал'
+    }
+  ],
+  dietTotalCalories: 'здесь общее количество калорий в рационе',
+  products: [{
+    name: 'здесь название продукта',
+    amount: 'здесь количество только цифра',
+    units: 'Единица измерения (г, кг, мл, л, шт)',
+  }]
+}
+`,
         diet: day?.diet,
       };
 
@@ -300,13 +313,8 @@ export default function CartScreen({navigation}) {
         await scheduleMealtimeNotifications(text, selectedDate);
         text = 'Нотификации успешно запланированы';
       } else if (step === 99) {
-        console.log('text', text);
-        const cart = jsonParse(text).map(item => {
-          const key = Object.keys(item)[0]; // Получаем ключ
-          const value = item[key]; // Получаем значение по ключу
-          return {name: key, amount: value};
-        });
-        dispatch(setCart(cart));
+        console.log('cart', jsonParse(text));
+        dispatch(setCart(jsonParse(text)));
         // text = 'Нотификации успешно запланированы';
       }
 
@@ -329,6 +337,29 @@ export default function CartScreen({navigation}) {
       setIsBotWriting(false);
       console.error('Ошибка при отправке сообщения:', error);
     }
+  };
+
+  useEffect(() => {
+    generateCart();
+  }, [days]);
+
+  const generateCart = async () => {
+    setIsBotWriting(true);
+    await sleep(3000);
+    const mergedData = days.flatMap(i => i.products);
+    const summedData = sumAmountByName(mergedData);
+    console.log('summedData', summedData);
+    dispatch(setCart(summedData));
+    setIsBotWriting(false);
+    // await sleep(10000);
+    // const message =
+    //   'Объедини одинаковые продукты по названию name даже если называются по разному, не должно быть дубликатов, суммируй amount, сделай сортировку по категориям, и верни в формате JSON :' +
+    //   JSON.stringify(summedData);
+    // handleSendMessage({
+    //   messageText: message,
+    //   messageTextVisible: message,
+    //   step: 99,
+    // });
   };
 
   // Рендеринг элемента сообщения
@@ -527,30 +558,12 @@ export default function CartScreen({navigation}) {
         </View> */}
 
         {/*{__DEV__ && (*/}
-        <View>
-          <Button
-            title="Сгенерировать корзину продуктов"
-            onPress={() => {
-              const mergedData = days
-                .map(i => i.products)
-                .reduce((acc, obj) => {
-                  Object.keys(obj).forEach(key => {
-                    acc.push({[key]: obj[key]});
-                  });
-                  return acc;
-                }, []);
-              console.log('mergedData', mergedData);
-              const message =
-                'Объедени одинаковые продукты, сформируй корзину для покупок, верни формате чистого JSON: ' +
-                JSON.stringify(mergedData);
-              handleSendMessage({
-                messageText: message,
-                messageTextVisible: message,
-                step: 99,
-              });
-            }}
-          />
-        </View>
+        {/*<View>*/}
+        {/*  <Button*/}
+        {/*    title="Сформировать корзину продуктов"*/}
+        {/*    onPress={generateCart}*/}
+        {/*  />*/}
+        {/*</View>*/}
         {/*)}*/}
 
         {/*{__DEV__ && (*/}
@@ -563,12 +576,28 @@ export default function CartScreen({navigation}) {
         {/*)}*/}
 
         {isBotWriting ? (
-          <LottieView
-            style={{width: 300, height: 300, alignSelf: 'center'}}
-            source={require('../assets/animations/Animation - 1715423113634.json')} // Путь к файлу анимации
-            autoPlay
-            loop
-          />
+          <View>
+            <Text
+              style={{
+                textAlign: 'center',
+                marginTop: 40,
+                color: '#67CFCF',
+                fontSize: 20,
+              }}>
+              Формирование корзины
+            </Text>
+            <LottieView
+              style={{
+                width: 300,
+                height: 300,
+                alignSelf: 'center',
+                fontWeight: 'bold',
+              }}
+              source={require('../assets/animations/Animation - 1715423113634.json')} // Путь к файлу анимации
+              autoPlay
+              loop
+            />
+          </View>
         ) : (
           <FlatList
             style={{height: 20, paddingHorizontal: 10}}
@@ -596,7 +625,7 @@ export default function CartScreen({navigation}) {
                     }
                   />
                   <Text style={{marginTop: 10, fontSize: 15, color: '#505050'}}>
-                    {item.name + ' - ' + item.amount}
+                    {item.name + ' - ' + item.amount + item.units}
                   </Text>
                 </TouchableOpacity>
               );
@@ -605,7 +634,7 @@ export default function CartScreen({navigation}) {
             ListHeaderComponent={() => (
               <Text>Продукты которые необходимо купить:</Text>
             )}
-            ListFooterComponent={() => <Button title={'Продукты куплены'} />}
+            // ListFooterComponent={() => <Button title={'Продукты куплены'} />}
           />
         )}
 

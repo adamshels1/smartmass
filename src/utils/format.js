@@ -5,6 +5,7 @@ export const jsonParse = text => {
       .replaceAll('```json', '')
       .replaceAll('```JSON', '')
       .replaceAll('```', '')
+      .replaceAll('\\"', '')
       .replace(/[\u0000-\u001F]/g, '')
       .replace('},]', '}]');
     return JSON.parse(text);
@@ -22,4 +23,28 @@ export function formatDietDataToString(data) {
   });
 
   return message;
+}
+
+export function sumAmountByName(products) {
+  const sumMap = {};
+
+  for (const product of products) {
+    const {name, amount, units} = product;
+    const key = name + '|' + units; // Создаем уникальный ключ из имени и единиц измерения
+
+    // Если продукт с таким ключом уже есть в объекте, прибавляем к нему значение amount
+    if (sumMap.hasOwnProperty(key)) {
+      sumMap[key] += parseFloat(amount);
+    } else {
+      sumMap[key] = parseFloat(amount);
+    }
+  }
+
+  // Преобразуем объект обратно в массив объектов
+  const result = Object.keys(sumMap).map(key => {
+    const [name, units] = key.split('|'); // Разделяем ключ на имя и единицы измерения
+    return {name, amount: sumMap[key].toFixed(0), units};
+  });
+
+  return result;
 }

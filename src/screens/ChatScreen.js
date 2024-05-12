@@ -384,7 +384,7 @@ export default function ChatScreen({navigation}) {
     </View>
   );
 
-  const nextMealTime = getNextMeal(day?.diet);
+  const nextMealTime = getNextMeal(day?.diet, selectedDate);
 
   const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в чистом формате JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
 
