@@ -373,6 +373,19 @@ export default function ChatScreen({navigation}) {
         styles.message,
         item.role === 'user' ? styles.userMessage : styles.otherMessage,
       ]}>
+      {/*<View>*/}
+      {/*  <Image*/}
+      {/*    style={{*/}
+      {/*      width: '100%',*/}
+      {/*      height: 100,*/}
+      {/*      marginBottom: 10,*/}
+      {/*      borderRadius: 10,*/}
+      {/*    }}*/}
+      {/*    source={{*/}
+      {/*      uri: 'https://images.unsplash.com/photo-1515711125864-2a69ecb3f2f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MDU0NTd8MHwxfHNlYXJjaHwxfHxFZ2dzJTIwd2l0aCUyME9hdG1lYWx8ZW58MHx8fHwxNzE1NDU4MjE5fDA&ixlib=rb-4.0.3&q=80&w=400',*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*</View>*/}
       <Text
         style={
           item.role === 'user'
@@ -646,7 +659,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     maxWidth: '80%',
-    flexDirection: 'row',
+    // flexDirection: 'row',
   },
   userMessage: {
     backgroundColor: '#67CFCF',
