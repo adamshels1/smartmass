@@ -1,4 +1,4 @@
-package com.gromass
+package com.adamshels.smartmass
 
 import android.app.Application
 import com.facebook.react.PackageList

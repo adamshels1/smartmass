@@ -571,19 +571,19 @@ export default function ChatScreen({navigation}) {
         {/* <View>
           <Button title="Display Notification" onPress={() => onDisplayNotification()} />
         </View> */}
-        {/*{__DEV__ && (*/}
-        <View>
-          <Button
-            title="Clear all"
-            onPress={() => {
-              dispatch(setMessagesAction([]));
-              dispatch(setStepAction(0, selectedDate));
-              dispatch(clearDays());
-              dispatch(setCart([]));
-            }}
-          />
-        </View>
-        {/*)}*/}
+        {__DEV__ && (
+          <View>
+            <Button
+              title="Clear all"
+              onPress={() => {
+                dispatch(setMessagesAction([]));
+                dispatch(setStepAction(0, selectedDate));
+                dispatch(clearDays());
+                dispatch(setCart([]));
+              }}
+            />
+          </View>
+        )}
         {/*{__DEV__ && (*/}
         {/*  <View>*/}
         {/*    <Button*/}
