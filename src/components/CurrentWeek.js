@@ -10,12 +10,12 @@ const CurrentWeek = ({onDateSelect, selectedDate}) => {
   // const currentDate = moment('2024-04-25');
 
   // Получаем начало текущей недели (воскресенье)
-  // const startOfWeek = currentDate.clone().startOf('week');
-  const startOfWeek = currentDate.clone();
+  const startOfWeek = currentDate.clone().startOf('week').day(1); //Убери day(1) для американцев
+  // const startOfWeek = currentDate.clone();
 
   // Создаем массив с датами текущей недели и названиями дней недели
   const weekDays = [];
-  const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+  const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
   for (let i = 0; i < 7; i++) {
     const day = startOfWeek.clone().add(i, 'days').startOf('day'); // Форматируем дату без времени
 
