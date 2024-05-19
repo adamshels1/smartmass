@@ -29,6 +29,7 @@ import {
   setMealtimesAction,
   setMessagesAction,
   setStepAction,
+  setTooltipStep,
 } from '../store/userActions';
 import AgendaComponent from '../components/AgendaComponent';
 
@@ -44,6 +45,8 @@ import CalendarModal from '../components/CalendarModal';
 const today = moment();
 import CurrentWeek from '../components/CurrentWeek';
 import {formatDietDataToString, jsonParse} from '../utils/format';
+
+import Tooltip from 'react-native-walkthrough-tooltip';
 export default function ChatScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
@@ -52,6 +55,7 @@ export default function ChatScreen({navigation}) {
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData);
   const days = useSelector(state => state.userData.days);
+  const tooltipStep = useSelector(state => state.userData.tooltipStep);
   // console.log('days', days);
   const day = useSelector(state =>
     state.userData?.days?.find(day =>
@@ -345,6 +349,8 @@ export default function ChatScreen({navigation}) {
       await sleep(100);
 
       flatListRef.current.scrollToEnd({animated: true});
+      await sleep(2000);
+      setToolTipVisible(true);
     } catch (error) {
       setIsBotWriting(false);
       console.error('Ошибка при отправке сообщения:', error);
@@ -495,6 +501,8 @@ export default function ChatScreen({navigation}) {
     },
   ];
 
+  const [toolTipVisible, setToolTipVisible] = useState(true);
+
   const renderMessageButtons = () => {
     if (isBotWriting) {
       return null;
@@ -503,6 +511,62 @@ export default function ChatScreen({navigation}) {
     return messageButtons
       ?.find(i => i.step === step)
       ?.buttons.map(i => {
+        if (true) {
+          return (
+            <Tooltip
+              animated={true}
+              // (Optional) When true,
+              // tooltip will animate in/out when showing/hiding
+              arrowSize={{width: 16, height: 8}}
+              // (Optional) Dimensions of arrow bubble pointing
+              // to the highlighted element
+              backgroundColor="rgba(0,0,0,0.5)"
+              // (Optional) Color of the fullscreen background
+              // beneath the tooltip.
+              isVisible={tooltipStep === 'showGetRationButton'}
+              // (Must) When true, tooltip is displayed
+              content={<Text style={{textAlign: 'center'}}>Клините сюда</Text>}
+              // (Must) This is the view displayed in the tooltip
+              placement="top"
+              // (Must) top, bottom, left, right, auto.
+              onClose={() => dispatch(setTooltipStep('showNexDayButton'))}
+              // (Optional) Callback fired when the user taps the tooltip
+            >
+              <View style={{alignItems: 'center', marginBottom: 5}}>
+                <TouchableOpacity
+                  onPress={() =>
+                    handleSendMessage({
+                      messageText: i.messageText,
+                      messageTextVisible: i.messageTextVisible,
+                      step: i.nextStep,
+                    })
+                  }
+                  style={{
+                    backgroundColor: '#F4F4F4',
+                    borderRadius: 15,
+                    minHeight: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    // width: '80%',
+                    borderWidth: 1,
+                    borderColor: '#67CFCF',
+                    paddingVertical: 5,
+                    paddingHorizontal: 15,
+                    maxWidth: '86%',
+                    flexDirection: 'row',
+                  }}>
+                  <Text style={{color: '#3E3E3E', fontSize: 14}}>
+                    {i.buttonText}
+                  </Text>
+                  <Image
+                    style={{width: 15, height: 15, top: 1.5, marginLeft: 10}}
+                    source={require('../assets/icons/send.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+            </Tooltip>
+          );
+        }
         return (
           <View style={{alignItems: 'center', marginBottom: 5}}>
             <TouchableOpacity
@@ -519,11 +583,12 @@ export default function ChatScreen({navigation}) {
                 minHeight: 40,
                 justifyContent: 'center',
                 alignItems: 'center',
-                width: '80%',
+                // width: '80%',
                 borderWidth: 1,
                 borderColor: '#67CFCF',
                 paddingVertical: 5,
-                paddingHorizontal: 10,
+                paddingHorizontal: 15,
+                maxWidth: '86%',
               }}>
               <Text style={{color: '#3E3E3E', fontSize: 14}}>
                 {i.buttonText}
@@ -558,6 +623,8 @@ export default function ChatScreen({navigation}) {
         <CurrentWeek
           onDateSelect={handleDateSelect}
           selectedDate={selectedDate}
+          toolTipVisible={toolTipVisible}
+          setToolTipVisible={setToolTipVisible}
         />
         <CalendarModal
           minDate={new Date()}
@@ -580,6 +647,7 @@ export default function ChatScreen({navigation}) {
                 dispatch(setStepAction(0, selectedDate));
                 dispatch(clearDays());
                 dispatch(setCart([]));
+                dispatch(setTooltipStep('showGetRationButton'));
               }}
             />
           </View>
@@ -616,31 +684,31 @@ export default function ChatScreen({navigation}) {
             }
           />
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Type a message..."
-              placeholderTextColor="#A1A1A1"
-              onChangeText={text => setMessageText(text)}
-              value={messageText}
-              multiline={true}
-              numberOfLines={4}
-              textAlignVertical="center"
-            />
-            <TouchableOpacity
-              onPress={() =>
-                handleSendMessage({
-                  messageText,
-                })
-              }
-              disabled={!disabledSendButton}
-              style={{opacity: disabledSendButton ? 1 : 0.5}}>
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('../assets/icons/send.png')}
-              />
-            </TouchableOpacity>
-          </View>
+          {/*<View style={styles.inputContainer}>*/}
+          {/*  <TextInput*/}
+          {/*    style={styles.input}*/}
+          {/*    placeholder="Type a message..."*/}
+          {/*    placeholderTextColor="#A1A1A1"*/}
+          {/*    onChangeText={text => setMessageText(text)}*/}
+          {/*    value={messageText}*/}
+          {/*    multiline={true}*/}
+          {/*    numberOfLines={4}*/}
+          {/*    textAlignVertical="center"*/}
+          {/*  />*/}
+          {/*  <TouchableOpacity*/}
+          {/*    onPress={() =>*/}
+          {/*      handleSendMessage({*/}
+          {/*        messageText,*/}
+          {/*      })*/}
+          {/*    }*/}
+          {/*    disabled={!disabledSendButton}*/}
+          {/*    style={{opacity: disabledSendButton ? 1 : 0.5}}>*/}
+          {/*    <Image*/}
+          {/*      style={{width: 30, height: 30}}*/}
+          {/*      source={require('../assets/icons/send.png')}*/}
+          {/*    />*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</View>*/}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

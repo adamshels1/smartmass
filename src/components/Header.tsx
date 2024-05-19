@@ -9,6 +9,9 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import {setTooltipStep} from '../store/userActions.js';
+import Tooltip from 'react-native-walkthrough-tooltip';
+import {useDispatch, useSelector} from 'react-redux';
 
 interface HeaderProps {
   title: string;
@@ -27,6 +30,8 @@ const Header: React.FC<HeaderProps> = ({
   containerStyle,
   titleStyle,
 }) => {
+  const dispatch = useDispatch();
+  const tooltipStep = useSelector(state => state.userData.tooltipStep);
   return (
     <View style={[styles.container, containerStyle]}>
       {showBack ? (
@@ -56,14 +61,36 @@ const Header: React.FC<HeaderProps> = ({
         )}
 
         {showSettingsIcon ? (
-          <TouchableOpacity
-            style={{marginLeft: 10}}
-            onPress={() => navigation.navigate('CartScreen')}>
-            <Image
-              style={styles.icon}
-              source={require('../assets/icons/cart_inactive.png')}
-            />
-          </TouchableOpacity>
+          <Tooltip
+            animated={true}
+            // (Optional) When true,
+            // tooltip will animate in/out when showing/hiding
+            arrowSize={{width: 16, height: 8}}
+            // (Optional) Dimensions of arrow bubble pointing
+            // to the highlighted element
+            backgroundColor="rgba(0,0,0,0.5)"
+            // (Optional) Color of the fullscreen background
+            // beneath the tooltip.
+            isVisible={tooltipStep === 'showCartButton'}
+            // (Must) When true, tooltip is displayed
+            content={
+              <Text style={{textAlign: 'center'}}>Корзина продуктов</Text>
+            }
+            // (Must) This is the view displayed in the tooltip
+            placement="bottom"
+            // (Must) top, bottom, left, right, auto.
+            onClose={() => dispatch(setTooltipStep(''))}
+            // (Optional) Callback fired when the user taps the tooltip
+          >
+            <TouchableOpacity
+              style={{marginLeft: 10}}
+              onPress={() => navigation.navigate('CartScreen')}>
+              <Image
+                style={styles.icon}
+                source={require('../assets/icons/cart_inactive.png')}
+              />
+            </TouchableOpacity>
+          </Tooltip>
         ) : (
           <View />
         )}

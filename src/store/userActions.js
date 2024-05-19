@@ -89,3 +89,10 @@ export const setCart = cart => {
     payload: cart,
   };
 };
+
+export const setTooltipStep = value => {
+  return {
+    type: 'SET_TOOLTIP_STEP',
+    payload: value,
+  };
+};

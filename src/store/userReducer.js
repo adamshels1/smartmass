@@ -20,6 +20,7 @@ const initialState = {
   step: 0,
   days: [],
   cart: [],
+  tooltipStep: 'showGetRationButton', //showGetRationButton | showNexDayButton  | showCartButton
 };
 
 export default (state = initialState, {type, payload}) => {
@@ -126,6 +127,11 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         cart: payload,
+      };
+    case 'SET_TOOLTIP_STEP':
+      return {
+        ...state,
+        tooltipStep: payload,
       };
     default:
       return state;

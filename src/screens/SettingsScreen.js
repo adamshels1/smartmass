@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Platform,
+  TouchableHighlight,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Input from '../components/Input';
@@ -39,6 +40,7 @@ const SettingsScreen = ({navigation}) => {
   );
 
   const pickerRef = useRef(null);
+  const pickerRefGoal = useRef(null);
 
   const disabled = weight && height && allergies;
   const isHasSettingsData =
@@ -84,45 +86,49 @@ const SettingsScreen = ({navigation}) => {
               alignItems: 'center',
               marginTop: 40,
             }}>
-            <View style={styles.inputContainer}>
-              <Image
-                style={styles.inputIcon}
-                source={require('../assets/icons/goal.png')}
-              />
-
-              <View
-                style={{
-                  width: Platform.OS === 'ios' ? 150 : 200,
-                  marginLeft: Platform.OS === 'ios' ? 10 : 0,
-                  height: 40,
-                  justifyContent: 'center',
-                }}>
-                <RNPickerSelect
-                  ref={pickerRef}
-                  textInputProps={{
-                    style: styles.input,
-                  }}
-                  style={{
-                    inputAndroid: styles.input,
-                  }}
-                  selectedValue={goal}
-                  value={goal}
-                  onValueChange={value => setGoal(value)}
-                  placeholder={{label: 'Выберите цель', value: null}}
-                  items={[
-                    {label: 'Набрать вес', value: 'gain'},
-                    {label: 'Сбросить вес', value: 'lose'},
-                    {label: 'Поддерживать вес', value: 'maintain'},
-                  ]}
-                />
-              </View>
-              {Platform.OS === 'ios' && (
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={pickerRefGoal?.current?.togglePicker}>
+              <View style={styles.inputContainer}>
                 <Image
-                  style={[styles.inputIcon]}
-                  source={require('../assets/icons/chevron-right.png')}
+                  style={styles.inputIcon}
+                  source={require('../assets/icons/goal.png')}
                 />
-              )}
-            </View>
+
+                <View
+                  style={{
+                    width: Platform.OS === 'ios' ? 150 : 200,
+                    marginLeft: Platform.OS === 'ios' ? 10 : 0,
+                    height: 40,
+                    justifyContent: 'center',
+                  }}>
+                  <RNPickerSelect
+                    ref={pickerRefGoal}
+                    textInputProps={{
+                      style: styles.input,
+                    }}
+                    style={{
+                      inputAndroid: styles.input,
+                    }}
+                    selectedValue={goal}
+                    value={goal}
+                    onValueChange={value => setGoal(value)}
+                    placeholder={{label: 'Выберите цель', value: null}}
+                    items={[
+                      {label: 'Набрать вес', value: 'gain'},
+                      {label: 'Сбросить вес', value: 'lose'},
+                      {label: 'Поддерживать вес', value: 'maintain'},
+                    ]}
+                  />
+                </View>
+                {Platform.OS === 'ios' && (
+                  <Image
+                    style={[styles.inputIcon]}
+                    source={require('../assets/icons/chevron-right.png')}
+                  />
+                )}
+              </View>
+            </TouchableHighlight>
 
             <Input
               icon={require('../assets/icons/weight.png')}

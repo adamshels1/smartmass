@@ -1,12 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import Tooltip from 'react-native-walkthrough-tooltip';
+import {setTooltipStep} from '../store/userActions';
 
-const CurrentWeek = ({onDateSelect, selectedDate}) => {
+const isNextDay2 = day => {
+  const tomorrow = moment().add(1, 'day').startOf('day');
+  return moment(day).isSame(tomorrow, 'day');
+};
+
+const CurrentWeek = ({
+  onDateSelect,
+  selectedDate,
+  toolTipVisible,
+  setToolTipVisible,
+}) => {
+  const tooltipStep = useSelector(state => state.userData.tooltipStep);
   // Получаем текущую дату без времени
+  const dispatch = useDispatch();
   const currentDate = moment().startOf('day');
   const days = useSelector(state => state.userData.days);
+  // const [toolTipVisible, setToolTipVisible] = useState(true);
   // const currentDate = moment('2024-04-25');
 
   // Получаем начало текущей недели (воскресенье)
@@ -31,59 +46,86 @@ const CurrentWeek = ({onDateSelect, selectedDate}) => {
 
   return (
     <View style={styles.container}>
-      {weekDays.map(({day, name, diet}, index) => (
-        <View style={{alignItems: 'center'}}>
-          <Text
-            style={[
-              styles.dayName,
-              {color: currentDate.isSame(day, 'day') ? '#67CFCF' : '#D3D3D3'},
-            ]}>
-            {name}
-          </Text>
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.dayButton,
-              day.isSame(selectedDate, 'day')
-                ? styles.activeDay
-                : styles.inactiveDay,
-              {opacity: isSameFutureDay(day) ? 1 : 0.5},
-            ]}
-            onPress={() => onDateSelect(day.format('YYYY-MM-DD'))}
-            disabled={!isSameFutureDay(day)}>
-            <Text style={styles.dayText}>{day.format('D')}</Text>
-          </TouchableOpacity>
-          {isSameFutureDay(day) && (
-            <View style={{marginTop: 5, flexDirection: 'row'}}>
-              <Image
-                style={{width: 15, height: 15}}
-                source={
-                  diet
-                    ? require('../assets/icons/cutlery.png')
-                    : require('../assets/icons/cutlery-inactive.png')
-                }
-              />
+      {weekDays.map(({day, name, diet}, index) => {
+        const isNextDay = isNextDay2(day);
+        return (
+          <Tooltip
+            animated={true}
+            // (Optional) When true,
+            // tooltip will animate in/out when showing/hiding
+            arrowSize={{width: 16, height: 8}}
+            // (Optional) Dimensions of arrow bubble pointing
+            // to the highlighted element
+            backgroundColor="rgba(0,0,0,0.5)"
+            // (Optional) Color of the fullscreen background
+            // beneath the tooltip.
+            isVisible={isNextDay && tooltipStep === 'showNexDayButton'}
+            // (Must) When true, tooltip is displayed
+            content={<Text style={{textAlign: 'center'}}>Выберите дату</Text>}
+            // (Must) This is the view displayed in the tooltip
+            placement="bottom"
+            // (Must) top, bottom, left, right, auto.
+            onClose={() => dispatch(setTooltipStep('showCartButton'))}
+            // (Optional) Callback fired when the user taps the tooltip
+          >
+            <View style={{alignItems: 'center'}}>
+              <Text
+                style={[
+                  styles.dayName,
+                  {
+                    color: currentDate.isSame(day, 'day')
+                      ? '#67CFCF'
+                      : '#D3D3D3',
+                  },
+                ]}>
+                {name}
+              </Text>
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.dayButton,
+                  day.isSame(selectedDate, 'day')
+                    ? styles.activeDay
+                    : styles.inactiveDay,
+                  {opacity: isSameFutureDay(day) ? 1 : 0.5},
+                ]}
+                onPress={() => onDateSelect(day.format('YYYY-MM-DD'))}
+                disabled={!isSameFutureDay(day)}>
+                <Text style={styles.dayText}>{day.format('D')}</Text>
+              </TouchableOpacity>
+              {isSameFutureDay(day) && (
+                <View style={{marginTop: 5, flexDirection: 'row'}}>
+                  <Image
+                    style={{width: 15, height: 15}}
+                    source={
+                      diet
+                        ? require('../assets/icons/cutlery.png')
+                        : require('../assets/icons/cutlery-inactive.png')
+                    }
+                  />
 
-              <Image
-                style={{width: 15, height: 15}}
-                source={require('../assets/icons/cart_inactive.png')}
-              />
+                  <Image
+                    style={{width: 15, height: 15}}
+                    source={require('../assets/icons/cart_inactive.png')}
+                  />
+                </View>
+              )}
+
+              {currentDate.isSame(day, 'day') && (
+                <View
+                  style={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: 2,
+                    backgroundColor: '#67CFCF',
+                    marginTop: 3,
+                  }}
+                />
+              )}
             </View>
-          )}
-
-          {currentDate.isSame(day, 'day') && (
-            <View
-              style={{
-                width: 4,
-                height: 4,
-                borderRadius: 2,
-                backgroundColor: '#67CFCF',
-                marginTop: 3,
-              }}
-            />
-          )}
-        </View>
-      ))}
+          </Tooltip>
+        );
+      })}
     </View>
   );
 };
