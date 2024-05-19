@@ -91,7 +91,7 @@ const SettingsScreen = ({navigation}) => {
             }}>
             <TouchableHighlight
               underlayColor="transparent"
-              onPress={pickerRefGoal?.current?.togglePicker}>
+              onPress={() => pickerRefGoal?.current?.togglePicker()}>
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
@@ -150,7 +150,7 @@ const SettingsScreen = ({navigation}) => {
 
             <TouchableHighlight
               underlayColor="transparent"
-              onPress={pickerRefMealStart?.current?.togglePicker}>
+              onPress={() => pickerRefMealStart?.current?.togglePicker()}>
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
@@ -204,7 +204,7 @@ const SettingsScreen = ({navigation}) => {
 
             <TouchableHighlight
               underlayColor="transparent"
-              onPress={pickerRefMealEnd?.current?.togglePicker}>
+              onPress={() => pickerRefMealEnd?.current?.togglePicker()}>
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
@@ -258,7 +258,7 @@ const SettingsScreen = ({navigation}) => {
 
             <TouchableHighlight
               underlayColor="transparent"
-              onPress={pickerRefMaxMeal?.current?.togglePicker}>
+              onPress={() => pickerRefMaxMeal?.current?.togglePicker()}>
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
