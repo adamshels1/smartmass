@@ -41,6 +41,9 @@ const SettingsScreen = ({navigation}) => {
 
   const pickerRef = useRef(null);
   const pickerRefGoal = useRef(null);
+  const pickerRefMealStart = useRef(null);
+  const pickerRefMealEnd = useRef(null);
+  const pickerRefMaxMeal = useRef(null);
 
   const disabled = weight && height && allergies;
   const isHasSettingsData =
@@ -145,152 +148,164 @@ const SettingsScreen = ({navigation}) => {
               onChangeText={text => setHeight(text)}
             />
 
-            <View style={styles.inputContainer}>
-              <Image
-                style={styles.inputIcon}
-                source={require('../assets/icons/start.png')}
-              />
-
-              <View
-                style={{
-                  width: Platform.OS === 'ios' ? 150 : 200,
-                  marginLeft: Platform.OS === 'ios' ? 10 : 0,
-                  height: 40,
-                  justifyContent: 'center',
-                }}>
-                <RNPickerSelect
-                  ref={pickerRef}
-                  textInputProps={{
-                    style: styles.input,
-                  }}
-                  style={{
-                    inputAndroid: styles.input,
-                  }}
-                  selectedValue={dailyMealStartTime}
-                  value={dailyMealStartTime}
-                  onValueChange={value => setDailyMealStartTime(value)}
-                  placeholder={{label: 'Начало приема пищи', value: null}}
-                  items={[
-                    {label: '6:00', value: '6:00'},
-                    {label: '6:30', value: '6:30'},
-                    {label: '7:00', value: '7:00'},
-                    {label: '7:30', value: '7:30'},
-                    {label: '8:00', value: '8:00'},
-                    {label: '8:30', value: '8:30'},
-                    {label: '9:00', value: '9:00'},
-                    {label: '9:30', value: '9:30'},
-                    {label: '10:00', value: '10:00'},
-                    {label: '10:30', value: '10:30'},
-                    {label: '11:00', value: '11:00'},
-                    {label: '11:30', value: '11:30'},
-                    {label: '12:00', value: '12:00'},
-                  ]}
-                />
-              </View>
-              {Platform.OS === 'ios' && (
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={pickerRefMealStart?.current?.togglePicker}>
+              <View style={styles.inputContainer}>
                 <Image
-                  style={[styles.inputIcon]}
-                  source={require('../assets/icons/chevron-right.png')}
+                  style={styles.inputIcon}
+                  source={require('../assets/icons/start.png')}
                 />
-              )}
-            </View>
 
-            <View style={styles.inputContainer}>
-              <Image
-                style={styles.inputIcon}
-                source={require('../assets/icons/time-left.png')}
-              />
-
-              <View
-                style={{
-                  width: Platform.OS === 'ios' ? 150 : 200,
-                  marginLeft: Platform.OS === 'ios' ? 10 : 0,
-                  height: 40,
-                  justifyContent: 'center',
-                }}>
-                <RNPickerSelect
-                  ref={pickerRef}
-                  textInputProps={{
-                    style: styles.input,
-                  }}
+                <View
                   style={{
-                    inputAndroid: styles.input,
-                  }}
-                  selectedValue={dailyMealEndTime}
-                  value={dailyMealEndTime}
-                  onValueChange={value => setDailyMealEndTime(value)}
-                  placeholder={{label: 'Конец приема пищи', value: null}}
-                  items={[
-                    {label: '17:00', value: '17:00'},
-                    {label: '17:30', value: '17:30'},
-                    {label: '18:00', value: '18:00'},
-                    {label: '18:30', value: '18:30'},
-                    {label: '19:00', value: '19:00'},
-                    {label: '19:30', value: '19:30'},
-                    {label: '20:00', value: '20:00'},
-                    {label: '20:30', value: '20:30'},
-                    {label: '21:00', value: '21:00'},
-                    {label: '21:30', value: '21:30'},
-                    {label: '22:00', value: '22:00'},
-                    {label: '22:30', value: '22:30'},
-                    {label: '23:00', value: '23:00'},
-                  ]}
-                />
+                    width: Platform.OS === 'ios' ? 150 : 200,
+                    marginLeft: Platform.OS === 'ios' ? 10 : 0,
+                    height: 40,
+                    justifyContent: 'center',
+                  }}>
+                  <RNPickerSelect
+                    ref={pickerRefMealStart}
+                    textInputProps={{
+                      style: styles.input,
+                    }}
+                    style={{
+                      inputAndroid: styles.input,
+                    }}
+                    selectedValue={dailyMealStartTime}
+                    value={dailyMealStartTime}
+                    onValueChange={value => setDailyMealStartTime(value)}
+                    placeholder={{label: 'Начало приема пищи', value: null}}
+                    items={[
+                      {label: '6:00', value: '6:00'},
+                      {label: '6:30', value: '6:30'},
+                      {label: '7:00', value: '7:00'},
+                      {label: '7:30', value: '7:30'},
+                      {label: '8:00', value: '8:00'},
+                      {label: '8:30', value: '8:30'},
+                      {label: '9:00', value: '9:00'},
+                      {label: '9:30', value: '9:30'},
+                      {label: '10:00', value: '10:00'},
+                      {label: '10:30', value: '10:30'},
+                      {label: '11:00', value: '11:00'},
+                      {label: '11:30', value: '11:30'},
+                      {label: '12:00', value: '12:00'},
+                    ]}
+                  />
+                </View>
+                {Platform.OS === 'ios' && (
+                  <Image
+                    style={[styles.inputIcon]}
+                    source={require('../assets/icons/chevron-right.png')}
+                  />
+                )}
               </View>
-              {Platform.OS === 'ios' && (
+            </TouchableHighlight>
+
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={pickerRefMealEnd?.current?.togglePicker}>
+              <View style={styles.inputContainer}>
                 <Image
-                  style={[styles.inputIcon]}
-                  source={require('../assets/icons/chevron-right.png')}
+                  style={styles.inputIcon}
+                  source={require('../assets/icons/time-left.png')}
                 />
-              )}
-            </View>
 
-            <View style={styles.inputContainer}>
-              <Image
-                style={styles.inputIcon}
-                source={require('../assets/icons/eating.png')}
-              />
-
-              <View
-                style={{
-                  width: Platform.OS === 'ios' ? 150 : 200,
-                  marginLeft: Platform.OS === 'ios' ? 10 : 0,
-                  height: 40,
-                  justifyContent: 'center',
-                }}>
-                <RNPickerSelect
-                  ref={pickerRef}
-                  textInputProps={{
-                    style: styles.input,
-                  }}
+                <View
                   style={{
-                    inputAndroid: styles.input,
-                  }}
-                  selectedValue={maxMealPerDay}
-                  value={maxMealPerDay}
-                  onValueChange={value => setMaxMealPerDay(value)}
-                  placeholder={{
-                    label: 'Количество приемов пищи в день',
-                    value: null,
-                  }}
-                  items={[
-                    {label: '1', value: '1'},
-                    {label: '2', value: '2'},
-                    {label: '3', value: '3'},
-                    {label: '4', value: '4'},
-                    {label: '5', value: '5'},
-                    {label: '6', value: '6'},
-                    {label: '7', value: '7'},
-                  ]}
-                />
+                    width: Platform.OS === 'ios' ? 150 : 200,
+                    marginLeft: Platform.OS === 'ios' ? 10 : 0,
+                    height: 40,
+                    justifyContent: 'center',
+                  }}>
+                  <RNPickerSelect
+                    ref={pickerRefMealEnd}
+                    textInputProps={{
+                      style: styles.input,
+                    }}
+                    style={{
+                      inputAndroid: styles.input,
+                    }}
+                    selectedValue={dailyMealEndTime}
+                    value={dailyMealEndTime}
+                    onValueChange={value => setDailyMealEndTime(value)}
+                    placeholder={{label: 'Конец приема пищи', value: null}}
+                    items={[
+                      {label: '17:00', value: '17:00'},
+                      {label: '17:30', value: '17:30'},
+                      {label: '18:00', value: '18:00'},
+                      {label: '18:30', value: '18:30'},
+                      {label: '19:00', value: '19:00'},
+                      {label: '19:30', value: '19:30'},
+                      {label: '20:00', value: '20:00'},
+                      {label: '20:30', value: '20:30'},
+                      {label: '21:00', value: '21:00'},
+                      {label: '21:30', value: '21:30'},
+                      {label: '22:00', value: '22:00'},
+                      {label: '22:30', value: '22:30'},
+                      {label: '23:00', value: '23:00'},
+                    ]}
+                  />
+                </View>
+                {Platform.OS === 'ios' && (
+                  <Image
+                    style={[styles.inputIcon]}
+                    source={require('../assets/icons/chevron-right.png')}
+                  />
+                )}
               </View>
-              {Platform.OS === 'ios' && (
+            </TouchableHighlight>
+
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={pickerRefMaxMeal?.current?.togglePicker}>
+              <View style={styles.inputContainer}>
                 <Image
-                  style={[styles.inputIcon]}
-                  source={require('../assets/icons/chevron-right.png')}
+                  style={styles.inputIcon}
+                  source={require('../assets/icons/eating.png')}
                 />
-              )}
-            </View>
+
+                <View
+                  style={{
+                    width: Platform.OS === 'ios' ? 150 : 200,
+                    marginLeft: Platform.OS === 'ios' ? 10 : 0,
+                    height: 40,
+                    justifyContent: 'center',
+                  }}>
+                  <RNPickerSelect
+                    ref={pickerRefMaxMeal}
+                    textInputProps={{
+                      style: styles.input,
+                    }}
+                    style={{
+                      inputAndroid: styles.input,
+                    }}
+                    selectedValue={maxMealPerDay}
+                    value={maxMealPerDay}
+                    onValueChange={value => setMaxMealPerDay(value)}
+                    placeholder={{
+                      label: 'Количество приемов пищи в день',
+                      value: null,
+                    }}
+                    items={[
+                      {label: '1', value: '1'},
+                      {label: '2', value: '2'},
+                      {label: '3', value: '3'},
+                      {label: '4', value: '4'},
+                      {label: '5', value: '5'},
+                      {label: '6', value: '6'},
+                      {label: '7', value: '7'},
+                    ]}
+                  />
+                </View>
+                {Platform.OS === 'ios' && (
+                  <Image
+                    style={[styles.inputIcon]}
+                    source={require('../assets/icons/chevron-right.png')}
+                  />
+                )}
+              </View>
+            </TouchableHighlight>
 
             <Input
               icon={require('../assets/icons/no-food.png')}
