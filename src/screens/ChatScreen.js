@@ -511,7 +511,7 @@ export default function ChatScreen({navigation}) {
     return messageButtons
       ?.find(i => i.step === step)
       ?.buttons.map(i => {
-        if (true) {
+        if (step === 1) {
           return (
             <Tooltip
               animated={true}
@@ -525,7 +525,11 @@ export default function ChatScreen({navigation}) {
               // beneath the tooltip.
               isVisible={tooltipStep === 'showGetRationButton'}
               // (Must) When true, tooltip is displayed
-              content={<Text style={{textAlign: 'center'}}>Клините сюда</Text>}
+              content={
+                <View>
+                  <Text style={{textAlign: 'center'}}>Клините сюда </Text>
+                </View>
+              }
               // (Must) This is the view displayed in the tooltip
               placement="top"
               // (Must) top, bottom, left, right, auto.

@@ -74,7 +74,11 @@ const Header: React.FC<HeaderProps> = ({
             isVisible={tooltipStep === 'showCartButton'}
             // (Must) When true, tooltip is displayed
             content={
-              <Text style={{textAlign: 'center'}}>Корзина продуктов</Text>
+              <View>
+                <Text style={{textAlign: 'center'}}>
+                  Корзина продуктов для рациона
+                </Text>
+              </View>
             }
             // (Must) This is the view displayed in the tooltip
             placement="bottom"

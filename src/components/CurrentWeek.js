@@ -25,12 +25,12 @@ const CurrentWeek = ({
   // const currentDate = moment('2024-04-25');
 
   // Получаем начало текущей недели (воскресенье)
-  const startOfWeek = currentDate.clone().startOf('week').day(1); //Убери day(1) для американцев
+  const startOfWeek = currentDate.clone().startOf('week'); //Убери day(1) для американцев
   // const startOfWeek = currentDate.clone();
 
   // Создаем массив с датами текущей недели и названиями дней недели
   const weekDays = [];
-  const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
   for (let i = 0; i < 7; i++) {
     const day = startOfWeek.clone().add(i, 'days').startOf('day'); // Форматируем дату без времени
 
@@ -61,7 +61,13 @@ const CurrentWeek = ({
             // beneath the tooltip.
             isVisible={isNextDay && tooltipStep === 'showNexDayButton'}
             // (Must) When true, tooltip is displayed
-            content={<Text style={{textAlign: 'center'}}>Выберите дату</Text>}
+            content={
+              <View>
+                <Text style={{textAlign: 'center'}}>
+                  Выберите следующую дату
+                </Text>
+              </View>
+            }
             // (Must) This is the view displayed in the tooltip
             placement="bottom"
             // (Must) top, bottom, left, right, auto.
