@@ -28,6 +28,9 @@ export function formatDietDataToString(data) {
 export function sumAmountByName(products) {
   const sumMap = {};
 
+  if (!products?.length) {
+    return null;
+  }
   for (const product of products) {
     const {name, amount, units} = product;
     const key = name + '|' + units; // Создаем уникальный ключ из имени и единиц измерения

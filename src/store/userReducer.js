@@ -21,6 +21,7 @@ const initialState = {
   days: [],
   cart: [],
   tooltipStep: 'showGetCaloriesButton', //showGetCaloriesButton | showGetRationButton | showNexDayButton  | showCartButton
+  showWelcomeScreen: true,
 };
 
 export default (state = initialState, {type, payload}) => {
@@ -132,6 +133,11 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         tooltipStep: payload,
+      };
+    case 'SET_SHOW_WELCOME_SCREEN':
+      return {
+        ...state,
+        showWelcomeScreen: payload,
       };
     default:
       return state;

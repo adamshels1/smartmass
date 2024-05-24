@@ -96,3 +96,10 @@ export const setTooltipStep = value => {
     payload: value,
   };
 };
+
+export const setShowWelcomeScreen = bool => {
+  return {
+    type: 'SET_SHOW_WELCOME_SCREEN',
+    payload: bool,
+  };
+};

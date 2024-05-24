@@ -3,8 +3,11 @@ import {View, Text, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
 import LottieView from 'lottie-react-native';
 import Button from '../components/Button';
+import {setShowWelcomeScreen} from '../store/userActions';
+import {useDispatch} from 'react-redux';
 
 const WelcomeScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const swiperRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -38,6 +41,7 @@ const WelcomeScreen = ({navigation}) => {
   const handleFinish = () => {
     // Your logic for finish action
     navigation.navigate('SettingsScreen');
+    dispatch(setShowWelcomeScreen(false));
   };
 
   const renderButton = () => {

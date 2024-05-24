@@ -23,24 +23,29 @@ const AppNavigator = () => {
   // }, [token])
 
   const isSignedIn = useSelector(state => state.userData.isSignedIn);
+  const isShowWelcomeScreen = useSelector(
+    state => state.userData.showWelcomeScreen,
+  );
 
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          {isShowWelcomeScreen && (
+            <Stack.Screen
+              name="WelcomeScreen"
+              component={WelcomeScreen}
+              options={{headerShown: false}}
+            />
+          )}
           <Stack.Screen
-            name="WelcomeScreen"
-            component={WelcomeScreen}
+            name="ChatScreen"
+            component={ChatScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="SettingsScreen"
             component={SettingsScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="ChatScreen"
-            component={ChatScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
