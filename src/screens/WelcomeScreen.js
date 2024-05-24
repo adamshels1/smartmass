@@ -1,16 +1,15 @@
 import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
-import LottieView from 'lottie-react-native';
 import Button from '../components/Button';
+import LottieView from 'lottie-react-native';
 import {setShowWelcomeScreen} from '../store/userActions';
 import {useDispatch} from 'react-redux';
 
-const WelcomeScreen = ({navigation}) => {
+const MySwiper = ({navigation}) => {
   const dispatch = useDispatch();
   const swiperRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const slides = [
     {
       text: 'Получайте рацион питания быстро и удобно благодаря Искусственному Интеллекту.',
@@ -28,47 +27,21 @@ const WelcomeScreen = ({navigation}) => {
 
   const handleNext = () => {
     if (swiperRef.current) {
-      swiperRef.current.scrollBy(1, true); // true for animated
-    }
-  };
-
-  const handlePrev = () => {
-    if (swiperRef.current) {
-      swiperRef.current.scrollBy(-1, true); // true for animated
+      swiperRef.current.scrollBy(1, true);
     }
   };
 
   const handleFinish = () => {
-    // Your logic for finish action
     navigation.navigate('SettingsScreen');
     dispatch(setShowWelcomeScreen(false));
   };
 
-  const renderButton = () => {
-    if (currentIndex === slides.length - 1) {
-      return (
-        <Button
-          title={'Давай начнем'}
-          onPress={handleFinish}
-          style={{flex: 1, marginLeft: 10}}
-        />
-      );
-    } else {
-      return (
-        <Button
-          title={'Далее'}
-          onPress={handleNext}
-          style={{flex: 1, marginLeft: 10}}
-        />
-      );
-    }
-  };
-
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={styles.container}>
       <Swiper
         ref={swiperRef}
         style={styles.wrapper}
+        loop={false}
         showsButtons={false}
         activeDotColor="#67CFCF"
         onIndexChanged={index => setCurrentIndex(index)}>
@@ -89,19 +62,36 @@ const WelcomeScreen = ({navigation}) => {
           </View>
         ))}
       </Swiper>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          padding: 20,
-        }}>
-        {renderButton()}
+      <View style={styles.buttonContainer}>
+        {currentIndex < slides.length - 1 ? (
+          <Button
+            title={'Далее'}
+            onPress={handleNext}
+            style={{flex: 1, marginLeft: 10}}
+          />
+        ) : (
+          <Button
+            title={'Давай начнем'}
+            onPress={handleFinish}
+            style={{flex: 1, marginLeft: 10}}
+          />
+        )}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 20,
+  },
+
   wrapper: {
     backgroundColor: '#31D6D6', // Устанавливаем цвет фона слайдера
   },
@@ -120,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeScreen;
+export default MySwiper;
