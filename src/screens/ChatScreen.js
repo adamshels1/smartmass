@@ -510,10 +510,12 @@ export default function ChatScreen({navigation}) {
     console.log('step ---->', step);
     return messageButtons
       ?.find(i => i.step === step)
-      ?.buttons.map(i => {
-        if (step === 1) {
+      ?.buttons.map((i, key) => {
+        console.log('step', step, tooltipStep);
+        if (step === 0 || step === 1) {
           return (
             <Tooltip
+              key={key}
               animated={true}
               // (Optional) When true,
               // tooltip will animate in/out when showing/hiding
@@ -523,7 +525,10 @@ export default function ChatScreen({navigation}) {
               backgroundColor="rgba(0,0,0,0.5)"
               // (Optional) Color of the fullscreen background
               // beneath the tooltip.
-              isVisible={tooltipStep === 'showGetRationButton'}
+              isVisible={
+                tooltipStep === 'showGetCaloriesButton' ||
+                tooltipStep === 'showGetRationButton'
+              }
               // (Must) When true, tooltip is displayed
               content={
                 <View>
@@ -533,7 +538,13 @@ export default function ChatScreen({navigation}) {
               // (Must) This is the view displayed in the tooltip
               placement="top"
               // (Must) top, bottom, left, right, auto.
-              onClose={() => dispatch(setTooltipStep('showNexDayButton'))}
+              onClose={() => {
+                if (tooltipStep === 'showGetCaloriesButton') {
+                  dispatch(setTooltipStep('showGetRationButton'));
+                } else if (tooltipStep === 'showGetRationButton') {
+                  dispatch(setTooltipStep('showNexDayButton'));
+                }
+              }}
               // (Optional) Callback fired when the user taps the tooltip
             >
               <View style={{alignItems: 'center', marginBottom: 5}}>
@@ -630,13 +641,13 @@ export default function ChatScreen({navigation}) {
           toolTipVisible={toolTipVisible}
           setToolTipVisible={setToolTipVisible}
         />
-        <CalendarModal
-          minDate={new Date()}
-          maxDate={moment(lastDay?.date).add(1, 'day').toDate()}
-          visible={modalVisible}
-          closeModal={closeModal}
-          onDateSelect={handleDateSelect}
-        />
+        {/*<CalendarModal*/}
+        {/*  minDate={new Date()}*/}
+        {/*  maxDate={moment(lastDay?.date).add(1, 'day').toDate()}*/}
+        {/*  visible={modalVisible}*/}
+        {/*  closeModal={closeModal}*/}
+        {/*  onDateSelect={handleDateSelect}*/}
+        {/*/>*/}
         {/*<Button title="изменить дату" onPress={openModal} />*/}
 
         {/* <View>
@@ -651,7 +662,8 @@ export default function ChatScreen({navigation}) {
                 dispatch(setStepAction(0, selectedDate));
                 dispatch(clearDays());
                 dispatch(setCart([]));
-                dispatch(setTooltipStep('showGetRationButton'));
+                dispatch(setTooltipStep('showGetCaloriesButton'));
+                dispatch(setCalories(null));
               }}
             />
           </View>

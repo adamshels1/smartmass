@@ -20,7 +20,7 @@ const initialState = {
   step: 0,
   days: [],
   cart: [],
-  tooltipStep: 'showGetRationButton', //showGetRationButton | showNexDayButton  | showCartButton
+  tooltipStep: 'showGetCaloriesButton', //showGetCaloriesButton | showGetRationButton | showNexDayButton  | showCartButton
 };
 
 export default (state = initialState, {type, payload}) => {

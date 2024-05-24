@@ -37,7 +37,7 @@ const WelcomeScreen = ({navigation}) => {
 
   const handleFinish = () => {
     // Your logic for finish action
-    navigation.navigate('ChatScreen');
+    navigation.navigate('SettingsScreen');
   };
 
   const renderButton = () => {

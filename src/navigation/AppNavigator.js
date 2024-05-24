@@ -34,6 +34,11 @@ const AppNavigator = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
+            name="SettingsScreen"
+            component={SettingsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
             options={{headerShown: false}}
@@ -41,11 +46,6 @@ const AppNavigator = () => {
           <Stack.Screen
             name="CartScreen"
             component={CartScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SettingsScreen"
-            component={SettingsScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

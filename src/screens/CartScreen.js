@@ -345,7 +345,7 @@ export default function CartScreen({navigation}) {
 
   const generateCart = async () => {
     setIsBotWriting(true);
-    await sleep(3000);
+    await sleep(1500);
     const mergedData = days.flatMap(i => i.products);
     const summedData = sumAmountByName(mergedData);
     console.log('summedData', summedData);
@@ -544,13 +544,7 @@ export default function CartScreen({navigation}) {
           onDateSelect={handleDateSelect}
           selectedDate={selectedDate}
         />
-        <CalendarModal
-          minDate={new Date()}
-          maxDate={moment(lastDay?.date).add(1, 'day').toDate()}
-          visible={modalVisible}
-          closeModal={closeModal}
-          onDateSelect={handleDateSelect}
-        />
+
         {/*<Button title="изменить дату" onPress={openModal} />*/}
 
         {/* <View>

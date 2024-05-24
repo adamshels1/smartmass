@@ -50,6 +50,7 @@ const CurrentWeek = ({
         const isNextDay = isNextDay2(day);
         return (
           <Tooltip
+            key={index}
             animated={true}
             // (Optional) When true,
             // tooltip will animate in/out when showing/hiding
@@ -87,7 +88,6 @@ const CurrentWeek = ({
                 {name}
               </Text>
               <TouchableOpacity
-                key={index}
                 style={[
                   styles.dayButton,
                   day.isSame(selectedDate, 'day')
