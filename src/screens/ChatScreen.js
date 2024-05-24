@@ -532,7 +532,15 @@ export default function ChatScreen({navigation}) {
               // (Must) When true, tooltip is displayed
               content={
                 <View>
-                  <Text style={{textAlign: 'center'}}>Клините сюда </Text>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 14,
+                      color: '#505050',
+                      fontWeight: '300',
+                    }}>
+                    Клините сюда{' '}
+                  </Text>
                 </View>
               }
               // (Must) This is the view displayed in the tooltip
@@ -570,7 +578,13 @@ export default function ChatScreen({navigation}) {
                     maxWidth: '86%',
                     flexDirection: 'row',
                   }}>
-                  <Text style={{color: '#3E3E3E', fontSize: 14}}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 14,
+                      color: '#505050',
+                      fontWeight: '300',
+                    }}>
                     {i.buttonText}
                   </Text>
                   <Image
@@ -604,10 +618,15 @@ export default function ChatScreen({navigation}) {
                 paddingVertical: 5,
                 paddingHorizontal: 15,
                 maxWidth: '86%',
+                flexDirection: 'row',
               }}>
-              <Text style={{color: '#3E3E3E', fontSize: 14}}>
+              <Text style={{color: '#3E3E3E', fontSize: 13, fontWeight: '400'}}>
                 {i.buttonText}
               </Text>
+              <Image
+                style={{width: 15, height: 15, top: 1.5, marginLeft: 10}}
+                source={require('../assets/icons/send.png')}
+              />
             </TouchableOpacity>
           </View>
         );
@@ -760,10 +779,12 @@ const styles = StyleSheet.create({
   userMessageText: {
     color: '#FFFFFF',
     fontSize: 13,
+    fontWeight: '300',
   },
   otherMessageText: {
     color: '#505050',
     fontSize: 13,
+    fontWeight: '300',
   },
   inputContainer: {
     flexDirection: 'row',

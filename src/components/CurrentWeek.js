@@ -64,7 +64,13 @@ const CurrentWeek = ({
             // (Must) When true, tooltip is displayed
             content={
               <View>
-                <Text style={{textAlign: 'center'}}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 14,
+                    color: '#505050',
+                    fontWeight: '300',
+                  }}>
                   Выберите следующую дату
                 </Text>
               </View>
