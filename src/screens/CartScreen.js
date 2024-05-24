@@ -181,53 +181,6 @@ export default function CartScreen({navigation}) {
     }
   };
 
-  useEffect(() => {
-    if (!isHasSettingsData) {
-      navigation.navigate('SettingsScreen');
-    }
-  }, [isHasSettingsData, navigation]);
-
-  useEffect(() => {
-    const backgroundEventHandler = async ({type, detail}) => {
-      // Обработка событий фоновой работы здесь
-      console.log('Background event:', type, detail);
-
-      // **Исправление:** Не рекомендуется использовать `notifee.displayNotification`
-      //   в обработчике фонового события. Это может привести к проблемам
-      //   с отображением уведомления.
-
-      // **Рекомендуется:** Отложить отображение уведомления до того,
-      //   как приложение вернется на передний план.
-
-      await Notifications.displayNotification({
-        title: detail.notification.title,
-        body: detail.notification.body,
-        data: detail.notification.data,
-      });
-
-      // Пример обработки события
-      // if (type === 'notificationPress') {
-      //   // Handle notification press event here
-      //   console.log('Notification pressed!');
-
-      //   // **Отложить отображение уведомления:**
-      //   await Notifications.displayNotification({
-      //     title: detail.notification.title,
-      //     body: detail.notification.body,
-      //     data: detail.notification.data,
-      //   });
-      // }
-    };
-
-    // Установка обработчика событий фоновой работы
-    notifee.onBackgroundEvent(backgroundEventHandler);
-
-    // Очистка обработчика при размонтировании компонента
-    return () => {
-      // notifee?.offBackgroundEvent(backgroundEventHandler);
-    };
-  }, []);
-
   const handleSendMessage = async ({
     messageText,
     messageTextVisible,

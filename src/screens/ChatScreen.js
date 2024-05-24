@@ -274,7 +274,7 @@ export default function ChatScreen({navigation}) {
     try {
       setIsBotWriting(true);
 
-      analytics().logEvent('send_message', {screen_name: 'Home'});
+      analytics().logEvent('send_message', {message: messageText});
 
       // let messages =
       //   store
@@ -343,6 +343,7 @@ export default function ChatScreen({navigation}) {
       setIsBotWriting(false);
 
       console.log('response', text);
+      analytics().logEvent('send_message', {response: text});
 
       if (step === 1) {
         dispatch(setCalories(text));
