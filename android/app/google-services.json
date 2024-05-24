@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "64664657407",
+    "project_id": "smart-mass-a2ed7",
+    "storage_bucket": "smart-mass-a2ed7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64664657407:android:782097f5d13eb644129bca",
+        "android_client_info": {
+          "package_name": "com.adamshels.smartmass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWaiNjJQFe0RoXIvSWskKJPhGtGSznOOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
