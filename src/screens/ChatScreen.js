@@ -15,6 +15,9 @@ import {
 } from 'react-native';
 import notifee, {TriggerType} from '@notifee/react-native';
 import Header from '../components/Header';
+import analytics from '@react-native-firebase/analytics';
+import DeviceInfo from 'react-native-device-info';
+
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
@@ -62,6 +65,25 @@ export default function ChatScreen({navigation}) {
       moment(day.date).isSame(moment(selectedDate), 'day'),
     ),
   );
+
+  useEffect(() => {
+    // Получение уникального идентификатора устройства
+    const getDeviceId = async () => {
+      const deviceId = await DeviceInfo.getUniqueId();
+
+      // Установка идентификатора пользователя, который может быть идентификатором устройства
+      analytics().setUserId(deviceId);
+    };
+
+    getDeviceId();
+
+    // Отправка события о просмотре домашнего экрана
+    analytics().logEvent('screen_view', {screen_name: 'Home'});
+
+    // Очистка эффекта
+    return () => {};
+  }, []);
+
   const lastDay = days?.[days?.length - 1];
   // console.log('userData', userData);
   const messages = day?.messages || [];
@@ -251,6 +273,8 @@ export default function ChatScreen({navigation}) {
   }) => {
     try {
       setIsBotWriting(true);
+
+      analytics().logEvent('send_message', {screen_name: 'Home'});
 
       // let messages =
       //   store
