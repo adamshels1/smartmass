@@ -624,7 +624,13 @@ export default function CartScreen({navigation}) {
                         : require('../assets/icons/eclipse.png')
                     }
                   />
-                  <Text style={{marginTop: 10, fontSize: 15, color: '#505050'}}>
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      fontSize: 15,
+                      color: '#505050',
+                      fontWeight: '300',
+                    }}>
                     {item.name + ' - ' + item.amount + item.units}
                   </Text>
                 </TouchableOpacity>
@@ -632,7 +638,9 @@ export default function CartScreen({navigation}) {
             }}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={() => (
-              <Text>Продукты которые необходимо купить:</Text>
+              <Text style={{fontSize: 17, color: '#505050', fontWeight: '500'}}>
+                Продукты которые необходимо купить:
+              </Text>
             )}
             // ListFooterComponent={() => <Button title={'Продукты куплены'} />}
           />

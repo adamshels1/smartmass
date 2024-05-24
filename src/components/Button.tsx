@@ -38,7 +38,7 @@ const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    width: 250,
+    width: 270,
     height: 56,
     borderRadius: 40,
     backgroundColor: '#31D6D6',
