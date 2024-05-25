@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <View style={[styles.container, containerStyle]}>
       {showBack ? (
-        <TouchableOpacity onPress={navigation.goBack}>
+        <TouchableOpacity onPress={navigation.goBack} hitSlop={20}>
           <Image
             style={styles.icon}
             source={require('../assets/icons/back.png')}
@@ -50,7 +50,8 @@ const Header: React.FC<HeaderProps> = ({
       <View style={{flexDirection: 'row'}}>
         {showSettingsIcon ? (
           <TouchableOpacity
-            onPress={() => navigation.navigate('SettingsScreen')}>
+            onPress={() => navigation.navigate('SettingsScreen')}
+            hitSlop={10}>
             <Image
               style={styles.icon}
               source={require('../assets/icons/settings.png')}
@@ -94,7 +95,8 @@ const Header: React.FC<HeaderProps> = ({
           >
             <TouchableOpacity
               style={{marginLeft: 10}}
-              onPress={() => navigation.navigate('CartScreen')}>
+              onPress={() => navigation.navigate('CartScreen')}
+              hitSlop={10}>
               <Image
                 style={styles.icon}
                 source={require('../assets/icons/cart_inactive.png')}
