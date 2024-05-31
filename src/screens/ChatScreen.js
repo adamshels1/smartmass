@@ -17,6 +17,7 @@ import notifee, {TriggerType} from '@notifee/react-native';
 import Header from '../components/Header';
 import analytics from '@react-native-firebase/analytics';
 import DeviceInfo from 'react-native-device-info';
+import i18n from '../shared/config/i18n';
 
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
@@ -744,31 +745,31 @@ export default function ChatScreen({navigation}) {
             }
           />
 
-          {/*<View style={styles.inputContainer}>*/}
-          {/*  <TextInput*/}
-          {/*    style={styles.input}*/}
-          {/*    placeholder="Type a message..."*/}
-          {/*    placeholderTextColor="#A1A1A1"*/}
-          {/*    onChangeText={text => setMessageText(text)}*/}
-          {/*    value={messageText}*/}
-          {/*    multiline={true}*/}
-          {/*    numberOfLines={4}*/}
-          {/*    textAlignVertical="center"*/}
-          {/*  />*/}
-          {/*  <TouchableOpacity*/}
-          {/*    onPress={() =>*/}
-          {/*      handleSendMessage({*/}
-          {/*        messageText,*/}
-          {/*      })*/}
-          {/*    }*/}
-          {/*    disabled={!disabledSendButton}*/}
-          {/*    style={{opacity: disabledSendButton ? 1 : 0.5}}>*/}
-          {/*    <Image*/}
-          {/*      style={{width: 30, height: 30}}*/}
-          {/*      source={require('../assets/icons/send.png')}*/}
-          {/*    />*/}
-          {/*  </TouchableOpacity>*/}
-          {/*</View>*/}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder={i18n.t('Type a message...')}
+              placeholderTextColor="#A1A1A1"
+              onChangeText={text => setMessageText(text)}
+              value={messageText}
+              multiline={true}
+              numberOfLines={4}
+              textAlignVertical="center"
+            />
+            <TouchableOpacity
+              onPress={() =>
+                handleSendMessage({
+                  messageText,
+                })
+              }
+              disabled={!disabledSendButton}
+              style={{opacity: disabledSendButton ? 1 : 0.5}}>
+              <Image
+                style={{width: 30, height: 30}}
+                source={require('../assets/icons/send.png')}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
