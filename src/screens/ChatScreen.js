@@ -22,7 +22,6 @@ import i18n from '../shared/config/i18n';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
-import Markdown from 'react-native-markdown-display';
 
 import {Flow} from 'react-native-animated-spinkit';
 import {
