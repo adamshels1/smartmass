@@ -28,12 +28,17 @@ i18n
     compatibilityJSON: 'v3',
     fallbackLng: LanguageList.EN,
     resources: {
-      en,
-      ru,
+      en: {
+        translation: en,
+      },
+      ru: {
+        translation: ru,
+      },
     },
     interpolation: {
       escapeValue: false,
     },
+    returnEmptyString: false,
   });
 
 export default i18n;

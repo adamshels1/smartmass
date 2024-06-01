@@ -1195,6 +1195,8 @@ PODS:
     - Firebase/RemoteConfig (= 10.19.0)
     - React-Core
     - RNFBApp
+  - RNLocalize (3.1.0):
+    - React-Core
   - RNNotifee (7.8.2):
     - React-Core
     - RNNotifee/NotifeeCore (= 7.8.2)
@@ -1267,6 +1269,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1407,6 +1410,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBRemoteConfig:
     :path: "../node_modules/@react-native-firebase/remote-config"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
   RNScreens:
@@ -1489,6 +1494,7 @@ SPEC CHECKSUMS:
   RNFBApp: 5ee688b07ed0fa692a3a8fd07df6d6ae41e4c3a0
   RNFBMessaging: c839473d12cbe1b042b29898177033de4214e932
   RNFBRemoteConfig: dc5418251c49d2f40edfd76cc935d2c36b8331b0
+  RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNScreens: a4d9ce8f68f833f4e42410140eafd88e38bba163
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

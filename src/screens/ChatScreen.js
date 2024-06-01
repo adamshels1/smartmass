@@ -336,7 +336,7 @@ export default function ChatScreen({navigation}) {
       console.log('sendMessage', messageText);
       const model = genAI.getGenerativeModel({model: 'gemini-pro'});
       const result = await model.generateContent(
-        JSON.stringify({prompt: messageText, context}),
+        JSON.stringify({prompt: messageText, context, language: i18n.language}),
       );
       const response = await result.response;
       let text = response.text();
@@ -437,7 +437,7 @@ export default function ChatScreen({navigation}) {
       step: 0,
       buttons: [
         {
-          buttonText: 'Какое количество калорий необходимо в день',
+          buttonText: i18n.t('How many calories are needed per day?'),
           messageText:
             'Привет! Отправь точное необходимое количество калорий целой цифрой чтобы ' +
             userData.goal,
