@@ -728,21 +728,21 @@ export default function ChatScreen({navigation}) {
           setToolTipVisible={setToolTipVisible}
         />
 
-        {__DEV__ && (
-          <View>
-            <Button
-              title={i18n.t('Clear all')}
-              onPress={() => {
-                dispatch(setMessagesAction([]));
-                dispatch(setStepAction(0, selectedDate));
-                dispatch(clearDays());
-                dispatch(setCart([]));
-                dispatch(setTooltipStep('showGetCaloriesButton'));
-                dispatch(setCalories(null));
-              }}
-            />
-          </View>
-        )}
+        {/*{__DEV__ && (*/}
+        {/*  <View>*/}
+        {/*    <Button*/}
+        {/*      title={i18n.t('Clear all')}*/}
+        {/*      onPress={() => {*/}
+        {/*        dispatch(setMessagesAction([]));*/}
+        {/*        dispatch(setStepAction(0, selectedDate));*/}
+        {/*        dispatch(clearDays());*/}
+        {/*        dispatch(setCart([]));*/}
+        {/*        dispatch(setTooltipStep('showGetCaloriesButton'));*/}
+        {/*        dispatch(setCalories(null));*/}
+        {/*      }}*/}
+        {/*    />*/}
+        {/*  </View>*/}
+        {/*)}*/}
         {/*{__DEV__ && (*/}
         {/*  <View>*/}
         {/*    <Button*/}
@@ -775,31 +775,31 @@ export default function ChatScreen({navigation}) {
             }
           />
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder={i18n.t('Type a message...')}
-              placeholderTextColor="#A1A1A1"
-              onChangeText={text => setMessageText(text)}
-              value={messageText}
-              multiline={true}
-              numberOfLines={4}
-              textAlignVertical="center"
-            />
-            <TouchableOpacity
-              onPress={() =>
-                handleSendMessage({
-                  messageText,
-                })
-              }
-              disabled={!disabledSendButton}
-              style={{opacity: disabledSendButton ? 1 : 0.5}}>
-              <Image
-                style={{width: 30, height: 30}}
-                source={require('../assets/icons/send.png')}
-              />
-            </TouchableOpacity>
-          </View>
+          {/*<View style={styles.inputContainer}>*/}
+          {/*  <TextInput*/}
+          {/*    style={styles.input}*/}
+          {/*    placeholder={i18n.t('Type a message...')}*/}
+          {/*    placeholderTextColor="#A1A1A1"*/}
+          {/*    onChangeText={text => setMessageText(text)}*/}
+          {/*    value={messageText}*/}
+          {/*    multiline={true}*/}
+          {/*    numberOfLines={4}*/}
+          {/*    textAlignVertical="center"*/}
+          {/*  />*/}
+          {/*  <TouchableOpacity*/}
+          {/*    onPress={() =>*/}
+          {/*      handleSendMessage({*/}
+          {/*        messageText,*/}
+          {/*      })*/}
+          {/*    }*/}
+          {/*    disabled={!disabledSendButton}*/}
+          {/*    style={{opacity: disabledSendButton ? 1 : 0.5}}>*/}
+          {/*    <Image*/}
+          {/*      style={{width: 30, height: 30}}*/}
+          {/*      source={require('../assets/icons/send.png')}*/}
+          {/*    />*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</View>*/}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
