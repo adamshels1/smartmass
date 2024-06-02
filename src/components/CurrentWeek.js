@@ -4,6 +4,7 @@ import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {setTooltipStep} from '../store/userActions';
+import i18n from '../shared/config/i18n';
 
 const isNextDay2 = day => {
   const tomorrow = moment().add(1, 'day').startOf('day');
@@ -30,7 +31,15 @@ const CurrentWeek = ({
 
   // Создаем массив с датами текущей недели и названиями дней недели
   const weekDays = [];
-  const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+  const dayNames = [
+    i18n.t('Sun'), // Вс
+    i18n.t('Mon'), // Пн
+    i18n.t('Tue'), // Вт
+    i18n.t('Wed'), // Ср
+    i18n.t('Thu'), // Чт
+    i18n.t('Fri'), // Пт
+    i18n.t('Sat'), // Сб
+  ];
   for (let i = 0; i < 7; i++) {
     const day = startOfWeek.clone().add(i, 'days').startOf('day'); // Форматируем дату без времени
 
@@ -71,7 +80,7 @@ const CurrentWeek = ({
                     color: '#505050',
                     fontWeight: '300',
                   }}>
-                  Выберите следующую дату
+                  {i18n.t('Select next date')}
                 </Text>
               </View>
             }

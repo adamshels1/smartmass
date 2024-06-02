@@ -347,16 +347,18 @@ export default function ChatScreen({navigation}) {
 
       if (step === 1) {
         dispatch(setCalories(text));
-        text = `Вам необходимо набрать ${text} калорий за один день.`;
+        text = i18n.t('You need to consume {{calories}} calories per day.', {
+          calories: text,
+        });
       } else if (step === 2) {
         const diet = jsonParse(text);
         const dietString = formatDietDataToString(diet.diet);
         console.log('formatDietDataToString', dietString);
         dispatch(setDietAction(diet.diet, diet.products, selectedDate));
-        text = dietString + 'Итого каллорий: ' + diet.dietTotalCalories;
+        text = dietString + i18n.t('Total calories: ') + diet.dietTotalCalories;
       } else if (step === 4) {
         await scheduleMealtimeNotifications(day?.diet, selectedDate);
-        text = 'Нотификации успешно запланированы';
+        text = i18n.t('Notifications successfully scheduled');
       }
 
       if (text?.length > 3 && step) {
@@ -378,11 +380,11 @@ export default function ChatScreen({navigation}) {
       setToolTipVisible(true);
     } catch (error) {
       setIsBotWriting(false);
-      console.error('Ошибка при отправке сообщения:', error);
+      console.error('Error sending message:', error);
     }
   };
 
-  // Рендеринг элемента сообщения
+  // Rendering message element
   const renderMessage = ({item}) => (
     // <View
     //   style={[
@@ -430,7 +432,15 @@ export default function ChatScreen({navigation}) {
 
   const nextMealTime = getNextMeal(day?.diet, selectedDate);
 
-  const dietPromt = `на 1 день со временем и какие продукты нужно купить по сколько грамм для этого рациона, до 15 продуктов, и напиши каларийность по примеру exampleResponseDiet в чистом формате JSON, что бы в рационе обязательно было ${userData.calories}ккал, перый прием пищи в ${userData.dailyMealStartTime}, последний прием пищи в ${userData.dailyMealEndTime} должен быть перекус, общее количество приемов пищи ${userData.maxMealPerDay}`;
+  const dietPromt = i18n.t(
+    'for 1 day with time and what products need to be bought, in what quantity in grams for this diet, up to 15 products, and write the calorie content following the example of exampleResponseDiet in pure JSON format, so that the diet necessarily contains {{calories}}kcal, the first meal at {{dailyMealStartTime}}, the last meal at {{dailyMealEndTime}} should be a snack, the total number of meals per day {{maxMealPerDay}}',
+    {
+      calories: userData.calories,
+      dailyMealStartTime: userData.dailyMealStartTime,
+      dailyMealEndTime: userData.dailyMealEndTime,
+      maxMealPerDay: userData.maxMealPerDay,
+    },
+  );
 
   const messageButtons = [
     {
@@ -439,10 +449,12 @@ export default function ChatScreen({navigation}) {
         {
           buttonText: i18n.t('How many calories are needed per day?'),
           messageText:
-            'Привет! Отправь точное необходимое количество калорий целой цифрой чтобы ' +
-            userData.goal,
-          messageTextVisible:
-            'Привет! Отправь точное необходимое количество калорий',
+            i18n.t(
+              'Hello! Send the exact required number of calories as a whole number to',
+            ) + userData.goal,
+          messageTextVisible: i18n.t(
+            'Hello! Send the exact required number of calories',
+          ),
           nextStep: 1,
         },
       ],
@@ -451,10 +463,11 @@ export default function ChatScreen({navigation}) {
       step: 1,
       buttons: [
         {
-          buttonText: 'Получить рацион на этот день',
-          messageText: `Напиши рацион ${dietPromt}`,
-          messageTextVisible:
-            'Напиши рацион на 1 день со временем и какие продукты нужно купить',
+          buttonText: i18n.t('Get a diet for this day'),
+          messageText: i18n.t('Write a diet') + dietPromt,
+          messageTextVisible: i18n.t(
+            'Write a diet for 1 day with time and what products need to be bought',
+          ),
           nextStep: 2,
         },
       ],
@@ -463,17 +476,18 @@ export default function ChatScreen({navigation}) {
       step: 2,
       buttons: [
         {
-          buttonText: 'Хорошо, какие продукты нужно закупить?',
-          messageText: `Сделай продукты для закупки списком: ${JSON.stringify(
-            day?.products,
-          )}?`,
-          messageTextVisible: 'Какие продукты закупить',
+          buttonText: i18n.t('Alright, what products do I need to buy?'),
+          messageText:
+            i18n.t('Make a shopping list for products:') +
+            JSON.stringify(day?.products) +
+            '?',
+          messageTextVisible: i18n.t('What products to buy'),
           nextStep: 3,
         },
         {
-          buttonText: 'Получить другой рацион',
-          messageText: `Напиши другой рацион ${dietPromt}`,
-          messageTextVisible: 'Получить другой рацион',
+          buttonText: i18n.t('Get another diet'),
+          messageText: i18n.t('Write another diet ') + dietPromt,
+          messageTextVisible: i18n.t('Get another diet'),
           nextStep: 2,
         },
       ],
@@ -482,11 +496,18 @@ export default function ChatScreen({navigation}) {
       step: 3,
       buttons: [
         {
-          buttonText:
-            'Продукты куплены. Давай установим уведомления на время приготовления.',
-          messageText: `Верни названия времени и время приема пиши из рациона ${day?.diet} в формате чистый json: [{time: null, name: null }]`,
-          messageTextVisible:
-            'Продукты куплены, давай установим уведомления на время приготовления',
+          buttonText: i18n.t(
+            "Products purchased. Let's set up notifications for cooking time.",
+          ),
+          messageText:
+            i18n.t(
+              'Return the names of the time and write down the meal time from the diet',
+            ) +
+            day?.diet +
+            i18n.t('in JSON format: [{time: null, name: null }]'),
+          messageTextVisible: i18n.t(
+            "Products purchased, let's set up notifications for cooking time",
+          ),
           nextStep: 4,
         },
       ],
@@ -495,14 +516,30 @@ export default function ChatScreen({navigation}) {
       step: 4,
       buttons: [
         {
-          buttonText: `Следущий прием пищи: ${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
-          messageText: `Дай рецепт: ${nextMealTime?.dish} - ${nextMealTime?.dishCalories} в ${nextMealTime?.time}`,
-          messageTextVisible: `${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
+          buttonText: i18n.t(
+            'Next meal: {{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: nextMealTime?.name,
+              mealTime: nextMealTime?.time,
+            },
+          ),
+          messageText:
+            i18n.t('Give the recipe:') +
+            `${nextMealTime?.dish} - ${nextMealTime?.dishCalories} ` +
+            i18n.t('at') +
+            `${nextMealTime?.time}`,
+          messageTextVisible: i18n.t(
+            '{{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: nextMealTime?.name,
+              mealTime: nextMealTime?.time,
+            },
+          ),
           nextStep: 5,
         },
         {
-          buttonText: 'Получить другой рацион',
-          messageText: `Напиши другой рацион ${dietPromt}`,
+          buttonText: i18n.t('Get another diet'),
+          messageText: i18n.t('Write another diet') + dietPromt,
           nextStep: 2,
         },
       ],
@@ -511,15 +548,33 @@ export default function ChatScreen({navigation}) {
       step: 5,
       buttons: [
         {
-          buttonText: `Следущий прием пищи: ${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
-          messageText: `Дай рецепт: ${nextMealTime?.dish} - ${nextMealTime?.dishCalories} в ${nextMealTime?.time}`,
-          messageTextVisible: `${nextMealTime?.name} в ${nextMealTime?.time}, Получить рецепт`,
+          buttonText: i18n.t(
+            'Next meal: {{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: nextMealTime?.name,
+              mealTime: nextMealTime?.time,
+            },
+          ),
+          messageText:
+            i18n.t('Give the recipe:') +
+            nextMealTime?.dish +
+            i18n.t(' - ') +
+            nextMealTime?.dishCalories +
+            i18n.t('at') +
+            nextMealTime?.time,
+          messageTextVisible: i18n.t(
+            '{{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: nextMealTime?.name,
+              mealTime: nextMealTime?.time,
+            },
+          ),
           nextStep: 5,
         },
         {
-          buttonText: 'Получить другой рацион',
-          messageText: `Напиши другой рацион ${dietPromt}`,
-          messageTextVisible: 'Получить другой рацион',
+          buttonText: i18n.t('Get another diet'),
+          messageText: i18n.t('Write another diet') + dietPromt,
+          messageTextVisible: i18n.t('Get another diet'),
           nextStep: 2,
         },
       ],
@@ -542,19 +597,12 @@ export default function ChatScreen({navigation}) {
             <Tooltip
               key={key}
               animated={true}
-              // (Optional) When true,
-              // tooltip will animate in/out when showing/hiding
               arrowSize={{width: 16, height: 8}}
-              // (Optional) Dimensions of arrow bubble pointing
-              // to the highlighted element
               backgroundColor="rgba(0,0,0,0.5)"
-              // (Optional) Color of the fullscreen background
-              // beneath the tooltip.
               isVisible={
                 tooltipStep === 'showGetCaloriesButton' ||
                 tooltipStep === 'showGetRationButton'
               }
-              // (Must) When true, tooltip is displayed
               content={
                 <View>
                   <Text
@@ -564,22 +612,18 @@ export default function ChatScreen({navigation}) {
                       color: '#505050',
                       fontWeight: '300',
                     }}>
-                    Клините сюда{' '}
+                    {i18n.t('Click here')}
                   </Text>
                 </View>
               }
-              // (Must) This is the view displayed in the tooltip
               placement="top"
-              // (Must) top, bottom, left, right, auto.
               onClose={() => {
                 if (tooltipStep === 'showGetCaloriesButton') {
                   dispatch(setTooltipStep('showGetRationButton'));
                 } else if (tooltipStep === 'showGetRationButton') {
                   dispatch(setTooltipStep('showNexDayButton'));
                 }
-              }}
-              // (Optional) Callback fired when the user taps the tooltip
-            >
+              }}>
               <View style={{alignItems: 'center', marginBottom: 5}}>
                 <TouchableOpacity
                   onPress={() =>
@@ -595,7 +639,6 @@ export default function ChatScreen({navigation}) {
                     minHeight: 40,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    // width: '80%',
                     borderWidth: 1,
                     borderColor: '#67CFCF',
                     paddingVertical: 5,
@@ -637,7 +680,6 @@ export default function ChatScreen({navigation}) {
                 minHeight: 40,
                 justifyContent: 'center',
                 alignItems: 'center',
-                // width: '80%',
                 borderWidth: 1,
                 borderColor: '#67CFCF',
                 paddingVertical: 5,
@@ -659,23 +701,23 @@ export default function ChatScreen({navigation}) {
   };
 
   const disabledSendButton = messageText && !isBotWriting;
-  // console.log('lastDay', lastDay);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
-        {/*<AgendaComponent onDayPress={d => handleDateSelect(d.dateString)} />*/}
         <Header
           showBack={false}
           navigation={navigation}
           title={
             userData.calories
-              ? `Цель на ${moment(selectedDate).format('DD.MM.YYYY')}: ${
-                  userData.calories
-                }ккал`
-              : 'Nutrition consultant GPT'
+              ? i18n.t('Goal for {{date}}: {{calories}}kcal', {
+                  date: moment(selectedDate).format('DD.MM.YYYY'),
+                  calories: userData.calories,
+                })
+              : i18n.t('Nutrition consultant GPT')
           }
           showSettingsIcon={true}
         />
@@ -685,22 +727,11 @@ export default function ChatScreen({navigation}) {
           toolTipVisible={toolTipVisible}
           setToolTipVisible={setToolTipVisible}
         />
-        {/*<CalendarModal*/}
-        {/*  minDate={new Date()}*/}
-        {/*  maxDate={moment(lastDay?.date).add(1, 'day').toDate()}*/}
-        {/*  visible={modalVisible}*/}
-        {/*  closeModal={closeModal}*/}
-        {/*  onDateSelect={handleDateSelect}*/}
-        {/*/>*/}
-        {/*<Button title="изменить дату" onPress={openModal} />*/}
 
-        {/* <View>
-          <Button title="Display Notification" onPress={() => onDisplayNotification()} />
-        </View> */}
         {__DEV__ && (
           <View>
             <Button
-              title="Clear all"
+              title={i18n.t('Clear all')}
               onPress={() => {
                 dispatch(setMessagesAction([]));
                 dispatch(setStepAction(0, selectedDate));
@@ -724,7 +755,7 @@ export default function ChatScreen({navigation}) {
         <View style={styles.container}>
           <FlatList
             contentInsetAdjustmentBehavior="automatic"
-            ref={flatListRef} // Передача рефа
+            ref={flatListRef}
             data={messages}
             renderItem={renderMessage}
             keyExtractor={(item, index) => index.toString()}

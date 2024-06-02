@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import LottieView from 'lottie-react-native';
 import {setShowWelcomeScreen} from '../store/userActions';
 import {useDispatch} from 'react-redux';
+import i18n from '../shared/config/i18n';
 
 const MySwiper = ({navigation}) => {
   const dispatch = useDispatch();
@@ -12,15 +13,19 @@ const MySwiper = ({navigation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = [
     {
-      text: 'Получайте рацион питания быстро и удобно благодаря Искусственному Интеллекту.',
+      text: i18n.t(
+        'Get your meal plan quickly and conveniently with Artificial Intelligence.',
+      ),
       animation: require('../assets/animations/Animation - 1716491891171.json'),
     },
     {
-      text: 'Запланируйте уведомления, чтобы всегда принимать пищу вовремя и без лишних хлопот.',
+      text: i18n.t('Plan notifications to always eat on time and hassle-free.'),
       animation: require('../assets/animations/Animation - 1716487145324.json'),
     },
     {
-      text: 'Легко подсчитывайте содержимое корзины продуктов с помощью нашего приложения.',
+      text: i18n.t(
+        'Easily track the contents of your grocery basket with our app.',
+      ),
       animation: require('../assets/animations/Animation - 1716491430846.json'),
     },
   ];
@@ -65,13 +70,13 @@ const MySwiper = ({navigation}) => {
       <View style={styles.buttonContainer}>
         {currentIndex < slides.length - 1 ? (
           <Button
-            title={'Далее'}
+            title={i18n.t('Next')}
             onPress={handleNext}
             style={{flex: 1, marginLeft: 10}}
           />
         ) : (
           <Button
-            title={'Давай начнем'}
+            title={i18n.t("Let's Get Started")}
             onPress={handleFinish}
             style={{flex: 1, marginLeft: 10}}
           />

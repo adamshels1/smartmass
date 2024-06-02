@@ -16,6 +16,7 @@ import {
 import notifee, {TriggerType} from '@notifee/react-native';
 import Header from '../components/Header';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+import i18n from '../shared/config/i18n';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
 
@@ -491,7 +492,11 @@ export default function CartScreen({navigation}) {
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
         {/*<AgendaComponent onDayPress={d => handleDateSelect(d.dateString)} />*/}
-        <Header showBack={true} navigation={navigation} title={'Корзина'} />
+        <Header
+          showBack={true}
+          navigation={navigation}
+          title={i18n.t('Cart')}
+        />
         <CurrentWeek
           onDateSelect={handleDateSelect}
           selectedDate={selectedDate}
@@ -530,7 +535,7 @@ export default function CartScreen({navigation}) {
                 color: '#67CFCF',
                 fontSize: 20,
               }}>
-              Формирование корзины
+              {i18n.t('Shopping Cart Creation')}
             </Text>
             <LottieView
               style={{
@@ -548,7 +553,17 @@ export default function CartScreen({navigation}) {
           <FlatList
             style={{height: 20, paddingHorizontal: 10}}
             ref={flatListRef} // Передача рефа
-            data={userData.cart}
+            data={userData.cart.sort((a, b) => {
+              const nameA = a.name.toLowerCase();
+              const nameB = b.name.toLowerCase();
+              if (nameA < nameB) {
+                return -1;
+              }
+              if (nameA > nameB) {
+                return 1;
+              }
+              return 0;
+            })}
             renderItem={({item, key}) => {
               return (
                 <TouchableOpacity
@@ -585,7 +600,7 @@ export default function CartScreen({navigation}) {
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={() => (
               <Text style={{fontSize: 17, color: '#505050', fontWeight: '500'}}>
-                Продукты которые необходимо купить:
+                {i18n.t('Products to Buy:')}
               </Text>
             )}
             // ListFooterComponent={() => <Button title={'Продукты куплены'} />}

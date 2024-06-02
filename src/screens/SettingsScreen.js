@@ -14,11 +14,12 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSettingsAction} from '../store/userActions';
+import i18n from '../shared/config/i18n';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
 
 //https://ai.google.dev/tutorials/get_started_node?hl=ru
-// Access your API key as an environment variable (see "Set up your API key" above)
+// Доступ к вашему API-ключу как к переменной среды (см. "Настройте свой API-ключ" выше)
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
 
 const SettingsScreen = ({navigation}) => {
@@ -79,7 +80,7 @@ const SettingsScreen = ({navigation}) => {
           style={{flex: 1}}>
           <Header
             showBack={isHasSettingsData}
-            title="Settings"
+            title={i18n.t('Settings')}
             navigation={navigation}
           />
 
@@ -116,11 +117,11 @@ const SettingsScreen = ({navigation}) => {
                     selectedValue={goal}
                     value={goal}
                     onValueChange={value => setGoal(value)}
-                    placeholder={{label: 'Выберите цель', value: null}}
+                    placeholder={{label: i18n.t('Select goal'), value: null}}
                     items={[
-                      {label: 'Набрать вес', value: 'gain'},
-                      {label: 'Сбросить вес', value: 'lose'},
-                      {label: 'Поддерживать вес', value: 'maintain'},
+                      {label: i18n.t('Gain weight'), value: 'gain'},
+                      {label: i18n.t('Lose weight'), value: 'lose'},
+                      {label: i18n.t('Maintain weight'), value: 'maintain'},
                     ]}
                   />
                 </View>
@@ -135,14 +136,14 @@ const SettingsScreen = ({navigation}) => {
 
             <Input
               icon={require('../assets/icons/weight.png')}
-              placeholder="Вес (кг)"
+              placeholder={i18n.t('Weight (kg)')}
               keyboardType="numeric"
               value={weight}
               onChangeText={text => setWeight(text)}
             />
             <Input
               icon={require('../assets/icons/height.png')}
-              placeholder="Рост (см)"
+              placeholder={i18n.t('Height (cm)')}
               keyboardType="numeric"
               value={height}
               onChangeText={text => setHeight(text)}
@@ -175,7 +176,10 @@ const SettingsScreen = ({navigation}) => {
                     selectedValue={dailyMealStartTime}
                     value={dailyMealStartTime}
                     onValueChange={value => setDailyMealStartTime(value)}
-                    placeholder={{label: 'Начало приема пищи', value: null}}
+                    placeholder={{
+                      label: i18n.t('Meal start time'),
+                      value: null,
+                    }}
                     items={[
                       {label: '6:00', value: '6:00'},
                       {label: '6:30', value: '6:30'},
@@ -229,7 +233,10 @@ const SettingsScreen = ({navigation}) => {
                     selectedValue={dailyMealEndTime}
                     value={dailyMealEndTime}
                     onValueChange={value => setDailyMealEndTime(value)}
-                    placeholder={{label: 'Конец приема пищи', value: null}}
+                    placeholder={{
+                      label: i18n.t('Meal end time'),
+                      value: null,
+                    }}
                     items={[
                       {label: '17:00', value: '17:00'},
                       {label: '17:30', value: '17:30'},
@@ -284,7 +291,7 @@ const SettingsScreen = ({navigation}) => {
                     value={maxMealPerDay}
                     onValueChange={value => setMaxMealPerDay(value)}
                     placeholder={{
-                      label: 'Количество приемов пищи в день',
+                      label: i18n.t('Number of meals per day'),
                       value: null,
                     }}
                     items={[
@@ -310,7 +317,7 @@ const SettingsScreen = ({navigation}) => {
             <Input
               icon={require('../assets/icons/no-food.png')}
               style={styles.input}
-              placeholder="Какие продукты исключить"
+              placeholder={i18n.t('Exclude foods')}
               value={allergies}
               onChangeText={text => setAllergies(text)}
               // multiline={true}
@@ -320,14 +327,18 @@ const SettingsScreen = ({navigation}) => {
             <Input
               icon={require('../assets/icons/healthy-food.png')}
               style={styles.input}
-              placeholder="Предпочтительные продукты, блюда"
+              placeholder={i18n.t('Preferred products, dishes')}
               value={preferredProducts}
               onChangeText={text => setPreferredProducts(text)}
               // multiline={true}
               numberOfLines={4}
               textAlignVertical="center"
             />
-            <Button disabled={!disabled} onPress={onSave} title="Save" />
+            <Button
+              disabled={!disabled}
+              onPress={onSave}
+              title={i18n.t('Save')}
+            />
           </View>
         </View>
         <View style={{height: Platform.OS === 'ios' ? 280 : 50}} />
