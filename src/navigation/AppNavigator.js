@@ -10,6 +10,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import ChatScreen from '../screens/ChatScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CartScreen from '../screens/CartScreen';
+import SourcesScreen from '../screens/SourcesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,11 @@ const AppNavigator = () => {
           <Stack.Screen
             name="CartScreen"
             component={CartScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="SourcesScreen"
+            component={SourcesScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

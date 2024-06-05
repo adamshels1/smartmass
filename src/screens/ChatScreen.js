@@ -771,6 +771,20 @@ export default function ChatScreen({navigation}) {
               )} */}
 
                 {renderMessageButtons()}
+                <View>
+                  <TouchableOpacity
+                    style={{marginBottom: 0, marginTop: 5}}
+                    onPress={() => navigation.navigate('SourcesScreen')}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontSize: 13,
+                        color: 'gray',
+                      }}>
+                      Information Sources
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             }
           />
