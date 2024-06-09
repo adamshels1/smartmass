@@ -19,7 +19,7 @@ export function formatDietDataToString(data) {
   let message = '';
 
   data.forEach(item => {
-    message += `${item.time} - ${item.name}\n* ${item.dish} - ${item.dishCalories}\n\n`;
+    message += `${item?.time} - ${item?.name}\n* ${item.dish} - ${item?.dishCalories}\n\n`;
   });
 
   return message;
@@ -28,7 +28,9 @@ export function formatDietDataToString(data) {
 export function sumAmountByName(products) {
   const sumMap = {};
 
-  if (!products?.length) {
+  console.log('products', products);
+
+  if (!products?.length || (products?.length && !products[0]?.name)) {
     return null;
   }
   for (const product of products) {

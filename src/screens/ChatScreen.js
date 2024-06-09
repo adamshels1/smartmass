@@ -728,21 +728,21 @@ export default function ChatScreen({navigation}) {
           setToolTipVisible={setToolTipVisible}
         />
 
-        {/*{__DEV__ && (*/}
-        {/*  <View>*/}
-        {/*    <Button*/}
-        {/*      title={i18n.t('Clear all')}*/}
-        {/*      onPress={() => {*/}
-        {/*        dispatch(setMessagesAction([]));*/}
-        {/*        dispatch(setStepAction(0, selectedDate));*/}
-        {/*        dispatch(clearDays());*/}
-        {/*        dispatch(setCart([]));*/}
-        {/*        dispatch(setTooltipStep('showGetCaloriesButton'));*/}
-        {/*        dispatch(setCalories(null));*/}
-        {/*      }}*/}
-        {/*    />*/}
-        {/*  </View>*/}
-        {/*)}*/}
+        {__DEV__ && (
+          <View>
+            <Button
+              title={i18n.t('Clear all')}
+              onPress={() => {
+                dispatch(setMessagesAction([]));
+                dispatch(setStepAction(0, selectedDate));
+                dispatch(clearDays());
+                dispatch(setCart([]));
+                dispatch(setTooltipStep('showGetCaloriesButton'));
+                dispatch(setCalories(null));
+              }}
+            />
+          </View>
+        )}
         {/*{__DEV__ && (*/}
         {/*  <View>*/}
         {/*    <Button*/}
@@ -781,7 +781,7 @@ export default function ChatScreen({navigation}) {
                         fontSize: 13,
                         color: 'gray',
                       }}>
-                      Information Sources
+                      {i18n.t('Information Sources')}
                     </Text>
                   </TouchableOpacity>
                 </View>

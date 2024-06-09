@@ -13,7 +13,7 @@ const languageDetector: LanguageDetectorAsyncModule = {
   detect: callback => {
     try {
       const languageCode = getLocalize<LanguageType>();
-      callback(languageCode);
+      callback('ru');
       moment.locale(languageCode);
     } catch (error) {
       console.error('Error detecting language:', error);

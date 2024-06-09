@@ -18,67 +18,67 @@ const SourcesScreen = ({navigation}) => {
         title={i18n.t('Information Sources')}
       />
       <ScrollView style={{flex: 1, padding: 15}}>
-        {/*<Text style={styles.title}>Information Sources</Text>*/}
+        {/*<Text style={styles.title}>{i18n.t('Information Sources')}</Text>*/}
         <Text style={styles.intro}>
-          Our app sources data from reliable sources such as:
+          {i18n.t('Our app sources data from reliable sources such as:')}
         </Text>
 
         <Text style={styles.header}>
-          1. Websites of authoritative medical organizations:
+          {i18n.t('Websites of authoritative medical organizations:')}
         </Text>
         <Text
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://www.who.int/health-topics/nutrition')
           }>
-          World Health Organization (WHO)
+          {i18n.t('World Health Organization (WHO)')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://www.nih.gov/')}>
-          National Institutes of Health (NIH)
+          {i18n.t('National Institutes of Health (NIH)')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://www.cdc.gov/')}>
-          Centers for Disease Control and Prevention (CDC)
+          {i18n.t('Centers for Disease Control and Prevention (CDC)')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://www.eatright.org/')}>
-          Academy of Nutrition and Dietetics (AND)
+          {i18n.t('Academy of Nutrition and Dietetics (AND)')}
         </Text>
 
-        <Text style={styles.header}>2. Scientific journals:</Text>
+        <Text style={styles.header}>{i18n.t('Scientific journals:')}</Text>
         <Text
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://www.mdpi.com/journal/nutrients')
           }>
-          Nutrients
+          {i18n.t('Nutrients')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://ajcn.nutrition.org/')}>
-          The American Journal of Clinical Nutrition
+          {i18n.t('The American Journal of Clinical Nutrition')}
         </Text>
         <Text
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://portal.issn.org/resource/ISSN/1541-6100')
           }>
-          The Journal of Nutrition
+          {i18n.t('The Journal of Nutrition')}
         </Text>
         <Text
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://onlinelibrary.wiley.com/journal/1930739x')
           }>
-          Obesity
+          {i18n.t('Obesity')}
         </Text>
 
         {/*<Text style={styles.header}>*/}
-        {/*  3. Books written by reputable medical professionals:*/}
+        {/*  {i18n.t('3. Books written by reputable medical professionals:')}*/}
         {/*</Text>*/}
         {/*<Text*/}
         {/*  style={styles.link}*/}
@@ -87,7 +87,7 @@ const SourcesScreen = ({navigation}) => {
         {/*      'https://www.ozon.ru/product/stend-dlya-sadika-obuchayushchiy-piramida-zdorovogo-pitaniya-600h850mm-1269809805/',*/}
         {/*    )*/}
         {/*  }>*/}
-        {/*  "Nutrition Pyramid" - Margarita Koroleva*/}
+        {/*  {i18n.t('"Nutrition Pyramid" - Margarita Koroleva')}*/}
         {/*</Text>*/}
         <Text
           style={styles.link}
@@ -96,7 +96,7 @@ const SourcesScreen = ({navigation}) => {
               'https://www.ozon.ru/category/maykl-greger-kak-ne-umeret/',
             )
           }>
-          "How Not to Die" - Michael Greger
+          {i18n.t('"How Not to Die" - Michael Greger')}
         </Text>
         <Text
           style={styles.link}
@@ -105,40 +105,41 @@ const SourcesScreen = ({navigation}) => {
               'https://www.ozon.ru/category/kitayskoe-issledovanie/',
             )
           }>
-          "The China Study" - T. Colin Campbell and Thomas M. Campbell II
+          {i18n.t(
+            '"The China Study" - T. Colin Campbell and Thomas M. Campbell II',
+          )}
         </Text>
 
         <Text style={styles.header}>
-          3. Apps and websites on healthy eating:
+          {i18n.t('Apps and websites on healthy eating:')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://www.myfitnesspal.com/')}>
-          MyFitnessPal
+          {i18n.t('MyFitnessPal')}
         </Text>
         <Text
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://www.loseit.com/how-it-works/')
           }>
-          Lose It!
+          {i18n.t('Lose It!')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://www.fatsecret.com/')}>
-          FatSecret
+          {i18n.t('FatSecret')}
         </Text>
         <Text
           style={styles.link}
           onPress={() => Linking.openURL('https://www.eatthismuch.com/')}>
-          Eat This Much
+          {i18n.t('Eat This Much')}
         </Text>
 
         <Text style={styles.warning}>
-          Important: Before starting a new diet, it is important to consult with
-          a doctor or dietitian to ensure it is suitable for you. Not all diets
-          are suitable for everyone, and what works for one person may not work
-          for another.
+          {i18n.t(
+            'Important: Before starting a new diet, it is important to consult with a doctor or dietitian to ensure it is suitable for you. Not all diets are suitable for everyone, and what works for one person may not work for another.',
+          )}
         </Text>
       </ScrollView>
     </SafeAreaView>

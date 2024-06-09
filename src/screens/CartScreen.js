@@ -484,6 +484,112 @@ export default function CartScreen({navigation}) {
   };
 
   const disabledSendButton = messageText && !isBotWriting;
+
+  const renderCart = () => {
+    if (isBotWriting) {
+      return (
+        <View>
+          <Text
+            style={{
+              textAlign: 'center',
+              marginTop: 40,
+              color: '#67CFCF',
+              fontSize: 20,
+            }}>
+            {i18n.t('Shopping Cart Creation')}
+          </Text>
+          <LottieView
+            style={{
+              width: 300,
+              height: 300,
+              alignSelf: 'center',
+              fontWeight: 'bold',
+            }}
+            source={require('../assets/animations/Animation - 1715423113634.json')} // Путь к файлу анимации
+            autoPlay
+            loop
+          />
+        </View>
+      );
+    }
+
+    if (!userData?.cart?.length) {
+      return (
+        <View style={{alignItems: 'center'}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              marginTop: 40,
+              color: '#67CFCF',
+              fontSize: 20,
+              width: '70%',
+            }}>
+            {i18n.t(
+              'Your shopping cart is empty. Please press the back button to get a meal plan for adding items to your cart.',
+            )}
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        style={{height: 20, paddingHorizontal: 10}}
+        ref={flatListRef} // Передача рефа
+        data={userData.cart.sort((a, b) => {
+          const nameA = a.name.toLowerCase();
+          const nameB = b.name.toLowerCase();
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        })}
+        renderItem={({item, key}) => {
+          return (
+            <TouchableOpacity
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={() => {
+                const cart = userData.cart.map(i => {
+                  if (i.name === item.name) {
+                    i.purchased = !i.purchased;
+                  }
+                  return i;
+                });
+                dispatch(setCart(cart));
+              }}>
+              <Image
+                style={{width: 25, height: 25, top: 6, marginRight: 7}}
+                source={
+                  item?.purchased
+                    ? require('../assets/icons/checklist.png')
+                    : require('../assets/icons/eclipse.png')
+                }
+              />
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontSize: 15,
+                  color: '#505050',
+                  fontWeight: '300',
+                }}>
+                {item.name + ' - ' + item.amount + item.units}
+              </Text>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={(item, index) => index.toString()}
+        ListHeaderComponent={() => (
+          <Text style={{fontSize: 17, color: '#505050', fontWeight: '500'}}>
+            {i18n.t('Products to Buy:')}
+          </Text>
+        )}
+        // ListFooterComponent={() => <Button title={'Продукты куплены'} />}
+      />
+    );
+  };
   // console.log('lastDay', lastDay);
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -526,86 +632,7 @@ export default function CartScreen({navigation}) {
         {/*  </View>*/}
         {/*)}*/}
 
-        {isBotWriting ? (
-          <View>
-            <Text
-              style={{
-                textAlign: 'center',
-                marginTop: 40,
-                color: '#67CFCF',
-                fontSize: 20,
-              }}>
-              {i18n.t('Shopping Cart Creation')}
-            </Text>
-            <LottieView
-              style={{
-                width: 300,
-                height: 300,
-                alignSelf: 'center',
-                fontWeight: 'bold',
-              }}
-              source={require('../assets/animations/Animation - 1715423113634.json')} // Путь к файлу анимации
-              autoPlay
-              loop
-            />
-          </View>
-        ) : (
-          <FlatList
-            style={{height: 20, paddingHorizontal: 10}}
-            ref={flatListRef} // Передача рефа
-            data={userData.cart.sort((a, b) => {
-              const nameA = a.name.toLowerCase();
-              const nameB = b.name.toLowerCase();
-              if (nameA < nameB) {
-                return -1;
-              }
-              if (nameA > nameB) {
-                return 1;
-              }
-              return 0;
-            })}
-            renderItem={({item, key}) => {
-              return (
-                <TouchableOpacity
-                  style={{flexDirection: 'row', alignItems: 'center'}}
-                  onPress={() => {
-                    const cart = userData.cart.map(i => {
-                      if (i.name === item.name) {
-                        i.purchased = !i.purchased;
-                      }
-                      return i;
-                    });
-                    dispatch(setCart(cart));
-                  }}>
-                  <Image
-                    style={{width: 25, height: 25, top: 6, marginRight: 7}}
-                    source={
-                      item?.purchased
-                        ? require('../assets/icons/checklist.png')
-                        : require('../assets/icons/eclipse.png')
-                    }
-                  />
-                  <Text
-                    style={{
-                      marginTop: 10,
-                      fontSize: 15,
-                      color: '#505050',
-                      fontWeight: '300',
-                    }}>
-                    {item.name + ' - ' + item.amount + item.units}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }}
-            keyExtractor={(item, index) => index.toString()}
-            ListHeaderComponent={() => (
-              <Text style={{fontSize: 17, color: '#505050', fontWeight: '500'}}>
-                {i18n.t('Products to Buy:')}
-              </Text>
-            )}
-            // ListFooterComponent={() => <Button title={'Продукты куплены'} />}
-          />
-        )}
+        {renderCart()}
 
         {/*<View style={styles.container}>*/}
         {/*  <FlatList*/}
