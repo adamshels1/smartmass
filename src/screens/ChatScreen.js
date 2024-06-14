@@ -42,7 +42,7 @@ function sleep(ms) {
 
 // Инициализация GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
-import {getTimeStamp, getNextMeal} from '../utils/helpers';
+import {getTimeStamp, getNextMeal, getCurrentMeal} from '../utils/helpers';
 import moment from 'moment/moment';
 import CalendarModal from '../components/CalendarModal';
 const today = moment();
@@ -431,6 +431,7 @@ export default function ChatScreen({navigation}) {
   );
 
   const nextMealTime = getNextMeal(day?.diet, selectedDate);
+  const currentMealTime = getCurrentMeal(day?.diet, selectedDate);
 
   const dietPromt = i18n.t(
     'for 1 day with time and what products need to be bought, in what quantity in grams for this diet, up to 15 products, and write the calorie content following the example of exampleResponseDiet in pure JSON format, so that the diet necessarily contains {{calories}}kcal, the first meal at {{dailyMealStartTime}}, the last meal at {{dailyMealEndTime}} should be a snack, the total number of meals per day {{maxMealPerDay}}',
@@ -517,6 +518,28 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: i18n.t(
+            'Current meal: {{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: currentMealTime?.name,
+              mealTime: currentMealTime?.time,
+            },
+          ),
+          messageText:
+            i18n.t('Give the recipe:') +
+            `${currentMealTime?.dish} - ${currentMealTime?.dishCalories} ` +
+            i18n.t('at') +
+            `${currentMealTime?.time}`,
+          messageTextVisible: i18n.t(
+            '{{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: currentMealTime?.name,
+              mealTime: currentMealTime?.time,
+            },
+          ),
+          nextStep: 5,
+        },
+        {
+          buttonText: i18n.t(
             'Next meal: {{mealName}} at {{mealTime}}, Get the recipe',
             {
               mealName: nextMealTime?.name,
@@ -547,6 +570,28 @@ export default function ChatScreen({navigation}) {
     {
       step: 5,
       buttons: [
+        {
+          buttonText: i18n.t(
+            'Current meal: {{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: currentMealTime?.name,
+              mealTime: currentMealTime?.time,
+            },
+          ),
+          messageText:
+            i18n.t('Give the recipe:') +
+            `${currentMealTime?.dish} - ${currentMealTime?.dishCalories} ` +
+            i18n.t('at') +
+            `${currentMealTime?.time}`,
+          messageTextVisible: i18n.t(
+            '{{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: currentMealTime?.name,
+              mealTime: currentMealTime?.time,
+            },
+          ),
+          nextStep: 5,
+        },
         {
           buttonText: i18n.t(
             'Next meal: {{mealName}} at {{mealTime}}, Get the recipe',

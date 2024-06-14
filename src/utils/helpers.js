@@ -46,3 +46,33 @@ export function getNextMeal(mealTimes, date) {
   // Если текущее время позже всех приемов пищи, возвращаем первый прием пищи на следующий день
   return sortedMeals[0];
 }
+
+export function getCurrentMeal(mealTimes, date) {
+  if (!mealTimes?.length) {
+    return null;
+  }
+  // Получаем текущее время
+  const currentTime = moment();
+
+  // Сортируем приемы пищи по времени в порядке возрастания
+  const sortedMeals = mealTimes?.sort((a, b) => {
+    const timeA = moment(a.time, 'HH:mm');
+    const timeB = moment(b.time, 'HH:mm');
+    return timeA - timeB;
+  });
+
+  // Находим следующий прием пищи после текущего времени
+  for (let i = 0; i < sortedMeals.length; i++) {
+    const mealTime = moment(
+      moment(date).format('YYYY-MM-DD') + ' ' + sortedMeals[i].time,
+      'YYYY-MM-DD HH:mm',
+    );
+    // const mealTime = moment(sortedMeals[i].time, 'HH:mm');
+    if (mealTime.isBefore(currentTime)) {
+      return sortedMeals[i];
+    }
+  }
+
+  // Если текущее время позже всех приемов пищи, возвращаем первый прием пищи на следующий день
+  return sortedMeals[0];
+}
