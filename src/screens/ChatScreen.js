@@ -295,7 +295,10 @@ export default function ChatScreen({navigation}) {
 
       flatListRef.current.scrollToEnd({animated: true});
 
+      const deviceId = await DeviceInfo.getUniqueId();
+
       const context = {
+        contextId: deviceId,
         weight: userData.weight,
         height: userData.height,
         dailyMealStartTime: userData.dailyMealStartTime,
@@ -323,7 +326,7 @@ export default function ChatScreen({navigation}) {
       dishCalories: 'здесь количество колорий этого блюда в конце ккал'
     }
   ],
-  dietTotalCalories: 'здесь общее количество калорий в рационе',
+  dietTotalCalories: 'сумма всех dishCalories в массиве diet должна быть ровно ${userData.calories} ',
   products: [{
     name: 'здесь название продукта',
     amount: 'здесь количество только цифра',
@@ -434,7 +437,7 @@ export default function ChatScreen({navigation}) {
   const currentMealTime = getCurrentMeal(day?.diet, selectedDate);
 
   const dietPromt = i18n.t(
-    'for 1 day with time and what products need to be bought, in what quantity in grams for this diet, up to 15 products, and write the calorie content following the example of exampleResponseDiet in pure JSON format, so that the diet necessarily contains {{calories}}kcal, the first meal at {{dailyMealStartTime}}, the last meal at {{dailyMealEndTime}} should be a snack, the total number of meals per day {{maxMealPerDay}}',
+    'for 1 day, following the example exampleResponseDiet in pure JSON format, so that the total of all dishes contains {{calories}} kcal, with the total number of meals per day being {{maxMealPerDay}}',
     {
       calories: userData.calories,
       dailyMealStartTime: userData.dailyMealStartTime,
@@ -449,10 +452,9 @@ export default function ChatScreen({navigation}) {
       buttons: [
         {
           buttonText: i18n.t('How many calories are needed per day?'),
-          messageText:
-            i18n.t(
-              'Hello! Send the exact required number of calories as a whole number to',
-            ) + userData.goal,
+          messageText: i18n.t(
+            `Hi! Please send the exact number of necessary calories as a whole number for the goal: ${userData.goal}, for weight: ${userData.weight} kg and height: ${userData.height} cm.`,
+          ),
           messageTextVisible: i18n.t(
             'Hello! Send the exact required number of calories',
           ),

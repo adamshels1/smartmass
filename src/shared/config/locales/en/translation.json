@@ -17,7 +17,7 @@
   "Eat This Much": "",
   "Exclude foods": "",
   "FatSecret": "",
-  "for 1 day with time and what products need to be bought, in what quantity in grams for this diet, up to 15 products, and write the calorie content following the example of exampleResponseDiet in pure JSON format, so that the diet necessarily contains {{calories}}kcal, the first meal at {{dailyMealStartTime}}, the last meal at {{dailyMealEndTime}} should be a snack, the total number of meals per day {{maxMealPerDay}}": "",
+  "for 1 day, following the example exampleResponseDiet in pure JSON format, so that the total of all dishes contains {{calories}} kcal, with the total number of meals per day being {{maxMealPerDay}}": "",
   "Fri": "",
   "Gain weight": "",
   "Get a diet for this day": "",
