@@ -632,11 +632,11 @@ export default function ChatScreen({navigation}) {
     if (isBotWriting) {
       return null;
     }
-    console.log('step ---->', step);
+    // console.log('step ---->', step);
     return messageButtons
       ?.find(i => i.step === step)
       ?.buttons.map((i, key) => {
-        console.log('step', step, tooltipStep);
+        // console.log('step', step, tooltipStep);
         if (step === 0 || step === 1) {
           return (
             <Tooltip
