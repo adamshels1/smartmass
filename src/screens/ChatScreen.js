@@ -59,12 +59,33 @@ export default function ChatScreen({navigation}) {
   const userData = useSelector(state => state.userData);
   const days = useSelector(state => state.userData.days);
   const tooltipStep = useSelector(state => state.userData.tooltipStep);
+  const [isVisibleChangePartDiet, setIsVisibleChangePartDiet] = useState(false);
+  const [changePartDietOptions, setChangePartDietOptions] = useState([]);
   // console.log('days', days);
   const day = useSelector(state =>
     state.userData?.days?.find(day =>
       moment(day.date).isSame(moment(selectedDate), 'day'),
     ),
   );
+
+  const exampleResponseDiet = `{
+  diet: [
+    {
+      time: 'здесь время',
+      name: 'здесь название приема пищи',
+      dish: 'здесь название блюда',
+      dishEn: 'здесь название данного блюда переведи на en',
+      dishCalories: 'здесь количество колорий этого блюда в конце ккал'
+    }
+  ],
+  dietTotalCalories: 'сумма всех dishCalories в массиве diet должна быть ровно ${userData.calories} ',
+  products: [{
+    name: 'здесь название продукта',
+    amount: 'здесь количество только цифра',
+    units: 'Единица измерения (г, кг, мл, л, шт)',
+  }]
+}
+`;
 
   useEffect(() => {
     // Получение уникального идентификатора устройства
@@ -270,8 +291,17 @@ export default function ChatScreen({navigation}) {
     messageText,
     messageTextVisible,
     step = null,
+    changedDiet,
   }) => {
     try {
+      // console.log(messageText, step);
+      if (step === 2 && messageText === i18n.t('Изменить часть диеты')) {
+        setIsVisibleChangePartDiet(true);
+        await sleep(300);
+        flatListRef.current.scrollToEnd({animated: true});
+        return;
+      }
+
       setIsBotWriting(true);
 
       analytics().logEvent('send_message', {message: messageText});
@@ -316,24 +346,7 @@ export default function ChatScreen({navigation}) {
         allergies: userData.allergies,
         preferredProducts: userData.preferredProducts,
         likedDishes: userData.likedDishes,
-        exampleResponseDiet: `{
-  diet: [
-    {
-      time: 'здесь время',
-      name: 'здесь название приема пищи',
-      dish: 'здесь название блюда',
-      dishEn: 'здесь название данного блюда переведи на en',
-      dishCalories: 'здесь количество колорий этого блюда в конце ккал'
-    }
-  ],
-  dietTotalCalories: 'сумма всех dishCalories в массиве diet должна быть ровно ${userData.calories} ',
-  products: [{
-    name: 'здесь название продукта',
-    amount: 'здесь количество только цифра',
-    units: 'Единица измерения (г, кг, мл, л, шт)',
-  }]
-}
-`,
+        exampleResponseDiet,
         diet: day?.diet,
       };
       console.log('sendMessage', messageText);
@@ -353,13 +366,27 @@ export default function ChatScreen({navigation}) {
         text = i18n.t('You need to consume {{calories}} calories per day.', {
           calories: text,
         });
+      } else if (step === 2 && changedDiet) {
+        console.log('changedDiet', changedDiet);
+        const products = jsonParse(text);
+        const dietString = formatDietDataToString(changedDiet);
+        console.log('formatDietDataToString', dietString);
+        dispatch(setDietAction(changedDiet, products.products, selectedDate));
+        text = dietString + i18n.t('Total calories: ') + day?.calories;
       } else if (step === 2) {
         const diet = jsonParse(text);
         const dietString = formatDietDataToString(diet.diet);
         console.log('formatDietDataToString', dietString);
         dispatch(setDietAction(diet.diet, diet.products, selectedDate));
         text = dietString + i18n.t('Total calories: ') + diet.dietTotalCalories;
-      } else if (step === 4) {
+      } else if (step === 3) {
+        const partDietOptions = jsonParse(text);
+        setIsVisibleChangePartDiet(false);
+        console.log('partDietOptions.diet', partDietOptions.diet.length);
+        // return;
+        setChangePartDietOptions(partDietOptions.diet);
+        text = i18n.t('Выберите из перечисленных вариантов');
+      } else if (step === 5) {
         await scheduleMealtimeNotifications(day?.diet, selectedDate);
         text = i18n.t('Notifications successfully scheduled');
       }
@@ -446,6 +473,77 @@ export default function ChatScreen({navigation}) {
     },
   );
 
+  const changePartDietButtons =
+    day?.diet?.length && isVisibleChangePartDiet
+      ? day.diet.reverse().map(diet => ({
+          buttonText: i18n.t('Изменить {{name}} в {{time}}', {
+            name: diet.name,
+            time: diet.time,
+          }),
+          messageText:
+            i18n.t(
+              'Дай другие примеры до 10 разных блюд для замены {{name}}, в формате в JSON: ',
+              {name: diet.name},
+            ) +
+            JSON.stringify({
+              diet: [
+                {
+                  time: `Time должно быть=${diet.time}`,
+                  name: `Name должно быть=${diet.name}`,
+                  dish: 'здесь название блюда',
+                  dishEn: 'здесь название данного блюда переведи на en',
+                  dishCalories: `Калории должны быть=${diet.dishCalories}`,
+                },
+              ],
+            }),
+          messageTextVisible: i18n.t('Change to another {{name}}', {
+            name: diet.name,
+          }),
+          nextStep: 3,
+        }))
+      : [];
+
+  const changePartDietResults = changePartDietOptions.length
+    ? changePartDietOptions.map(diet => {
+        const changedDiet = day?.diet?.map(item => {
+          if (item.time === diet.time) {
+            item.dish = diet.dish;
+            item.dishCalories = diet.dishCalories;
+          }
+          return item;
+        });
+        return {
+          buttonText: i18n.t('Выбрать {{dish}} в {{time}}', {
+            dish: diet.dish,
+            time: diet.time,
+          }),
+          changedDiet: changedDiet?.reverse(),
+          messageText:
+            'Какие продукты необходимы для этого рациона: ' +
+            JSON.stringify(changedDiet?.map(item => item.dish)) +
+            ' в формате ' +
+            JSON.stringify({
+              products: [
+                {
+                  name: 'здесь название продукта',
+                  amount: 'здесь количество только цифра',
+                  units: 'Единица измерения (г, кг, мл, л, шт)',
+                },
+              ],
+            }),
+          messageTextVisible: i18n.t(
+            'Замени прием пищи в {{time}} на ${dish} в ',
+            {
+              name: diet.name,
+              time: diet.time,
+              dish: diet.dish,
+            },
+          ),
+          nextStep: 2,
+        };
+      })
+    : [];
+
   const messageButtons = [
     {
       step: 0,
@@ -485,7 +583,7 @@ export default function ChatScreen({navigation}) {
             JSON.stringify(day?.products) +
             '?',
           messageTextVisible: i18n.t('What products to buy'),
-          nextStep: 3,
+          nextStep: 4,
         },
         {
           buttonText: i18n.t('Get another diet'),
@@ -493,10 +591,21 @@ export default function ChatScreen({navigation}) {
           messageTextVisible: i18n.t('Get another diet'),
           nextStep: 2,
         },
+        {
+          buttonText: i18n.t('Изменить часть диеты'),
+          messageText: i18n.t('Изменить часть диеты'),
+          messageTextVisible: i18n.t('Изменить часть диеты'),
+          nextStep: 2,
+        },
+        ...changePartDietButtons,
       ],
     },
     {
       step: 3,
+      buttons: [...changePartDietResults],
+    },
+    {
+      step: 4,
       buttons: [
         {
           buttonText: i18n.t(
@@ -506,66 +615,12 @@ export default function ChatScreen({navigation}) {
             i18n.t(
               'Return the names of the time and write down the meal time from the diet',
             ) +
-            day?.diet +
-            i18n.t('in JSON format: [{time: null, name: null }]'),
+            JSON.stringify(day?.diet) +
+            i18n.t(' in JSON format: [{time: null, name: null }]'),
           messageTextVisible: i18n.t(
             "Products purchased, let's set up notifications for cooking time",
           ),
-          nextStep: 4,
-        },
-      ],
-    },
-    {
-      step: 4,
-      buttons: [
-        {
-          buttonText: i18n.t(
-            'Current meal: {{mealName}} at {{mealTime}}, Get the recipe',
-            {
-              mealName: currentMealTime?.name,
-              mealTime: currentMealTime?.time,
-            },
-          ),
-          messageText:
-            i18n.t('Give the recipe:') +
-            `${currentMealTime?.dish} - ${currentMealTime?.dishCalories} ` +
-            i18n.t('at') +
-            `${currentMealTime?.time}`,
-          messageTextVisible: i18n.t(
-            '{{mealName}} at {{mealTime}}, Get the recipe',
-            {
-              mealName: currentMealTime?.name,
-              mealTime: currentMealTime?.time,
-            },
-          ),
           nextStep: 5,
-        },
-        {
-          buttonText: i18n.t(
-            'Next meal: {{mealName}} at {{mealTime}}, Get the recipe',
-            {
-              mealName: nextMealTime?.name,
-              mealTime: nextMealTime?.time,
-            },
-          ),
-          messageText:
-            i18n.t('Give the recipe:') +
-            `${nextMealTime?.dish} - ${nextMealTime?.dishCalories} ` +
-            i18n.t('at') +
-            `${nextMealTime?.time}`,
-          messageTextVisible: i18n.t(
-            '{{mealName}} at {{mealTime}}, Get the recipe',
-            {
-              mealName: nextMealTime?.name,
-              mealTime: nextMealTime?.time,
-            },
-          ),
-          nextStep: 5,
-        },
-        {
-          buttonText: i18n.t('Get another diet'),
-          messageText: i18n.t('Write another diet') + dietPromt,
-          nextStep: 2,
         },
       ],
     },
@@ -592,7 +647,62 @@ export default function ChatScreen({navigation}) {
               mealTime: currentMealTime?.time,
             },
           ),
-          nextStep: 5,
+          nextStep: 6,
+        },
+        {
+          buttonText: i18n.t(
+            'Next meal: {{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: nextMealTime?.name,
+              mealTime: nextMealTime?.time,
+            },
+          ),
+          messageText:
+            i18n.t('Give the recipe:') +
+            `${nextMealTime?.dish} - ${nextMealTime?.dishCalories} ` +
+            i18n.t('at') +
+            `${nextMealTime?.time}`,
+          messageTextVisible: i18n.t(
+            '{{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: nextMealTime?.name,
+              mealTime: nextMealTime?.time,
+            },
+          ),
+          nextStep: 6,
+        },
+        {
+          buttonText: i18n.t('Get another diet'),
+          messageText: i18n.t('Write another diet') + dietPromt,
+          messageTextVisible: i18n.t('Get another diet'),
+          nextStep: 2,
+        },
+      ],
+    },
+    {
+      step: 6,
+      buttons: [
+        {
+          buttonText: i18n.t(
+            'Current meal: {{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: currentMealTime?.name,
+              mealTime: currentMealTime?.time,
+            },
+          ),
+          messageText:
+            i18n.t('Give the recipe:') +
+            `${currentMealTime?.dish} - ${currentMealTime?.dishCalories} ` +
+            i18n.t('at') +
+            `${currentMealTime?.time}`,
+          messageTextVisible: i18n.t(
+            '{{mealName}} at {{mealTime}}, Get the recipe',
+            {
+              mealName: currentMealTime?.name,
+              mealTime: currentMealTime?.time,
+            },
+          ),
+          nextStep: 6,
         },
         {
           buttonText: i18n.t(
@@ -616,7 +726,7 @@ export default function ChatScreen({navigation}) {
               mealTime: nextMealTime?.time,
             },
           ),
-          nextStep: 5,
+          nextStep: 6,
         },
         {
           buttonText: i18n.t('Get another diet'),
@@ -712,12 +822,13 @@ export default function ChatScreen({navigation}) {
           );
         }
         return (
-          <View style={{alignItems: 'center', marginBottom: 5}}>
+          <View key={key} style={{alignItems: 'center', marginBottom: 5}}>
             <TouchableOpacity
               onPress={() =>
                 handleSendMessage({
                   messageText: i.messageText,
                   messageTextVisible: i.messageTextVisible,
+                  changedDiet: i.changedDiet,
                   step: i.nextStep,
                 })
               }
@@ -786,6 +897,7 @@ export default function ChatScreen({navigation}) {
                 dispatch(setCart([]));
                 dispatch(setTooltipStep('showGetCaloriesButton'));
                 dispatch(setCalories(null));
+                setIsVisibleChangePartDiet(false);
               }}
             />
           </View>
