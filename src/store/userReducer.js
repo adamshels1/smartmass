@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {sortByTime} from '../utils/sort';
 
 const initialState = {
   isSignedIn: false,
@@ -47,10 +48,11 @@ export default (state = initialState, {type, payload}) => {
     case 'SET_DIET':
       // console.log('SET_DIET', payload);
 
+      const sortedDiet = sortByTime(payload.diet);
       const updatedDays2 = state.days?.map(day => {
         const isSameDay = moment(day.date).isSame(payload.date, 'day');
         return isSameDay
-          ? {...day, diet: payload.diet, products: payload.products}
+          ? {...day, diet: sortedDiet, products: payload.products}
           : day;
       });
 

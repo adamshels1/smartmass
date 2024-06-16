@@ -19,6 +19,7 @@ import analytics from '@react-native-firebase/analytics';
 import DeviceInfo from 'react-native-device-info';
 import i18n from '../shared/config/i18n';
 import {ImagePixabay, ImageUnsplash} from '../shared/ui/ImageByDescription';
+import {Message} from '../features/chat/index.ts';
 
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
@@ -293,6 +294,7 @@ export default function ChatScreen({navigation}) {
     messageTextVisible,
     step = null,
     changedDiet,
+    meal,
   }) => {
     try {
       // console.log(messageText, step);
@@ -362,6 +364,8 @@ export default function ChatScreen({navigation}) {
       console.log('response', text);
       analytics().logEvent('send_message', {response: text});
 
+      let data = {};
+
       if (step === 1) {
         dispatch(setCalories(text));
         text = i18n.t('You need to consume {{calories}} calories per day.', {
@@ -374,12 +378,18 @@ export default function ChatScreen({navigation}) {
         console.log('formatDietDataToString', dietString);
         dispatch(setDietAction(changedDiet, products.products, selectedDate));
         text = dietString + i18n.t('Total calories: ') + day?.calories;
+        data.type = 'diet';
+        data.diet = changedDiet;
+        data.products = products.products;
       } else if (step === 2) {
         const diet = jsonParse(text);
         const dietString = formatDietDataToString(diet.diet);
         console.log('formatDietDataToString', dietString);
         dispatch(setDietAction(diet.diet, diet.products, selectedDate));
         text = dietString + i18n.t('Total calories: ') + diet.dietTotalCalories;
+        data.type = 'diet';
+        data.diet = diet.diet;
+        data.products = diet.products;
       } else if (step === 3) {
         const partDietOptions = jsonParse(text);
         setIsVisibleChangePartDiet(false);
@@ -390,13 +400,16 @@ export default function ChatScreen({navigation}) {
       } else if (step === 5) {
         await scheduleMealtimeNotifications(day?.diet, selectedDate);
         text = i18n.t('Notifications successfully scheduled');
+      } else if (step === 6) {
+        data.type = 'recipe';
+        data.meal = meal;
       }
 
       if (text?.length > 3 && step) {
         dispatch(setStepAction(step, selectedDate));
       }
 
-      const newBotMessage = {role: 'model', parts: [{text}]};
+      const newBotMessage = {role: 'model', parts: [{text}], data};
       dispatch(
         setMessagesAction(
           [...messages, newUserMessage, newBotMessage],
@@ -416,50 +429,7 @@ export default function ChatScreen({navigation}) {
   };
 
   // Rendering message element
-  const renderMessage = ({item}) => (
-    // <View
-    //   style={[
-    //     styles.message,
-    //     item.role === 'user' ? styles.userMessage : styles.otherMessage,
-    //   ]}>
-    //   <Markdown
-    //     style={{
-    //       body:
-    //         item.role === 'user'
-    //           ? styles.userMessageText
-    //           : styles.otherMessageText,
-    //     }}>
-    //     {item?.parts[0]?.text?.replace(/[*]/g, '•')}
-    //   </Markdown>
-    // </View>
-    <View
-      style={[
-        styles.message,
-        item.role === 'user' ? styles.userMessage : styles.otherMessage,
-      ]}>
-      {/*<View>*/}
-      {/*  <Image*/}
-      {/*    style={{*/}
-      {/*      width: '100%',*/}
-      {/*      height: 100,*/}
-      {/*      marginBottom: 10,*/}
-      {/*      borderRadius: 10,*/}
-      {/*    }}*/}
-      {/*    source={{*/}
-      {/*      uri: 'https://images.unsplash.com/photo-1515711125864-2a69ecb3f2f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MDU0NTd8MHwxfHNlYXJjaHwxfHxFZ2dzJTIwd2l0aCUyME9hdG1lYWx8ZW58MHx8fHwxNzE1NDU4MjE5fDA&ixlib=rb-4.0.3&q=80&w=400',*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*</View>*/}
-      <Text
-        style={
-          item.role === 'user'
-            ? styles.userMessageText
-            : styles.otherMessageText
-        }>
-        {item?.parts[0]?.text?.replace(/[*]/g, '•')}
-      </Text>
-    </View>
-  );
+  const renderMessage = ({item}) => <Message item={item} />;
 
   const nextMealTime = getNextMeal(day?.diet, selectedDate);
   const currentMealTime = getCurrentMeal(day?.diet, selectedDate);
@@ -476,7 +446,7 @@ export default function ChatScreen({navigation}) {
 
   const changePartDietButtons =
     day?.diet?.length && isVisibleChangePartDiet
-      ? day.diet.reverse().map(diet => ({
+      ? day.diet.map(diet => ({
           buttonText: i18n.t('Изменить {{name}} в {{time}}', {
             name: diet.name,
             time: diet.time,
@@ -519,7 +489,7 @@ export default function ChatScreen({navigation}) {
             time: diet.time,
             dishCalories: diet.dishCalories,
           }),
-          changedDiet: changedDiet?.reverse(),
+          changedDiet: changedDiet,
           newMeal: diet,
           messageText:
             'Какие продукты необходимы для этого рациона: ' +
@@ -535,7 +505,7 @@ export default function ChatScreen({navigation}) {
               ],
             }),
           messageTextVisible: i18n.t(
-            'Замени прием пищи в {{time}} на ${dish} в ',
+            'Замени прием пищи в {{time}} на {{dish}}',
             {
               name: diet.name,
               time: diet.time,
@@ -650,6 +620,7 @@ export default function ChatScreen({navigation}) {
               mealTime: currentMealTime?.time,
             },
           ),
+          meal: currentMealTime,
           nextStep: 6,
         },
         {
@@ -672,6 +643,7 @@ export default function ChatScreen({navigation}) {
               mealTime: nextMealTime?.time,
             },
           ),
+          meal: nextMealTime,
           nextStep: 6,
         },
         {
@@ -833,6 +805,7 @@ export default function ChatScreen({navigation}) {
                   messageTextVisible: i.messageTextVisible,
                   changedDiet: i.changedDiet,
                   step: i.nextStep,
+                  meal: i.meal,
                 })
               }
               style={{
@@ -851,8 +824,8 @@ export default function ChatScreen({navigation}) {
               {i.newMeal && (
                 <ImagePixabay
                   description={i.newMeal.dishEn}
-                  style={{borderRadius: 15, marginRight: 7}}
-                  imageStyle={{borderRadius: 16}}
+                  style={{borderRadius: 50, marginRight: 7}}
+                  imageStyle={{borderRadius: 50}}
                   size="medium"
                 />
               )}
@@ -1009,36 +982,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: '#fff',
-  },
-  message: {
-    // paddingVertical: 10,
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    maxWidth: '80%',
-    // flexDirection: 'row',
-  },
-  userMessage: {
-    backgroundColor: '#67CFCF',
-    alignSelf: 'flex-end',
-    borderTopRightRadius: 0,
-  },
-  otherMessage: {
-    backgroundColor: '#EEEEEE',
-    alignSelf: 'flex-start',
-    borderBottomLeftRadius: 0,
-    maxWidth: '85%',
-    minWidth: '50%',
-  },
-  userMessageText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: '300',
-  },
-  otherMessageText: {
-    color: '#505050',
-    fontSize: 13,
-    fontWeight: '300',
   },
   inputContainer: {
     flexDirection: 'row',

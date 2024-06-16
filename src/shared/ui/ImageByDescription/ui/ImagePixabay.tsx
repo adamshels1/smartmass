@@ -8,6 +8,7 @@ import {
   ImageStyle,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
+import * as Animatable from 'react-native-animatable';
 
 const PEXELS_API_URL = 'https://api.pexels.com/v1/search';
 const PEXELS_API_KEYS = [
@@ -25,8 +26,8 @@ interface ImagePexelsProps {
 
 const ImagePexels: React.FC<ImagePexelsProps> = ({
   description,
-  width = 100,
-  height = 100,
+  width = 80,
+  height = 80,
   size = 'medium',
   style,
   imageStyle,
@@ -36,7 +37,7 @@ const ImagePexels: React.FC<ImagePexelsProps> = ({
 
   useEffect(() => {
     const fetchImage = async () => {
-      if (!description.trim()) {
+      if (!description?.trim()) {
         setLoading(false);
         setImageUrl(null);
         return;
@@ -97,15 +98,17 @@ const ImagePexels: React.FC<ImagePexelsProps> = ({
     <View style={[styles.container, {width, height}, style]}>
       {/* Применяем свойство style к корневому View */}
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="small" color="#505050" />
       ) : imageUrl ? (
-        <Image
-          source={{uri: imageUrl}}
-          style={[{width, height}, imageStyle]} // Применяем свойство imageStyle к изображению
-          resizeMode="cover"
-        />
+        <Animatable.View animation="bounceIn">
+          <Image
+            source={{uri: imageUrl}}
+            style={[{width, height}, imageStyle]} // Применяем свойство imageStyle к изображению
+            resizeMode="cover"
+          />
+        </Animatable.View>
       ) : (
-        <View style={[styles.noImage, {width, height}]}>
+        <View style={[styles.noImage, {width, height}, imageStyle]}>
           {/* Placeholder image or any other UI you want to show when no image is found */}
         </View>
       )}
