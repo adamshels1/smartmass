@@ -479,6 +479,7 @@ export default function ChatScreen({navigation}) {
         const changedDiet = day?.diet?.map(item => {
           if (item.time === diet.time) {
             item.dish = diet.dish;
+            item.dishEn = diet.dishEn;
             item.dishCalories = diet.dishCalories;
           }
           return item;
@@ -677,6 +678,7 @@ export default function ChatScreen({navigation}) {
               mealTime: currentMealTime?.time,
             },
           ),
+          meal: currentMealTime,
           nextStep: 6,
         },
         {
@@ -701,6 +703,7 @@ export default function ChatScreen({navigation}) {
               mealTime: nextMealTime?.time,
             },
           ),
+          meal: nextMealTime,
           nextStep: 6,
         },
         {
