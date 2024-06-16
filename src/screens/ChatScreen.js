@@ -18,6 +18,7 @@ import Header from '../components/Header';
 import analytics from '@react-native-firebase/analytics';
 import DeviceInfo from 'react-native-device-info';
 import i18n from '../shared/config/i18n';
+import {ImagePixabay, ImageUnsplash} from '../shared/ui/ImageByDescription';
 
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 
@@ -513,11 +514,13 @@ export default function ChatScreen({navigation}) {
           return item;
         });
         return {
-          buttonText: i18n.t('Выбрать {{dish}} в {{time}}', {
+          buttonText: i18n.t('{{dish}}\nВ {{time}}, {{dishCalories}}', {
             dish: diet.dish,
             time: diet.time,
+            dishCalories: diet.dishCalories,
           }),
           changedDiet: changedDiet?.reverse(),
+          newMeal: diet,
           messageText:
             'Какие продукты необходимы для этого рациона: ' +
             JSON.stringify(changedDiet?.map(item => item.dish)) +
@@ -841,11 +844,27 @@ export default function ChatScreen({navigation}) {
                 borderWidth: 1,
                 borderColor: '#67CFCF',
                 paddingVertical: 5,
-                paddingHorizontal: 15,
-                maxWidth: '86%',
+                paddingHorizontal: 5,
+                // maxWidth: '90%',
                 flexDirection: 'row',
               }}>
-              <Text style={{color: '#3E3E3E', fontSize: 13, fontWeight: '400'}}>
+              {i.newMeal && (
+                <ImagePixabay
+                  description={i.newMeal.dishEn}
+                  style={{borderRadius: 15, marginRight: 7}}
+                  imageStyle={{borderRadius: 16}}
+                  size="medium"
+                />
+              )}
+
+              <Text
+                style={{
+                  color: '#3E3E3E',
+                  fontSize: 13,
+                  fontWeight: '400',
+                  width: 200,
+                  paddingHorizontal: 10,
+                }}>
                 {i.buttonText}
               </Text>
               <Image
@@ -943,6 +962,12 @@ export default function ChatScreen({navigation}) {
                       {i18n.t('Information Sources')}
                     </Text>
                   </TouchableOpacity>
+                  {/*<ImageUnsplash*/}
+                  {/*  description={'mealtime Beef stew with sweet potato mash'}*/}
+                  {/*/>*/}
+                  {/*<ImagePixabay*/}
+                  {/*  description={'mealtime Beef stew with sweet potato mash'}*/}
+                  {/*/>*/}
                 </View>
               </View>
             }
