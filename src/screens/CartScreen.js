@@ -45,6 +45,7 @@ import CalendarModal from '../components/CalendarModal';
 const today = moment();
 import CurrentWeek from '../components/CurrentWeek';
 import {jsonParse, sumAmountByName} from '../utils/format';
+import {ImagePixabay, ImageUnsplash} from '../shared/ui/ImageByDescription';
 export default function CartScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
@@ -550,7 +551,7 @@ export default function CartScreen({navigation}) {
         renderItem={({item, key}) => {
           return (
             <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}
+              style={{flexDirection: 'row', alignItems: 'center', height: 60}}
               onPress={() => {
                 const cart = userData.cart.map(i => {
                   if (i.name === item.name) {
@@ -567,6 +568,22 @@ export default function CartScreen({navigation}) {
                     ? require('../assets/icons/checklist.png')
                     : require('../assets/icons/eclipse.png')
                 }
+              />
+
+              {/*<ImagePixabay*/}
+              {/*  description={item.nameEn + ' market'}*/}
+              {/*  style={{borderRadius: 15, marginRight: 7}}*/}
+              {/*  imageStyle={{borderRadius: 15}}*/}
+              {/*  size="medium"*/}
+              {/*  width={30}*/}
+              {/*  height={30}*/}
+              {/*/>*/}
+              <ImageUnsplash
+                description={item.nameEn}
+                style={{borderRadius: 25, marginRight: 7}}
+                imageStyle={{borderRadius: 25}}
+                width={50}
+                height={50}
               />
               <Text
                 style={{

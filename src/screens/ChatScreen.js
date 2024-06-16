@@ -83,6 +83,7 @@ export default function ChatScreen({navigation}) {
   dietTotalCalories: 'сумма всех dishCalories в массиве diet должна быть ровно ${userData.calories} ',
   products: [{
     name: 'здесь название продукта',
+    nameEn: 'здесь название продукта на английском',
     amount: 'здесь количество только цифра',
     units: 'Единица измерения (г, кг, мл, л, шт)',
   }]
