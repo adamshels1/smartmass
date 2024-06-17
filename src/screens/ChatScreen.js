@@ -300,7 +300,7 @@ export default function ChatScreen({navigation}) {
   }) => {
     try {
       // console.log(messageText, step);
-      if (step === 2 && messageText === i18n.t('Изменить часть диеты')) {
+      if (step === 2 && messageText === i18n.t('Change part of the diet')) {
         setIsVisibleChangePartDiet(true);
         await sleep(300);
         flatListRef.current.scrollToEnd({animated: true});
@@ -437,7 +437,7 @@ export default function ChatScreen({navigation}) {
   const currentMealTime = getCurrentMeal(day?.diet, selectedDate);
 
   const dietPromt = i18n.t(
-    'for 1 day, following the example exampleResponseDiet in pure JSON format, so that the total of all dishes contains {{calories}} kcal, with the total number of meals per day being {{maxMealPerDay}}',
+    'for one day, following the example of exampleResponseDiet in pure JSON format, so that the total sum of all dishes contains {{calories}} kcal, the total number of meals per day is {{maxMealPerDay}}, and products should contain all the items that need to be purchased for the diet.',
     {
       calories: userData.calories,
       dailyMealStartTime: userData.dailyMealStartTime,
@@ -491,7 +491,7 @@ export default function ChatScreen({navigation}) {
         });
 
         return {
-          buttonText: i18n.t('{{dish}}\nВ {{time}}, {{dishCalories}}', {
+          buttonText: i18n.t('{{dish}}\n{{time}}, {{dishCalories}}', {
             dish: diet.dish,
             time: diet.time,
             dishCalories: diet.dishCalories,
@@ -512,7 +512,7 @@ export default function ChatScreen({navigation}) {
               ],
             }),
           messageTextVisible: i18n.t(
-            'Замени прием пищи в {{time}} на {{dish}}',
+            'Replace the meal at {{time}} with {{dish}}',
             {
               time: diet.time,
               dish: diet.dish,
@@ -571,9 +571,9 @@ export default function ChatScreen({navigation}) {
           nextStep: 2,
         },
         {
-          buttonText: i18n.t('Изменить часть диеты'),
-          messageText: i18n.t('Изменить часть диеты'),
-          messageTextVisible: i18n.t('Изменить часть диеты'),
+          buttonText: i18n.t('Change part of the diet'),
+          messageText: i18n.t('Change part of the diet'),
+          messageTextVisible: i18n.t('Change part of the diet'),
           nextStep: 2,
         },
         ...changePartDietButtons,
