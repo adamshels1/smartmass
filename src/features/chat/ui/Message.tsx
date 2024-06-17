@@ -9,7 +9,6 @@ interface RenderMessageProps {
 }
 
 const Message: React.FC<RenderMessageProps> = ({item}) => {
-  console.log('item', item);
   const {data, role, parts} = item;
   const isUser = role === 'user';
   const wrapStyle = [

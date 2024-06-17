@@ -578,13 +578,13 @@ export default function CartScreen({navigation}) {
               {/*  width={30}*/}
               {/*  height={30}*/}
               {/*/>*/}
-              <ImageUnsplash
-                description={item.nameEn}
-                style={{borderRadius: 25, marginRight: 7}}
-                imageStyle={{borderRadius: 25}}
-                width={50}
-                height={50}
-              />
+              {/*<ImageUnsplash*/}
+              {/*  description={item.nameEn}*/}
+              {/*  style={{borderRadius: 25, marginRight: 7}}*/}
+              {/*  imageStyle={{borderRadius: 25}}*/}
+              {/*  width={50}*/}
+              {/*  height={50}*/}
+              {/*/>*/}
               <Text
                 style={{
                   marginTop: 10,

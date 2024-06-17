@@ -52,6 +52,7 @@ import CurrentWeek from '../components/CurrentWeek';
 import {formatDietDataToString, jsonParse} from '../utils/format';
 
 import Tooltip from 'react-native-walkthrough-tooltip';
+import {sortByTime} from '../utils/sort';
 export default function ChatScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
@@ -447,14 +448,14 @@ export default function ChatScreen({navigation}) {
 
   const changePartDietButtons =
     day?.diet?.length && isVisibleChangePartDiet
-      ? day.diet.map(diet => ({
+      ? sortByTime(day.diet).map(diet => ({
           buttonText: i18n.t('Изменить {{name}} в {{time}}', {
             name: diet.name,
             time: diet.time,
           }),
           messageText:
             i18n.t(
-              'Дай другие примеры до 10 разных блюд для замены {{name}}, в формате в JSON: ',
+              'Дай другие примеры до 20 разных блюд для замены {{name}}, в формате в JSON: ',
               {name: diet.name},
             ) +
             JSON.stringify({
@@ -479,12 +480,16 @@ export default function ChatScreen({navigation}) {
     ? changePartDietOptions.map(diet => {
         const changedDiet = day?.diet?.map(item => {
           if (item.time === diet.time) {
-            item.dish = diet.dish;
-            item.dishEn = diet.dishEn;
-            item.dishCalories = diet.dishCalories;
+            return {
+              ...item,
+              dish: diet.dish,
+              dishEn: diet.dishEn,
+              dishCalories: diet.dishCalories,
+            };
           }
           return item;
         });
+
         return {
           buttonText: i18n.t('{{dish}}\nВ {{time}}, {{dishCalories}}', {
             dish: diet.dish,
@@ -509,7 +514,6 @@ export default function ChatScreen({navigation}) {
           messageTextVisible: i18n.t(
             'Замени прием пищи в {{time}} на {{dish}}',
             {
-              name: diet.name,
               time: diet.time,
               dish: diet.dish,
             },
