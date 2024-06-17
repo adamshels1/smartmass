@@ -35,7 +35,7 @@ export function sumAmountByName(products) {
   }
   for (const product of products) {
     const {name, nameEn, amount, units} = product;
-    const key = name + '|' + nameEn + '|' + units; // Создаем уникальный ключ из имени и единиц измерения
+    const key = name + '|' + units; // Создаем уникальный ключ из имени и единиц измерения
 
     // Если продукт с таким ключом уже есть в объекте, прибавляем к нему значение amount
     if (sumMap.hasOwnProperty(key)) {
@@ -47,8 +47,8 @@ export function sumAmountByName(products) {
 
   // Преобразуем объект обратно в массив объектов
   const result = Object.keys(sumMap).map(key => {
-    const [name, nameEn, units] = key.split('|'); // Разделяем ключ на имя и единицы измерения
-    return {name, nameEn, amount: sumMap[key].toFixed(0), units};
+    const [name, units] = key.split('|'); // Разделяем ключ на имя и единицы измерения
+    return {name, amount: sumMap[key].toFixed(0), units};
   });
 
   return result;

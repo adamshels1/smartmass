@@ -17,7 +17,7 @@
   "Eat This Much": "Eat This Much",
   "Exclude foods": "Исключить продукты",
   "FatSecret": "FatSecret",
-  "for 1 day, following the example exampleResponseDiet in pure JSON format, so that the total of all dishes contains {{calories}} kcal, with the total number of meals per day being {{maxMealPerDay}}": " на 1 день следуя примеру exampleResponseDiet в чистом JSON формате, так чтобы сумма всех блод содержала {{calories}} ккал, общее количество приемов пищи в день {{maxMealPerDay}}",
+  "for 1 day, following the example exampleResponseDiet in pure JSON format, so that the total of all dishes contains {{calories}} kcal, with the total number of meals per day being {{maxMealPerDay}}": " на 1 день следуя примеру exampleResponseDiet в чистом JSON формате, так чтобы сумма всех блод содержала {{calories}} ккал, общее количество приемов пищи в день {{maxMealPerDay}}, products дожно содержать все продукты которые необходимо купить для diet",
   "Fri": "Пт",
   "Gain weight": "Набрать вес",
   "Get a diet for this day": "Получить диету на этот день",

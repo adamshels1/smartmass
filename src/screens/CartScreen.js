@@ -551,7 +551,7 @@ export default function CartScreen({navigation}) {
         renderItem={({item, key}) => {
           return (
             <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center', height: 60}}
+              style={{flexDirection: 'row', alignItems: 'center', height: 35}}
               onPress={() => {
                 const cart = userData.cart.map(i => {
                   if (i.name === item.name) {
@@ -582,8 +582,8 @@ export default function CartScreen({navigation}) {
               {/*  description={item.nameEn}*/}
               {/*  style={{borderRadius: 25, marginRight: 7}}*/}
               {/*  imageStyle={{borderRadius: 25}}*/}
-              {/*  width={50}*/}
-              {/*  height={50}*/}
+              {/*  width={25}*/}
+              {/*  height={25}*/}
               {/*/>*/}
               <Text
                 style={{
