@@ -1,4 +1,4 @@
-import {useSelector, useDispatch, useStore} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
@@ -18,46 +18,33 @@ import Header from '../components/Header';
 import analytics from '@react-native-firebase/analytics';
 import DeviceInfo from 'react-native-device-info';
 import i18n from '../shared/config/i18n';
-import {ImagePixabay, ImageUnsplash} from '../shared/ui/ImageByDescription';
+import {ImagePixabay} from '../shared/ui/ImageByDescription';
 import {Message} from '../features/chat/index.ts';
-
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-
 const {GoogleGenerativeAI} = require('@google/generative-ai');
-
 import {Flow} from 'react-native-animated-spinkit';
 import {
   clearDays,
   setCalories,
   setCart,
   setDietAction,
-  setMealtimesAction,
   setMessagesAction,
   setStepAction,
   setTooltipStep,
 } from '../store/userActions';
-import AgendaComponent from '../components/AgendaComponent';
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Инициализация GoogleGenerativeAI
-const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
-import {getTimeStamp, getNextMeal, getCurrentMeal} from '../utils/helpers';
+import {getNextMeal, getCurrentMeal} from 'utils/helpers';
 import moment from 'moment/moment';
-import CalendarModal from '../components/CalendarModal';
 const today = moment();
 import CurrentWeek from '../components/CurrentWeek';
-import {formatDietDataToString, jsonParse} from '../utils/format';
-
+import {formatDietDataToString, jsonParse} from 'utils/format';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import {sortByTime} from '../utils/sort';
+import {sortByTime} from 'utils/sort';
+import {delay} from 'shared/lib/delay';
+const genAI = new GoogleGenerativeAI('AIzaSyBZamTEjnnSf5ZiPpSLG2q8Lgq8eDuNIBE');
+
 export default function ChatScreen({navigation}) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
   const [messageText, setMessageText] = useState('');
-  // const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null); // Создание рефа
   const userData = useSelector(state => state.userData);
   const days = useSelector(state => state.userData.days);
@@ -204,21 +191,11 @@ export default function ChatScreen({navigation}) {
 
   const scheduleMealtimeNotifications = async (diet, date) => {
     try {
-      // dispatch(setMealtimesAction(jsonParse(mealtimes), date));
-
-      // console.log('mealtimes', mealtimes)
       diet.map(item => {
-        console.log('item.time', item.time);
-
         const datetime = moment(
           moment(date).format('YYYY-MM-DD') + ' ' + item.time,
           'YYYY-MM-DD HH:mm',
         );
-
-        console.log('datetime', datetime);
-
-        console.log('title', item.name + ' в ' + item.time);
-        console.log('desc', item.dish + ' - ' + item.dishCalories);
 
         onCreateTriggerNotification(
           datetime.valueOf(),
@@ -227,11 +204,6 @@ export default function ChatScreen({navigation}) {
         );
       });
 
-      // JSON.parse('[{"time": "14:27", "name": "Завтрак"}, {"time": "14:28", "name": "Перекус"}, {"time": "14:29", "name": "Обед"}, {"time": "16:00", "name": "Перекус"}, {"time": "19:00", "name": "Ужин"}]').map(item => {
-      //   // console.log('item', item)
-      //   onCreateTriggerNotification(item.time, item.name, 'Настало время приема пищи')
-      // })
-      // Request permissions (required for iOS)
       await notifee.requestPermission();
       //create channel for android
       await notifee.createChannel({
@@ -299,10 +271,9 @@ export default function ChatScreen({navigation}) {
     meal,
   }) => {
     try {
-      // console.log(messageText, step);
       if (step === 2 && messageText === i18n.t('Change part of the diet')) {
         setIsVisibleChangePartDiet(true);
-        await sleep(300);
+        await delay(300);
         flatListRef.current.scrollToEnd({animated: true});
         return;
       }
@@ -310,12 +281,6 @@ export default function ChatScreen({navigation}) {
       setIsBotWriting(true);
 
       analytics().logEvent('send_message', {message: messageText});
-
-      // let messages =
-      //   store
-      //     .getState()
-      //     .userData.days?.find(day => moment(day.date).isSame(today, 'day'))
-      //     ?.messages || [];
 
       const newUserMessage = {
         role: 'user',
@@ -326,7 +291,7 @@ export default function ChatScreen({navigation}) {
 
       setMessageText('');
 
-      await sleep(100);
+      await delay(100);
 
       flatListRef.current.scrollToEnd({animated: true});
 
@@ -419,10 +384,10 @@ export default function ChatScreen({navigation}) {
         ),
       );
 
-      await sleep(100);
+      await delay(100);
 
       flatListRef.current.scrollToEnd({animated: true});
-      await sleep(2000);
+      await delay(2000);
       setToolTipVisible(true);
     } catch (error) {
       setIsBotWriting(false);
@@ -727,11 +692,9 @@ export default function ChatScreen({navigation}) {
     if (isBotWriting) {
       return null;
     }
-    // console.log('step ---->', step);
     return messageButtons
       ?.find(i => i.step === step)
       ?.buttons.map((i, key) => {
-        // console.log('step', step, tooltipStep);
         if (step === 0 || step === 1) {
           return (
             <Tooltip
@@ -943,42 +906,36 @@ export default function ChatScreen({navigation}) {
                       {i18n.t('Information Sources')}
                     </Text>
                   </TouchableOpacity>
-                  {/*<ImageUnsplash*/}
-                  {/*  description={'mealtime Beef stew with sweet potato mash'}*/}
-                  {/*/>*/}
-                  {/*<ImagePixabay*/}
-                  {/*  description={'mealtime Beef stew with sweet potato mash'}*/}
-                  {/*/>*/}
                 </View>
               </View>
             }
           />
 
-          {/*<View style={styles.inputContainer}>*/}
-          {/*  <TextInput*/}
-          {/*    style={styles.input}*/}
-          {/*    placeholder={i18n.t('Type a message...')}*/}
-          {/*    placeholderTextColor="#A1A1A1"*/}
-          {/*    onChangeText={text => setMessageText(text)}*/}
-          {/*    value={messageText}*/}
-          {/*    multiline={true}*/}
-          {/*    numberOfLines={4}*/}
-          {/*    textAlignVertical="center"*/}
-          {/*  />*/}
-          {/*  <TouchableOpacity*/}
-          {/*    onPress={() =>*/}
-          {/*      handleSendMessage({*/}
-          {/*        messageText,*/}
-          {/*      })*/}
-          {/*    }*/}
-          {/*    disabled={!disabledSendButton}*/}
-          {/*    style={{opacity: disabledSendButton ? 1 : 0.5}}>*/}
-          {/*    <Image*/}
-          {/*      style={{width: 30, height: 30}}*/}
-          {/*      source={require('../assets/icons/send.png')}*/}
-          {/*    />*/}
-          {/*  </TouchableOpacity>*/}
-          {/*</View>*/}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder={i18n.t('Type a message...')}
+              placeholderTextColor="#A1A1A1"
+              onChangeText={text => setMessageText(text)}
+              value={messageText}
+              multiline={true}
+              numberOfLines={4}
+              textAlignVertical="center"
+            />
+            <TouchableOpacity
+              onPress={() =>
+                handleSendMessage({
+                  messageText,
+                })
+              }
+              disabled={!disabledSendButton}
+              style={{opacity: disabledSendButton ? 1 : 0.5}}>
+              <Image
+                style={{width: 30, height: 30}}
+                source={require('../assets/icons/send.png')}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
