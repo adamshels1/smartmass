@@ -77,6 +77,7 @@ android {
 
     namespace "com.adamshels.smartmass"
     defaultConfig {
+//         applicationId "com.adamshels.smartmass"
         applicationId "com.adamshels.smartmass"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
