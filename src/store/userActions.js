@@ -71,6 +71,7 @@ export const setMessagesAction = (messages, date) => {
 };
 
 export const setStepAction = (step, date) => {
+  console.log('setStepAction', step);
   return {
     type: 'SET_STEP',
     payload: {step, date},
@@ -101,5 +102,19 @@ export const setShowWelcomeScreen = bool => {
   return {
     type: 'SET_SHOW_WELCOME_SCREEN',
     payload: bool,
+  };
+};
+
+export const setIsVisibleChangePartDiet = (visible, date) => {
+  return {
+    type: 'SET_IS_VISIBLE_CHANGE_PART_DIET',
+    payload: {visible, date},
+  };
+};
+
+export const setChangePartDietResults = (changePartDietResults, date) => {
+  return {
+    type: 'SET_CHANGE_PART_DIET_RESULTS',
+    payload: {changePartDietResults, date},
   };
 };

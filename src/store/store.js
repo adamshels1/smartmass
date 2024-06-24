@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Исп�
 import thunk from 'redux-thunk'; // Импортируйте redux-thunk
 
 import userReducer from './userReducer';
+import chatReducer from 'entities/chat/model/store/chatReducer';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   userData: userReducer,
+  chat: chatReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

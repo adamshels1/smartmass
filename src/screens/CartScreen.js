@@ -72,7 +72,8 @@ export default function CartScreen({navigation}) {
   } else if (day?.step > 1) {
     step = day?.step;
   }
-  const [isBotWriting, setIsBotWriting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const isBotWriting = useSelector(state => state.chat.isBotWriting);
   const isHasSettingsData =
     userData.weight && userData.height && userData.goal && userData.allergies;
 
@@ -188,7 +189,7 @@ export default function CartScreen({navigation}) {
     step = null,
   }) => {
     try {
-      setIsBotWriting(true);
+      setIsLoading(true);
 
       // let messages =
       //   store
@@ -254,7 +255,7 @@ export default function CartScreen({navigation}) {
       );
       const response = await result.response;
       let text = response.text();
-      setIsBotWriting(false);
+      setIsLoading(false);
 
       console.log('step', step, text);
 
@@ -288,7 +289,7 @@ export default function CartScreen({navigation}) {
 
       flatListRef?.current?.scrollToEnd({animated: true});
     } catch (error) {
-      setIsBotWriting(false);
+      setIsLoading(false);
       console.error('Ошибка при отправке сообщения:', error);
     }
   };
@@ -298,13 +299,13 @@ export default function CartScreen({navigation}) {
   }, [days]);
 
   const generateCart = async () => {
-    setIsBotWriting(true);
+    setIsLoading(true);
     await sleep(1500);
     const mergedData = days.flatMap(i => i.products);
     const summedData = sumAmountByName(mergedData);
     console.log('summedData', summedData);
     dispatch(setCart(summedData));
-    setIsBotWriting(false);
+    setIsLoading(false);
     // await sleep(10000);
     // const message =
     //   'Объедини одинаковые продукты по названию name даже если называются по разному, не должно быть дубликатов, суммируй amount, сделай сортировку по категориям, и верни в формате JSON :' +
@@ -447,7 +448,7 @@ export default function CartScreen({navigation}) {
   ];
 
   const renderMessageButtons = () => {
-    if (isBotWriting) {
+    if (isLoading) {
       return null;
     }
     return messageButtons
@@ -484,10 +485,10 @@ export default function CartScreen({navigation}) {
       });
   };
 
-  const disabledSendButton = messageText && !isBotWriting;
+  const disabledSendButton = messageText && !isLoading;
 
   const renderCart = () => {
-    if (isBotWriting) {
+    if (isLoading || isBotWriting) {
       return (
         <View>
           <Text
@@ -661,11 +662,11 @@ export default function CartScreen({navigation}) {
         {/*    contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-end'}}*/}
         {/*    ListFooterComponent={*/}
         {/*      <View style={{marginBottom: 10}}>*/}
-        {/*        {isBotWriting && (*/}
+        {/*        {isLoading && (*/}
         {/*          <Flow style={{marginLeft: 15}} size={48} color="#A1A1A1" />*/}
         {/*        )}*/}
 
-        {/*        /!* {isBotWriting && (*/}
+        {/*        /!* {isLoading && (*/}
         {/*        <Image style={{ width: 80, height: 50, marginBottom: 0 }} resizeMode='contain' source={require('../assets/animations/writing.gif')} />*/}
         {/*      )} *!/*/}
 

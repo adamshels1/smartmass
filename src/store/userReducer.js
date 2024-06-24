@@ -62,6 +62,37 @@ export default (state = initialState, {type, payload}) => {
         ...state,
         days: updatedDays2,
       };
+
+    case 'SET_IS_VISIBLE_CHANGE_PART_DIET':
+      // console.log('SET_DIET', payload);
+
+      const updatedDays5 = state.days?.map(day => {
+        const isSameDay = moment(day.date).isSame(payload.date, 'day');
+        return isSameDay
+          ? {...day, isVisibleChangePartDiet: payload.visible}
+          : day;
+      });
+
+      return {
+        ...state,
+        days: updatedDays5,
+      };
+
+    case 'SET_CHANGE_PART_DIET_RESULTS':
+      // console.log('SET_DIET', payload);
+
+      const updatedDays6 = state.days?.map(day => {
+        const isSameDay = moment(day.date).isSame(payload.date, 'day');
+        return isSameDay
+          ? {...day, changePartDietResults: payload.changePartDietResults}
+          : day;
+      });
+
+      return {
+        ...state,
+        days: updatedDays6,
+      };
+
     case 'SET_MEALTIMES':
       // console.log('SET_MEALTIMES', payload);
 
