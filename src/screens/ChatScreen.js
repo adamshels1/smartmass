@@ -293,12 +293,9 @@ export default function ChatScreen({navigation}) {
                 )}
 
                 <MessageButtons
-                  selectedDate={selectedDate}
-                  isBotWriting={isBotWriting}
-                  isVisibleChangePartDiet={isVisibleChangePartDiet}
+                  chatMessagesRef={flatListRef.current}
                   tooltipStep={tooltipStep}
                   handleSendMessage={handleSendMessage}
-                  changePartDietOptions={changePartDietOptions}
                 />
                 <InformationSourcesButton />
               </View>

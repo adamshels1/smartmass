@@ -11,7 +11,6 @@ export interface MessageItem {
 }
 
 export interface SendMessageType {
-  selectedDate: string;
   messageText: string;
   messageTextVisible: boolean;
   nextStep: string | null;

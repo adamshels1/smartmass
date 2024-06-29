@@ -10,26 +10,21 @@ import {ImagePixabay} from 'shared/ui/ImageByDescription';
 import {sortByTime} from 'utils/sort';
 import {Meal} from 'features/chat/model/types/diet';
 import {SendMessageType} from 'entities/chat/model/types/chat.ts';
+import {sendMessage} from 'entities/chat/model/services/sendMessage.ts';
 
 interface MessageButtonsProps {
-  selectedDate: string;
-  isBotWriting: boolean;
-  isVisibleChangePartDiet: boolean;
   tooltipStep: string;
-  handleSendMessage: (data: SendMessageType) => void;
-  changePartDietOptions: Meal[];
+  chatMessagesRef: any;
 }
 
 const MessageButtons: React.FC<MessageButtonsProps> = ({
-  selectedDate,
-  isBotWriting,
-  isVisibleChangePartDiet,
   tooltipStep,
-  handleSendMessage,
-  changePartDietOptions,
+  chatMessagesRef,
 }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state: any) => state.userData);
+  const selectedDate = useSelector((state: any) => state.chat.selectedDate);
+  const isBotWriting = useSelector((state: any) => state.chat.isBotWriting);
   const day = useSelector((state: any) =>
     state.userData?.days?.find((day: any) =>
       moment(day.date).isSame(moment(selectedDate), 'day'),
@@ -42,6 +37,25 @@ const MessageButtons: React.FC<MessageButtonsProps> = ({
   } else if (day?.step) {
     step = day?.step;
   }
+
+  const handleSendMessage = async ({
+    messageText,
+    messageTextVisible,
+    nextStep = null,
+    changedDiet,
+    meal,
+  }: any) => {
+    await dispatch(
+      sendMessage({
+        messageText,
+        messageTextVisible,
+        nextStep,
+        changedDiet,
+        meal,
+        chatMessagesRef,
+      }),
+    );
+  };
 
   const nextMealTime = getNextMeal(day?.diet, selectedDate);
   const currentMealTime = getCurrentMeal(day?.diet, selectedDate);
