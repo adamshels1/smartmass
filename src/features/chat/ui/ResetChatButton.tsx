@@ -9,18 +9,13 @@ import {
   setStepAction,
   setTooltipStep,
 } from 'store/userActions.js';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
-interface ResetChatButtonProps {
-  setIsVisibleChangePartDiet: (bool: boolean) => void;
-  selectedDate: string;
-}
+interface ResetChatButtonProps {}
 
-const ResetChatButton: React.FC<ResetChatButtonProps> = ({
-  setIsVisibleChangePartDiet,
-  selectedDate,
-}) => {
+const ResetChatButton: React.FC<ResetChatButtonProps> = () => {
   const dispatch = useDispatch();
+  const selectedDate = useSelector(state => state.chat.selectedDate);
 
   const handleResetChat = async () => {
     try {
@@ -30,7 +25,6 @@ const ResetChatButton: React.FC<ResetChatButtonProps> = ({
       dispatch(setCart([]));
       dispatch(setTooltipStep('showGetCaloriesButton'));
       dispatch(setCalories(null));
-      setIsVisibleChangePartDiet(false);
     } catch (error) {
       console.error('Error resetting chat data:', error);
     }
