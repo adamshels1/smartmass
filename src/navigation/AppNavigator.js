@@ -11,6 +11,7 @@ import ChatScreen from '../screens/ChatScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CartScreen from '../screens/CartScreen';
 import SourcesScreen from '../screens/SourcesScreen';
+import ProductByBarCodeScreen from '../screens/ProductByBarCodeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +58,11 @@ const AppNavigator = () => {
           <Stack.Screen
             name="SourcesScreen"
             component={SourcesScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ProductByBarCodeScreen"
+            component={ProductByBarCodeScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

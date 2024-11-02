@@ -1211,6 +1211,10 @@ PODS:
     - Firebase/RemoteConfig (= 10.19.0)
     - React-Core
     - RNFBApp
+  - RNGestureHandler (2.16.2):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - RNLocalize (3.1.0):
     - React-Core
   - RNNotifee (7.8.2):
@@ -1218,9 +1222,16 @@ PODS:
     - RNNotifee/NotifeeCore (= 7.8.2)
   - RNNotifee/NotifeeCore (7.8.2):
     - React-Core
+  - RNReanimated (3.11.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (3.29.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+  - RNSVG (15.8.0):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -1229,6 +1240,12 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
+  - VisionCamera (4.0.0):
+    - VisionCamera/Core (= 4.0.0)
+    - VisionCamera/React (= 4.0.0)
+  - VisionCamera/Core (4.0.0)
+  - VisionCamera/React (4.0.0):
+    - React-Core
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1292,9 +1309,13 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1438,12 +1459,20 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBRemoteConfig:
     :path: "../node_modules/@react-native-firebase/remote-config"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1524,12 +1553,16 @@ SPEC CHECKSUMS:
   RNFBApp: 5ee688b07ed0fa692a3a8fd07df6d6ae41e4c3a0
   RNFBMessaging: c839473d12cbe1b042b29898177033de4214e932
   RNFBRemoteConfig: dc5418251c49d2f40edfd76cc935d2c36b8331b0
+  RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
   RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
+  RNReanimated: 3c15d836bc232658f355d404b17e2a3f9046fe6c
   RNScreens: a4d9ce8f68f833f4e42410140eafd88e38bba163
+  RNSVG: 8b1a777d54096b8c2a0fd38fc9d5a454332bbb4d
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  VisionCamera: 4a46e519bd666999ef2654cd32bec4fcc0336627
   Yoga: d17d2cc8105eed528474683b42e2ea310e1daf61
 
 PODFILE CHECKSUM: 9f2e6c1af536b16532fd6216da2fc41c1fe3d374

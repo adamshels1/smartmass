@@ -13,6 +13,7 @@ import {setTooltipStep} from '../store/userActions.js';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {useDispatch, useSelector} from 'react-redux';
 import i18n from '../shared/config/i18n';
+import ScanBarCode from 'shared/ui/ScanBarCode/ui/ScanBarCode.tsx';
 
 interface HeaderProps {
   title: string;
@@ -27,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({
   title,
   navigation,
   showBack = true,
+  showScanButton = false,
   showSettingsIcon,
   containerStyle,
   titleStyle,
@@ -95,6 +97,8 @@ const Header: React.FC<HeaderProps> = ({
         ) : (
           <View />
         )}
+
+        {showScanButton && <ScanBarCode />}
       </View>
     </View>
   );

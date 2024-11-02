@@ -78,6 +78,7 @@ export default function Chat() {
               : i18n.t('Nutrition consultant GPT')
           }
           showSettingsIcon={true}
+          showScanButton={true}
         />
         <CurrentWeek />
         <ResetChatButton />
