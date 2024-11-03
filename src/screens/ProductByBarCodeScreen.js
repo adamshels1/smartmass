@@ -45,6 +45,7 @@ export default function ProductByBarCodeScreen({navigation, route}) {
   //5449000000439 cocacola
 
   // const barcode = '5053990107339'; // Замените на фактический штрих-код
+  //https://barkodist.com/pringles-original-40-g-barkodu
   const barcode = route?.params?.barcode;
   useEffect(() => {
     const fetchData = async () => {
