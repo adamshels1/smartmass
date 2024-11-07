@@ -98,7 +98,7 @@ const Header: React.FC<HeaderProps> = ({
           <View />
         )}
 
-        {showScanButton && <ScanBarCode />}
+        {/*{showScanButton && <ScanBarCode />}*/}
       </View>
     </View>
   );
