@@ -37,6 +37,9 @@ export default function Chat() {
     ),
   );
 
+  const state = useSelector(state => state);
+  console.log('state', state);
+
   const messages = day?.messages || [];
 
   const handleSendMessage = async ({

@@ -13,6 +13,8 @@ import CartScreen from '../screens/CartScreen';
 import SourcesScreen from '../screens/SourcesScreen';
 import ProductByBarCodeScreen from '../screens/ProductByBarCodeScreen';
 
+import {NotificationProvider} from 'app/providers/NotificationProvider';
+
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -31,42 +33,44 @@ const AppNavigator = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {isShowWelcomeScreen && (
+      <NotificationProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {isShowWelcomeScreen && (
+              <Stack.Screen
+                name="WelcomeScreen"
+                component={WelcomeScreen}
+                options={{headerShown: false}}
+              />
+            )}
             <Stack.Screen
-              name="WelcomeScreen"
-              component={WelcomeScreen}
+              name="ChatScreen"
+              component={ChatScreen}
               options={{headerShown: false}}
             />
-          )}
-          <Stack.Screen
-            name="ChatScreen"
-            component={ChatScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SettingsScreen"
-            component={SettingsScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="CartScreen"
-            component={CartScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SourcesScreen"
-            component={SourcesScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="ProductByBarCodeScreen"
-            component={ProductByBarCodeScreen}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen
+              name="SettingsScreen"
+              component={SettingsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="CartScreen"
+              component={CartScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="SourcesScreen"
+              component={SourcesScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="ProductByBarCodeScreen"
+              component={ProductByBarCodeScreen}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NotificationProvider>
     </Provider>
   );
 
