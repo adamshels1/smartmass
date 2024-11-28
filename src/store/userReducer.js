@@ -6,6 +6,7 @@ const initialState = {
   userName: 'Conan',
   weight: null,
   height: null,
+  weightChangeGoal: null,
   goal: null,
   allergies: [],
   likedDishes: [],
@@ -15,6 +16,8 @@ const initialState = {
   dailyMealStartTime: null,
   dailyMealEndTime: null,
   preferredProducts: null,
+  age: null,
+  gender: null,
   //dailyData
   mealtimes: [],
   messages: [],
