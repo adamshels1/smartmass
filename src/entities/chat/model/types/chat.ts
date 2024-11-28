@@ -18,3 +18,26 @@ export interface SendMessageType {
   meal?: Meal;
   chatMessagesRef: any;
 }
+
+// Определение интерфейсов
+export interface Product {
+  name: string;
+  nameEn: string;
+  amount: number;
+  units: string;
+}
+
+export interface Meal {
+  time: string;
+  name: string;
+  dish: string;
+  dishEn: string;
+  dishCalories: number;
+  recipe: string;
+}
+
+export interface DailyDiet {
+  diet: Meal[];
+  dietTotalCalories: string;
+  products: Product[];
+}

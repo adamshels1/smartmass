@@ -7,6 +7,8 @@ import {
   ScrollView,
   Platform,
   TouchableHighlight,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Input from '../components/Input';
@@ -15,6 +17,8 @@ import Button from '../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSettingsAction} from '../store/userActions';
 import i18n from '../shared/config/i18n';
+import {getDailyDiets} from 'entities/chat/model/services/getDailyDiets/getDailyDiets';
+import {changeDailyDietOne} from 'entities/chat/model/services/getAnotherDailyDiet/getAnotherDailyDiet';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
 
@@ -71,6 +75,14 @@ const SettingsScreen = ({navigation}) => {
     );
     navigation.navigate('ChatScreen');
   };
+
+  return (
+    <View style={{paddingTop: 100}}>
+      <TouchableOpacity onPress={getDailyDiets}>
+        <Text>get diet</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <SafeAreaView style={{flex: 1}}>

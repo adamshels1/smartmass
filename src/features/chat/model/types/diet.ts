@@ -4,4 +4,5 @@ export interface Meal {
   dish: string;
   dishCalories: string;
   dishEn: string;
+  recipe: string;
 }
