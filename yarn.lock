@@ -1753,6 +1753,11 @@
   resolved "https://registry.npmjs.org/@react-native-firebase/remote-config/-/remote-config-18.7.3.tgz"
   integrity sha512-Cxntq5X/Gk1xGZyU+LKVl4boKDaVh2UVZCOmHGJZ7sTCmxbKPN/t2GU5MUHQc28PvB9uLewXesm7qL6E30I8Iw==
 
+"@react-native-google-signin/google-signin@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-13.1.0.tgz"
+  integrity sha512-C2/sqb0/s0c+Dwc/mykASZsRuHxGqn7SFrCxCY9D8p8IOQO05haInhCc7lzraJshRixGva5c/4usQZ71HMYSEQ==
+
 "@react-native-picker/picker@^2.7.5":
   version "2.7.5"
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.7.5.tgz"
