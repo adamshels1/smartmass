@@ -36,14 +36,17 @@ const GoogleSigninButton2 = () => {
       const {email, name, photo} = user;
 
       // Отправка данных на ваш бэкэнд
-      const response = await fetch('http://localhost:3000/api/googleAuth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'http://localhost:3000/api/auth/googleAuth',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idToken, email, name, photo}),
         },
-        body: JSON.stringify({idToken, email, name, photo}),
-      });
-      console.log('response', response);
+      );
+      console.log('response', await response.json());
       alert(JSON.stringify(response));
 
       const data = await response.json();
