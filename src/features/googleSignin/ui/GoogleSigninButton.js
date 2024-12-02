@@ -15,7 +15,7 @@ GoogleSignin.configure({
   scopes: ['profile', 'email'],
 });
 
-const GoogleSigninButton = () => {
+const GoogleSigninButton2 = () => {
   useEffect(() => {
     GoogleSignin.signInSilently()
       .then(user => {
@@ -33,17 +33,18 @@ const GoogleSigninButton = () => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       const {idToken, user} = userInfo.data;
-      alert(JSON.stringify(user));
       const {email, name, photo} = user;
 
       // Отправка данных на ваш бэкэнд
-      const response = await fetch('http://localhost:3000/api/google-login', {
+      const response = await fetch('http://localhost:3000/api/googleAuth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({idToken, email, name, photo}),
       });
+      console.log('response', response);
+      alert(JSON.stringify(response));
 
       const data = await response.json();
       await AsyncStorage.setItem('userToken', data.token);
@@ -55,10 +56,10 @@ const GoogleSigninButton = () => {
   };
 
   return (
-    <View style={{paddingTop: 100}}>
+    <View>
       <GoogleSigninButton onPress={signIn} />
     </View>
   );
 };
 
-export default GoogleSigninButton;
+export default GoogleSigninButton2;

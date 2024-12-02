@@ -4,6 +4,7 @@ import {StyleSheet, SafeAreaView} from 'react-native';
 import analytics from '@react-native-firebase/analytics';
 import DeviceInfo from 'react-native-device-info';
 import Chat from 'features/chat/ui/Chat';
+import GoogleSigninButton2 from 'features/googleSignin/ui/GoogleSigninButton';
 
 export default function ChatScreen({navigation}) {
   const userData = useSelector(state => state.userData);
@@ -31,6 +32,7 @@ export default function ChatScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <GoogleSigninButton2 />
       <Chat />
     </SafeAreaView>
   );
