@@ -1,25 +1,24 @@
-import {GoogleGenerativeAI} from '@google/generative-ai';
-const genAI = new GoogleGenerativeAI('AIzaSyDk_JN-D7ToR5acTN6oQ8S6VkOoEYbawIM');
+import axios from 'axios';
 
-export interface SendMessageType {
+interface SendMessageType {
   messageText: string;
   responseFormat: any;
 }
+
 export const sendMessage_v2 = async ({
   messageText,
   responseFormat,
-}: SendMessageType) => {
+}: SendMessageType): Promise<string> => {
   try {
-    const model = genAI.getGenerativeModel({model: 'gemini-pro'});
-    const result = await model.generateContent(
-      JSON.stringify({prompt: messageText, responseFormat}),
-    );
-    const response = await result.response;
-    let text = response.text();
-    console.log('response.text', text);
-    return text;
+    const response = await axios.post('http://localhost:3000/api/chat', {
+      messageText,
+      responseFormat,
+    });
+    const aiResponse = response.data.aiResponse;
+    console.log('AI Response:', aiResponse);
+    return aiResponse;
   } catch (error) {
     console.error('Error sending message:', error);
-    return '';
+    return 'Error sending message';
   }
 };
