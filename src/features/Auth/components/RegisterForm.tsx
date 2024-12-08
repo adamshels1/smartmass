@@ -7,8 +7,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
-import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
+import CustomButton from 'shared/ui/CustomButton/CustomButton';
+import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 
 const RegisterForm = () => {
   const [email, setEmail] = useState('');
@@ -72,7 +72,7 @@ const RegisterForm = () => {
         <CustomButton
           title="У меня уже есть аккаунт"
           onPress={() => Alert.alert('Уже есть аккаунт')}
-          style={[styles.registerButton, styles.existingAccountButton]}
+          style={styles.existingAccountButton}
           textStyle={styles.existingAccountButtonText}
         />
       </ScrollView>

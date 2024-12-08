@@ -5,13 +5,21 @@ import {AppNavigation, NavigationStackLists} from 'shared/config/navigation';
 import WelcomeScreen from 'screens/WelcomeScreen.js';
 import LoginScreen from 'features/Auth/ui/LoginScreen.tsx';
 import RegisterScreen from 'features/Auth/ui/RegisterScreen.tsx';
+import EmailVerificationForm from 'features/Auth/components/EmailVerificationForm.tsx';
 
 export const Stack = createNativeStackNavigator<NavigationStackLists>();
 
 const Navigation = () => {
   return (
     <NavigationContainer theme={DarkTheme}>
-      <Stack.Navigator initialRouteName={AppNavigation.REGISTRATION}>
+      <Stack.Navigator initialRouteName={AppNavigation.VERIFY}>
+        <Stack.Screen
+          name={AppNavigation.VERIFY}
+          options={{
+            headerTransparent: true,
+          }}
+          component={EmailVerificationForm}
+        />
         <Stack.Screen
           name={AppNavigation.REGISTRATION}
           options={{
