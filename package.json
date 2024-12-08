@@ -25,6 +25,7 @@
     "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/native-stack": "^6.9.22",
+    "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.6.8",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "dotenv": "^16.4.5",
