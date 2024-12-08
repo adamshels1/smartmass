@@ -1,39 +1,161 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Button} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {loginWithEmail, loginWithGoogle} from '../model/authSlice';
-import {RootState} from 'app/providers/StoreProvider/config/store';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
+import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx'; // Используем ваш компонент
+import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx'; // Используем ваш компонент
 
-const LoginForm: React.FC = () => {
-  const dispatch = useDispatch();
+const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {loading, error} = useSelector((state: RootState) => state.auth);
+  const [error, setError] = useState('');
 
   const handleLogin = () => {
-    dispatch(loginWithEmail({email, password}));
-  };
+    if (!email || !password) {
+      setError('Введите все поля!');
+      return;
+    }
 
-  const handleGoogleLogin = () => {
-    const idToken = ''; // Получите idToken из Google Sign-In
-    dispatch(loginWithGoogle(idToken));
+    // Пример обработки авторизации
+    setError('');
+    Alert.alert('Вход', `Вошли как: ${email}`);
   };
 
   return (
-    <View>
-      <Text>Email:</Text>
-      <TextInput value={email} onChangeText={setEmail} />
-      <Text>Password:</Text>
-      <TextInput value={password} onChangeText={setPassword} secureTextEntry />
-      <Button title="Login" onPress={handleLogin} disabled={loading} />
-      <Button
-        title="Login with Google"
-        onPress={handleGoogleLogin}
-        disabled={loading}
-      />
-      {error && <Text style={{color: 'red'}}>{error}</Text>}
-    </View>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>С возвращением</Text>
+        <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
+
+        <TouchableOpacity style={styles.appleButton}>
+          <Text style={styles.appleText}>
+             Войти при помощи аккаунта Apple
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.googleButton}>
+          <Text style={styles.googleText}>
+            Войти при помощи аккаунта Google
+          </Text>
+        </TouchableOpacity>
+
+        <Text style={styles.dividerText}>
+          Или войдите при помощи email аккаунта
+        </Text>
+
+        <CustomTextInput
+          placeholder="Адрес электронной почты"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <CustomTextInput
+          placeholder="Пароль"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+        <TouchableOpacity>
+          <Text style={styles.forgotPassword}>Я забыл пароль</Text>
+        </TouchableOpacity>
+
+        <CustomButton
+          title="Войти"
+          onPress={handleLogin}
+          style={styles.loginButton}
+        />
+        <CustomButton
+          title="Создать аккаунт"
+          onPress={() => Alert.alert('Создать аккаунт')}
+          style={styles.registerButton}
+          textStyle={styles.registerButtonText}
+        />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
-export default LoginForm;
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+    padding: 20,
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '600',
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 20,
+  },
+  appleButton: {
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    borderRadius: 33,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  appleText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  googleButton: {
+    backgroundColor: '#F44336',
+    paddingVertical: 15,
+    borderRadius: 33,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  googleText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  dividerText: {
+    fontSize: 14,
+    color: '#aaa',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  forgotPassword: {
+    color: '#31D6D6',
+    fontSize: 14,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  loginButton: {
+    backgroundColor: '#31D6D6',
+  },
+  registerButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#31D6D6',
+  },
+  registerButtonText: {
+    color: '#31D6D6',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+});
+
+export default SignInScreen;
