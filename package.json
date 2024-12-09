@@ -54,6 +54,8 @@
     "react-native-svg": "^15.8.0",
     "react-native-svg-charts": "^5.4.0",
     "react-native-swiper": "^1.6.0",
+    "react-native-tag-input": "^0.0.21",
+    "react-native-tags-input": "^1.0.10",
     "react-native-vision-camera": "^4.0.0",
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-redux": "^8.1.3",

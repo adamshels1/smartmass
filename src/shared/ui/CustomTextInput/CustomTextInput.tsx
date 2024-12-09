@@ -18,6 +18,8 @@ interface CustomTextInputProps {
   label?: string;
   labelStyle?: TextStyle;
   secureTextEntry?: boolean; // Для ввода пароля
+  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad'; // Тип клавиатуры
+  maxLength?: number; // Максимальная длина ввода
 }
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
@@ -29,6 +31,8 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   label,
   labelStyle,
   secureTextEntry = false,
+  keyboardType = 'default',
+  maxLength,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry); // По умолчанию видимость соответствует secureTextEntry
 
@@ -40,8 +44,11 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
+          placeholderTextColor={'gray'}
           secureTextEntry={!isPasswordVisible} // Управляем видимостью текста
           style={[styles.input, inputStyle]}
+          keyboardType={keyboardType}
+          maxLength={maxLength}
         />
         {secureTextEntry && (
           <TouchableOpacity

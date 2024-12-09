@@ -12,6 +12,7 @@ interface CustomButtonProps {
   onPress: () => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  disabled?: boolean;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -19,10 +20,21 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   onPress,
   style,
   textStyle,
+  disabled = false,
 }) => {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+    <TouchableOpacity
+      style={[styles.button, style, disabled && styles.disabledButton]}
+      onPress={disabled ? undefined : onPress}
+      disabled={disabled}>
+      <Text
+        style={[
+          styles.buttonText,
+          textStyle,
+          disabled && styles.disabledButtonText,
+        ]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -35,10 +47,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
+  disabledButton: {
+    backgroundColor: '#A5A5A5',
+  },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  disabledButtonText: {
+    color: '#D1D1D1',
   },
 });
 

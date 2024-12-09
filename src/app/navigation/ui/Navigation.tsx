@@ -6,6 +6,7 @@ import WelcomeScreen from 'screens/WelcomeScreen.js';
 import LoginScreen from 'features/Auth/ui/LoginScreen.tsx';
 import RegisterScreen from 'features/Auth/ui/RegisterScreen.tsx';
 import EmailVerificationForm from 'features/Auth/components/EmailVerificationForm.tsx';
+import HealthTrackingForm from 'features/healthTracking/ui/HealthTrackingForm.tsx';
 
 export const Stack = createNativeStackNavigator<NavigationStackLists>();
 
@@ -18,7 +19,7 @@ const Navigation = () => {
           options={{
             headerTransparent: true,
           }}
-          component={EmailVerificationForm}
+          component={HealthTrackingForm}
         />
         <Stack.Screen
           name={AppNavigation.REGISTRATION}
