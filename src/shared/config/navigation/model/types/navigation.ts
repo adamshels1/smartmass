@@ -9,6 +9,7 @@ export enum AppNavigation {
   VERIFY = 'Verify',
   FORGOT = 'Forgot',
   COURSE = 'Course',
+  MEAL_CALENDAR = 'MealCalendar',
 }
 
 interface NavigationSplashType {
@@ -24,6 +25,7 @@ export type NavigationStackLists = {
   [AppNavigation.VERIFY]: undefined;
   [AppNavigation.FORGOT]: NavigationSplashType | undefined;
   [AppNavigation.COURSE]: {courseId: number};
+  [AppNavigation.MEAL_CALENDAR]: undefined;
 };
 
 export type RootStackParamList = NavigationStackLists & NavigationTabLists;

@@ -7,13 +7,21 @@ import LoginScreen from 'features/Auth/ui/LoginScreen.tsx';
 import RegisterScreen from 'features/Auth/ui/RegisterScreen.tsx';
 import EmailVerificationForm from 'features/Auth/components/EmailVerificationForm.tsx';
 import HealthTrackingForm from 'features/healthTracking/ui/HealthTrackingForm.tsx';
+import MealCalendarScreen from 'features/meal/ui/MealCalendarScreen.tsx';
 
 export const Stack = createNativeStackNavigator<NavigationStackLists>();
 
 const Navigation = () => {
   return (
     <NavigationContainer theme={DarkTheme}>
-      <Stack.Navigator initialRouteName={AppNavigation.VERIFY}>
+      <Stack.Navigator initialRouteName={AppNavigation.MEAL_CALENDAR}>
+        <Stack.Screen
+          name={AppNavigation.MEAL_CALENDAR}
+          options={{
+            headerTransparent: true,
+          }}
+          component={MealCalendarScreen}
+        />
         <Stack.Screen
           name={AppNavigation.VERIFY}
           options={{
