@@ -19,7 +19,7 @@ const data: DataItem[] = [
   {day: 'Воскресенье', date: '24', kcal: 2456, progress: 1.0},
 ];
 
-const MealCalendar = () => {
+const CalorieCalendar = () => {
   const renderItem = ({item}: {item: DataItem}) => (
     <View style={styles.card}>
       <View style={styles.dateContainer}>
@@ -32,7 +32,6 @@ const MealCalendar = () => {
           color={item.progress > 1 ? 'red' : '#31D6D6'}
           style={styles.progressBar}
         />
-        {item.progress > 1 && <View style={styles.overrunBar} />}
         <Text style={styles.kcal}>{item.kcal}kcal</Text>
       </View>
       <View style={styles.actionContainer}>
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
   },
   month: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     marginBottom: 5,
   },
   week: {
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
   infoContainer: {
     flex: 1,
@@ -107,11 +106,11 @@ const styles = StyleSheet.create({
   },
   day: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     marginBottom: 5,
   },
   progressBar: {
-    height: 6,
+    height: 3,
     borderRadius: 3,
     backgroundColor: '#E0E0E0',
   },
@@ -141,16 +140,17 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#31D6D6',
-    borderRadius: 10,
+    borderRadius: 33,
     padding: 15,
     alignItems: 'center',
     marginTop: 20,
+    marginBottom: 20,
   },
   buttonText: {
     fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
 });
 
-export default MealCalendar;
+export default CalorieCalendar;

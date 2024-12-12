@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {DarkTheme, NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {AppNavigation, NavigationStackLists} from 'shared/config/navigation';
 import WelcomeScreen from 'screens/WelcomeScreen.js';
@@ -8,13 +8,22 @@ import RegisterScreen from 'features/Auth/ui/RegisterScreen.tsx';
 import EmailVerificationForm from 'features/Auth/components/EmailVerificationForm.tsx';
 import HealthTrackingForm from 'features/healthTracking/ui/HealthTrackingForm.tsx';
 import MealCalendarScreen from 'features/meal/ui/MealCalendarScreen.tsx';
+import TabNavigation from './TabNavigation.tsx';
+import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 
 export const Stack = createNativeStackNavigator<NavigationStackLists>();
 
 const Navigation = () => {
   return (
-    <NavigationContainer theme={DarkTheme}>
-      <Stack.Navigator initialRouteName={AppNavigation.MEAL_CALENDAR}>
+    <NavigationContainer theme={DefaultTheme}>
+      <Stack.Navigator initialRouteName={AppNavigation.HOME}>
+        <Stack.Screen
+          name={AppNavigation.HOME}
+          options={{
+            headerTransparent: true,
+          }}
+          component={TabNavigation}
+        />
         <Stack.Screen
           name={AppNavigation.MEAL_CALENDAR}
           options={{

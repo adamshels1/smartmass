@@ -1246,10 +1246,11 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.29.0):
+  - RNScreens (3.35.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+    - React-RCTImage
   - RNSVG (15.10.1):
     - React-Core
   - RNVectorIcons (10.2.0):
@@ -1599,7 +1600,7 @@ SPEC CHECKSUMS:
   RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNReanimated: 3c15d836bc232658f355d404b17e2a3f9046fe6c
-  RNScreens: a4d9ce8f68f833f4e42410140eafd88e38bba163
+  RNScreens: e5093efe5103f3fd5f4479a0f0281ee5e6d81e11
   RNSVG: 7ff26379b2d1871b8571e6f9bc9630de6baf9bdf
   RNVectorIcons: e547446004607b9037ae4bea770d0fd2ba15c4a7
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

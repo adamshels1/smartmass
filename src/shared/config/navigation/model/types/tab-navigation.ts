@@ -1,15 +1,13 @@
 export enum AppTabNavigation {
-  MAIN = 'Home',
-  FEEDS = 'Feeds',
-  GLOBAL = 'Global',
-  CHAT = 'Chat',
-  SETTING = 'Setting',
+  HOME = 'Home',
+  CALENDAR = 'Plan',
+  CART = 'Cart',
+  SETTINGS = 'Settings',
 }
 
 export type NavigationTabLists = {
-  [AppTabNavigation.MAIN]: undefined;
-  [AppTabNavigation.FEEDS]: undefined;
-  [AppTabNavigation.GLOBAL]: undefined;
-  [AppTabNavigation.CHAT]: undefined;
-  [AppTabNavigation.SETTING]: undefined;
+  [AppTabNavigation.HOME]: undefined;
+  [AppTabNavigation.CALENDAR]: undefined;
+  [AppTabNavigation.CART]: undefined;
+  [AppTabNavigation.SETTINGS]: undefined;
 };

@@ -7,6 +7,8 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import {RefreshIcon} from 'shared/assets/icons';
+import DateProgressComponent from './DateProgressComponent.tsx';
 
 const meals = [
   {
@@ -32,7 +34,7 @@ const meals = [
   },
 ];
 
-const App = () => {
+const DailyMeals: React.FC = () => {
   const renderItem = ({item}) => (
     <View style={styles.mealCard}>
       <Image source={{uri: item.image}} style={styles.mealImage} />
@@ -44,23 +46,20 @@ const App = () => {
         <Text style={styles.mealKcal}>{item.kcal} ккал</Text>
       </View>
       <TouchableOpacity style={styles.refreshButton}>
-        <Text style={styles.refreshText}>⟳</Text>
+        {/*<Text style={styles.refreshText}>⟳</Text>*/}
+        <RefreshIcon width={25} height={25} fill={'gray'} />
       </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
-        <Text style={styles.backText}>← Назад</Text>
-      </TouchableOpacity>
-      <View style={styles.header}>
-        <Text style={styles.date}>24 ноября, Воскресенье</Text>
-        <View style={styles.kcalContainer}>
-          <Text style={styles.kcalProgress}>0 / 2456 ккал</Text>
-          <Text style={styles.kcalIcon}>🍔</Text>
-        </View>
-      </View>
+      <DateProgressComponent
+        date="24 ноября, Воскресенье"
+        progress={0.2}
+        kcal="0 / 2456 ккал"
+      />
+
       <Text style={styles.timer}>До следующего приема пищи: 2ч 31м</Text>
       <FlatList
         data={meals}
@@ -95,10 +94,6 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 10,
   },
-  date: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
   kcalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -132,7 +127,7 @@ const styles = StyleSheet.create({
   mealImage: {
     width: 60,
     height: 60,
-    borderRadius: 10,
+    borderRadius: 30,
   },
   mealInfo: {
     flex: 1,
@@ -145,7 +140,7 @@ const styles = StyleSheet.create({
   },
   mealName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     marginBottom: 5,
   },
   mealKcal: {
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#31D6D6',
-    borderRadius: 10,
+    borderRadius: 33,
     padding: 15,
     alignItems: 'center',
     marginTop: 20,
@@ -169,21 +164,22 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
   otherButton: {
     borderColor: '#31D6D6',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 33,
     padding: 15,
     alignItems: 'center',
     marginTop: 10,
+    marginBottom: 20,
   },
   otherButtonText: {
     fontSize: 16,
     color: '#31D6D6',
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
 });
 
-export default App;
+export default DailyMeals;

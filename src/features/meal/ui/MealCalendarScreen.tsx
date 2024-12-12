@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import MealCalendar from './MealCalendar.tsx';
+import CalorieCalendar from './CalorieCalendar.tsx';
 
 const MealCalendarScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MealCalendar</Text>
-      <MealCalendar />
+      <CalorieCalendar />
     </View>
   );
 };

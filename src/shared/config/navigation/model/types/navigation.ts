@@ -1,6 +1,7 @@
 import {NavigationTabLists} from './tab-navigation.ts';
 
 export enum AppNavigation {
+  HOME = 'Home',
   WELCOME = 'Welcome',
   WELCOME_INFO = 'WelcomeInfo',
   MAIN = 'Main',
@@ -17,6 +18,7 @@ interface NavigationSplashType {
 }
 
 export type NavigationStackLists = {
+  [AppNavigation.HOME]: undefined;
   [AppNavigation.WELCOME]: undefined;
   [AppNavigation.WELCOME_INFO]: undefined;
   [AppNavigation.MAIN]: undefined;
