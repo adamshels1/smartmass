@@ -2,29 +2,41 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {BurgerIcon} from 'shared/assets/icons';
 import {ProgressBar} from 'react-native-paper';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import {useSelector} from 'react-redux';
+import {RootState} from 'app/providers/StoreProvider';
+import moment from 'moment';
+import {SkeletonLoader} from 'shared/ui';
 
 interface DateProgressComponentProps {
   date: string;
-  progress: number;
-  kcal: string;
 }
 
-const DateProgress: React.FC<DateProgressComponentProps> = ({
-  date,
-  progress,
-  kcal,
-}) => {
+const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
+  const days = useSelector((state: RootState) => state.meal.days);
+  const status = useSelector((state: RootState) => state.meal.status);
+
+  const day = days.find(day => day.date === date);
+
+  // if (status === 'loading') {
+  //   return <SkeletonLoader length={1} />;
+  // }
+
+  const progress = day?.takenCalories / 3000;
+
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>
+          {moment(date).format('DD MMMM, dddd')}
+        </Text>
         <View style={styles.progressContainer}>
           <ProgressBar
             progress={progress}
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <Text style={styles.kcalProgress}>{kcal}</Text>
+          <Text style={styles.kcalProgress}>100</Text>
         </View>
       </View>
       <TouchableOpacity>

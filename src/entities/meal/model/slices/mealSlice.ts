@@ -59,7 +59,9 @@ const mealsSlice = createSlice({
           console.log('action', action.meta.arg.date);
           const dayMeals: DayMeals = {
             date: action.meta.arg.date,
-            meals: action.payload.data,
+            meals: action.payload.data.meals,
+            totalCalories: action.payload.data.totalCalories,
+            takenCalories: action.payload.data.takenCalories,
           };
           state.status = 'succeeded';
           state.days = state.days.filter(

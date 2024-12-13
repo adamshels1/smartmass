@@ -8,6 +8,7 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 
 const DailyMeals: React.FC = () => {
   const dispatch = useAppDispatch();
+  const date = new Date().toISOString().split('T')[0];
   const handleGenerateMeals = () => {
     const today = new Date().toISOString().split('T')[0];
     dispatch(
@@ -22,12 +23,8 @@ const DailyMeals: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <DateProgress
-        date="24 ноября, Воскресенье"
-        progress={0.2}
-        kcal="0 / 2456 ккал"
-      />
-      <MealsList />
+      <DateProgress date={date} />
+      <MealsList date={date} />
       {/*<CustomButton title={'Добавить продукты в корзину'} onPress={() => {}} />*/}
       <CustomButton
         title={'Другая диета на весь день'}
