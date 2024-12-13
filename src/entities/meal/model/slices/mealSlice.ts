@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {MealsState, DayMeals, Meal} from '../types/mealTypes';
-import {generateDailyMeals, getDailyMeals} from '../api/mealApi.ts';
+import {generateDailyMeals, getDailyMeals, updateMeal} from '../api/mealApi.ts';
 
 const initialState: MealsState = {
   days: [],
@@ -34,6 +34,13 @@ export const initiateGenerateDailyMeals = createAsyncThunk(
       params.userId,
     );
     dispatch(fetchDailyMeals({date: params.date, userId: params.userId}));
+  },
+);
+
+export const initiateUpdateMeal = createAsyncThunk(
+  'meals/updateMeal',
+  async (meal: Meal) => {
+    await updateMeal(meal);
   },
 );
 
@@ -74,6 +81,16 @@ const mealsSlice = createSlice({
       .addCase(initiateGenerateDailyMeals.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message ?? 'Failed to generate meals';
+      })
+      .addCase(initiateUpdateMeal.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(initiateUpdateMeal.fulfilled, state => {
+        state.status = 'succeeded';
+      })
+      .addCase(initiateUpdateMeal.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? 'Failed to update meal';
       });
   },
 });

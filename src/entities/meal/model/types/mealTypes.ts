@@ -1,7 +1,7 @@
 export interface Meal {
   id: number;
   userId: number;
-  date: Date;
+  date: string;
   isMealTaken: boolean;
   isPlanned: boolean;
   time: string;

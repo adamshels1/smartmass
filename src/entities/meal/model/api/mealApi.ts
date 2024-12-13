@@ -66,3 +66,13 @@ export const getDailyMeals = async (
     throw error;
   }
 };
+
+export const updateMeal = async (meal: Meal): Promise<void> => {
+  try {
+    const response = await apiInstance.put('/meal/updateMeal', meal);
+    console.log('Meal updated successfully:', response.data);
+  } catch (error) {
+    console.error('Error updating meal:', error);
+    throw error;
+  }
+};
