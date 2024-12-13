@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import DailyMeals from 'features/meal/ui/DailyMeals';
+import DailyMeals from 'features/meal/ui/dailyMeals/DailyMeals.tsx';
 
 const DailyMealsScreen: React.FC = () => {
   return (

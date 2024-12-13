@@ -20,6 +20,7 @@ const Navigation = () => {
         <Stack.Screen
           name={AppNavigation.HOME}
           options={{
+            headerShown: false,
             headerTransparent: true,
           }}
           component={TabNavigation}

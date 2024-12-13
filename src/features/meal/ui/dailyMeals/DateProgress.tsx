@@ -9,7 +9,7 @@ interface DateProgressComponentProps {
   kcal: string;
 }
 
-const DateProgressComponent: React.FC<DateProgressComponentProps> = ({
+const DateProgress: React.FC<DateProgressComponentProps> = ({
   date,
   progress,
   kcal,
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DateProgressComponent;
+export default DateProgress;

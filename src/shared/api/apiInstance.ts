@@ -3,7 +3,7 @@ import axios from 'axios';
 // Создаем instance axios
 const apiInstance = axios.create({
   baseURL: 'http://localhost:3000/api', // Базовый URL для API
-  timeout: 1000, // Таймаут запроса
+  timeout: 20000, // Таймаут запроса
   headers: {
     'Content-Type': 'application/json',
     accept: '*/*',
