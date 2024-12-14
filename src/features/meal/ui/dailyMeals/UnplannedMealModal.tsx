@@ -1,22 +1,42 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import ActionSheet from 'react-native-actions-sheet';
 import SelectInput from 'shared/ui/SelectInput/SelectInput.tsx';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import {BurgerIcon} from 'shared/assets/icons';
+import {sendMessageToAI} from 'entities/chat/model/api/chataiApi.ts';
 
 const UnplannedMealForm = () => {
   const [food, setFood] = useState('');
   const [time, setTime] = useState('');
   const [calories, setCalories] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const actionSheetRef = useRef(null);
+
+  useEffect(() => {
+    if (food) {
+      const timeoutId = setTimeout(() => {
+        setIsLoading(true);
+        sendMessageToAI('skolko primerno kallorii ' + food, 'integer').then(
+          response => {
+            if (response && response.aiResponse) {
+              setCalories(response.aiResponse);
+            }
+            setIsLoading(false);
+          },
+        );
+      }, 1000); // Adjust delay as needed
+      return () => clearTimeout(timeoutId);
+    }
+  }, [food]);
 
   const handleAdd = () => {
     console.log({food, time, calories});
@@ -88,6 +108,19 @@ const UnplannedMealForm = () => {
             keyboardType="numeric"
             maxLength={3} // Максимальная длина для калорий
           />
+          {isLoading && (
+            <ActivityIndicator
+              size="small"
+              color="gray"
+              style={{
+                position: 'absolute',
+                top: 110,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+            />
+          )}
           <CustomButton title="Добавить" onPress={handleAdd} />
           <CustomButton
             title="Закрыть"
