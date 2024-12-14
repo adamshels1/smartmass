@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
 import moment from 'moment';
 import {SkeletonLoader} from 'shared/ui';
+import UnplannedMealModal from 'features/meal/ui/dailyMeals/UnplannedMealModal.tsx';
 
 interface DateProgressComponentProps {
   date: string;
@@ -22,7 +23,7 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
   //   return <SkeletonLoader length={1} />;
   // }
 
-  const progress = day?.takenCalories / 3000;
+  const progress = day?.takenCalories ? day?.takenCalories : 0 / 3000;
 
   return (
     <View style={styles.container}>
@@ -39,9 +40,8 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
           <Text style={styles.kcalProgress}>100</Text>
         </View>
       </View>
-      <TouchableOpacity>
-        <BurgerIcon width={50} height={50} fill={'#ff0000'} />
-      </TouchableOpacity>
+
+      <UnplannedMealModal />
     </View>
   );
 };

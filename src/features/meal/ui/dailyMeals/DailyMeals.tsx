@@ -10,10 +10,9 @@ const DailyMeals: React.FC = () => {
   const dispatch = useAppDispatch();
   const date = new Date().toISOString().split('T')[0];
   const handleGenerateMeals = () => {
-    const today = new Date().toISOString().split('T')[0];
     dispatch(
       initiateGenerateDailyMeals({
-        date: today,
+        date: date,
         mealCount: 3,
         totalCalories: 3000,
         userId: 1,
