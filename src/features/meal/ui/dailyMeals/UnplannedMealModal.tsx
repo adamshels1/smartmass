@@ -16,14 +16,16 @@ import {sendMessageToAI} from 'entities/chat/model/api/chataiApi.ts';
 import {addUnplannedMeal} from 'entities/meal/model/api/mealApi.ts';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {fetchDailyMeals} from 'entities/meal/model/slices/mealSlice.ts';
-
+import {timeItems} from 'features/meal/constants/timeItems.ts';
+import {getCurrentTime} from 'shared/lib/utils/timeUtils.ts';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 interface UnplannedMealFormProps {
   date: string;
 }
 
 const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
   const [food, setFood] = useState('');
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState(getCurrentTime());
   const [calories, setCalories] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -52,13 +54,27 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
       setIsButtonLoading(true);
       await addUnplannedMeal(date, food, time, parseInt(calories, 10));
       dispatch(fetchDailyMeals({date, userId: 1}));
-      console.log({food, time, calories});
+      resetState();
       actionSheetRef.current?.hide(); // Закрыть ActionSheet после добавления
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response && error.response.status === 500) {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'Время занято',
+          textBody:
+            'В это время вы уже приняли пищу. Пожалуйста, выберите другое время.',
+        });
+      }
       console.error('Failed to add unplanned meal:', error);
     } finally {
       setIsButtonLoading(false);
     }
+  };
+
+  const resetState = () => {
+    setFood('');
+    setTime(getCurrentTime());
+    setCalories('');
   };
 
   const handleShowSheet = () => {
@@ -68,6 +84,9 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
       console.warn('ActionSheet ref is not set');
     }
   };
+
+  const disabledAddButton =
+    isButtonLoading || !food || !time || !calories || isLoading;
 
   return (
     <View style={styles.container}>
@@ -90,32 +109,7 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
             label="Время"
             value={time}
             onValueChange={setTime}
-            items={[
-              {label: '6:00', value: '6:00'},
-              {label: '7:00', value: '7:00'},
-              {label: '8:00', value: '8:00'},
-              {label: '9:00', value: '9:00'},
-              {label: '10:00', value: '10:00'},
-              {label: '11:00', value: '11:00'},
-              {label: '12:00', value: '12:00'},
-              {label: '13:00', value: '13:00'},
-              {label: '14:00', value: '14:00'},
-              {label: '15:00', value: '15:00'},
-              {label: '16:00', value: '16:00'},
-              {label: '17:00', value: '17:00'},
-              {label: '18:00', value: '18:00'},
-              {label: '19:00', value: '19:00'},
-              {label: '20:00', value: '20:00'},
-              {label: '21:00', value: '21:00'},
-              {label: '22:00', value: '22:00'},
-              {label: '23:00', value: '23:00'},
-              {label: '00:00', value: '00:00'},
-              {label: '01:00', value: '01:00'},
-              {label: '02:00', value: '02:00'},
-              {label: '03:00', value: '03:00'},
-              {label: '04:00', value: '04:00'},
-              {label: '05:00', value: '05:00'},
-            ]}
+            items={timeItems}
             placeholder={{label: 'Выберите время', value: null}}
           />
           <CustomTextInput
@@ -130,19 +124,14 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
             <ActivityIndicator
               size="small"
               color="gray"
-              style={{
-                position: 'absolute',
-                top: 110,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
+              style={styles.loader}
             />
           )}
           <CustomButton
             title="Добавить"
             onPress={handleAdd}
             loading={isButtonLoading}
+            disabled={disabledAddButton}
           />
           <CustomButton
             title="Закрыть"
@@ -187,6 +176,13 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     borderRadius: 5,
+  },
+  loader: {
+    position: 'absolute',
+    top: 110,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
 

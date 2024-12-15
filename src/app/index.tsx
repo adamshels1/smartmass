@@ -4,15 +4,18 @@ import {AppStatusBar} from 'shared/ui/AppStatusBar';
 import {Navigation} from './navigation';
 import {StoreProvider} from './providers/StoreProvider';
 import {PaperProvider} from 'react-native-paper';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const App = (): React.JSX.Element => {
   return (
     <StoreProvider>
       <PaperProvider>
-        <SafeAreaProvider>
-          <AppStatusBar />
-          <Navigation />
-        </SafeAreaProvider>
+        <AlertNotificationRoot>
+          <SafeAreaProvider>
+            <AppStatusBar />
+            <Navigation />
+          </SafeAreaProvider>
+        </AlertNotificationRoot>
       </PaperProvider>
     </StoreProvider>
   );
