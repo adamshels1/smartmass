@@ -17,6 +17,8 @@ export interface Meal {
 export interface DayMeals {
   date: string;
   meals: Meal[];
+  totalCalories: number;
+  takenCalories: number;
 }
 
 export interface MealsState {

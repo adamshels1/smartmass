@@ -7,19 +7,28 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import ActionSheet from 'react-native-actions-sheet';
+import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
 import SelectInput from 'shared/ui/SelectInput/SelectInput.tsx';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import {BurgerIcon} from 'shared/assets/icons';
 import {sendMessageToAI} from 'entities/chat/model/api/chataiApi.ts';
+import {addUnplannedMeal} from 'entities/meal/model/api/mealApi.ts';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import {fetchDailyMeals} from 'entities/meal/model/slices/mealSlice.ts';
 
-const UnplannedMealForm = () => {
+interface UnplannedMealFormProps {
+  date: string;
+}
+
+const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
   const [food, setFood] = useState('');
   const [time, setTime] = useState('');
   const [calories, setCalories] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const actionSheetRef = useRef(null);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const actionSheetRef = useRef<ActionSheetRef>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (food) {
@@ -38,9 +47,18 @@ const UnplannedMealForm = () => {
     }
   }, [food]);
 
-  const handleAdd = () => {
-    console.log({food, time, calories});
-    actionSheetRef.current?.hide(); // Закрыть ActionSheet после добавления
+  const handleAdd = async () => {
+    try {
+      setIsButtonLoading(true);
+      await addUnplannedMeal(date, food, time, parseInt(calories, 10));
+      dispatch(fetchDailyMeals({date, userId: 1}));
+      console.log({food, time, calories});
+      actionSheetRef.current?.hide(); // Закрыть ActionSheet после добавления
+    } catch (error) {
+      console.error('Failed to add unplanned meal:', error);
+    } finally {
+      setIsButtonLoading(false);
+    }
   };
 
   const handleShowSheet = () => {
@@ -121,7 +139,11 @@ const UnplannedMealForm = () => {
               }}
             />
           )}
-          <CustomButton title="Добавить" onPress={handleAdd} />
+          <CustomButton
+            title="Добавить"
+            onPress={handleAdd}
+            loading={isButtonLoading}
+          />
           <CustomButton
             title="Закрыть"
             onPress={() => actionSheetRef.current?.hide()}

@@ -76,3 +76,23 @@ export const updateMeal = async (meal: Meal): Promise<void> => {
     throw error;
   }
 };
+
+export const addUnplannedMeal = async (
+  date: string,
+  description: string,
+  time: string,
+  dishCalories: number,
+): Promise<void> => {
+  try {
+    const response = await apiInstance.post('/meal/addUnplannedMeal', {
+      date,
+      description,
+      time,
+      dishCalories,
+    });
+    console.log('Unplanned meal added:', response.data);
+  } catch (error) {
+    console.error('Error adding unplanned meal:', error);
+    throw error;
+  }
+};

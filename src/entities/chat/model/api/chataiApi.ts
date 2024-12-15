@@ -4,7 +4,7 @@ import apiInstance from 'shared/api/apiInstance.ts';
 export const sendMessageToAI = async (
   messageText: string,
   responseFormat: any,
-): Promise<void> => {
+): Promise<any> => {
   try {
     const response = await apiInstance.post('/chat', {
       messageText,

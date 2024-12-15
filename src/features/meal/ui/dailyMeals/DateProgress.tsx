@@ -1,12 +1,9 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {BurgerIcon} from 'shared/assets/icons';
+import {View, Text, StyleSheet} from 'react-native';
 import {ProgressBar} from 'react-native-paper';
-import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
 import moment from 'moment';
-import {SkeletonLoader} from 'shared/ui';
 import UnplannedMealModal from 'features/meal/ui/dailyMeals/UnplannedMealModal.tsx';
 
 interface DateProgressComponentProps {
@@ -15,13 +12,8 @@ interface DateProgressComponentProps {
 
 const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
   const days = useSelector((state: RootState) => state.meal.days);
-  const status = useSelector((state: RootState) => state.meal.status);
 
   const day = days.find(day => day.date === date);
-
-  // if (status === 'loading') {
-  //   return <SkeletonLoader length={1} />;
-  // }
 
   const progress = day?.takenCalories ? day?.takenCalories : 0 / 3000;
 
@@ -41,7 +33,7 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
         </View>
       </View>
 
-      <UnplannedMealModal />
+      <UnplannedMealModal date={date} />
     </View>
   );
 };
