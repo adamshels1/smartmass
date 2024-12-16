@@ -14,8 +14,14 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
   const days = useSelector((state: RootState) => state.meal.days);
 
   const day = days.find(day => day.date === date);
+  console.log('day', day);
 
-  const progress = day?.takenCalories ? day?.takenCalories : 0 / 3000;
+  const progress =
+    day?.takenCalories && day?.totalCalories
+      ? day?.takenCalories / day?.totalCalories
+      : 0;
+
+  console.log('progress', progress);
 
   return (
     <View style={styles.container}>
@@ -29,7 +35,7 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <Text style={styles.kcalProgress}>100</Text>
+          <Text style={styles.kcalProgress}>{day?.takenCalories} kcal</Text>
         </View>
       </View>
 
