@@ -7,7 +7,7 @@ import {
   Platform,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {registerUser, setMessage, logout} from '../model/authSlice.ts';
+import {registerUser, setMessage} from '../model/authSlice.ts';
 import {RootState} from 'app/providers/StoreProvider/config/store.ts';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';

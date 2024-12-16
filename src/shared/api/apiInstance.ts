@@ -1,4 +1,5 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Создаем instance axios
 const apiInstance = axios.create({
@@ -12,9 +13,9 @@ const apiInstance = axios.create({
 
 // Настройка интерсепторов для обработки ошибок и добавления токенов
 apiInstance.interceptors.request.use(
-  config => {
-    // Здесь можно добавить токены аутентификации
-    const token = ''; // Получите токен из состояния или локального хранилища
+  async config => {
+    // Получаем токен из AsyncStorage
+    const token = await AsyncStorage.getItem('userToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
