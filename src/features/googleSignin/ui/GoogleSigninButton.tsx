@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
+import {loginWithGoogle} from 'entities/auth/model/authSlice'; // Импортируем функцию
 
 GoogleSignin.configure({
   webClientId:
@@ -16,6 +17,8 @@ GoogleSignin.configure({
 });
 
 const GoogleSigninButton2 = () => {
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     GoogleSignin.signInSilently()
       .then(user => {
@@ -32,27 +35,9 @@ const GoogleSigninButton2 = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      const {idToken, user} = userInfo.data;
-      const {email, name, photo} = user;
-
-      // Отправка данных на ваш бэкэнд
-      const response = await fetch(
-        'http://localhost:3000/api/auth/googleAuth',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({idToken, email, name, photo}),
-        },
-      );
-      console.log('response', await response.json());
-      alert(JSON.stringify(response));
-
-      const data = await response.json();
-      await AsyncStorage.setItem('userToken', data.token);
-
-      console.log(userInfo);
+      // @ts-ignore
+      const {idToken} = userInfo.data;
+      dispatch(loginWithGoogle(idToken));
     } catch (error) {
       console.error(error);
     }
@@ -60,9 +45,29 @@ const GoogleSigninButton2 = () => {
 
   return (
     <View>
-      <GoogleSigninButton onPress={signIn} />
+      <GoogleSigninButton
+        size={1}
+        style={styles.googleButton}
+        onPress={signIn}
+      />
     </View>
   );
 };
 
 export default GoogleSigninButton2;
+
+const styles = StyleSheet.create({
+  googleButton: {
+    width: '100%',
+    height: 48,
+    borderRadius: 3,
+    backgroundColor: '#4285F4',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  googleText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import LoginForm from '../components/LoginForm';
+import {View, StyleSheet} from 'react-native';
+import LoginForm from '../entities/auth/ui/LoginForm.tsx';
 
 const LoginScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
       <LoginForm />
     </View>
   );

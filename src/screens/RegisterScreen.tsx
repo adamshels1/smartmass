@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import RegisterForm from '../components/RegisterForm';
+import {View, StyleSheet} from 'react-native';
+import RegisterForm from '../entities/auth/ui/RegisterForm.tsx';
 
 const RegisterScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
       <RegisterForm />
     </View>
   );
@@ -14,11 +13,6 @@ const RegisterScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
   },
 });
 

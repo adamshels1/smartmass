@@ -1,22 +1,24 @@
 import React, {useState} from 'react';
 import {
-  View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   Alert,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
 } from 'react-native';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx'; // Используем ваш компонент
-import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx'; // Используем ваш компонент
+import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
+import {AppNavigation} from 'shared/config/navigation';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import GoogleSigninButton2 from 'features/googleSignin/ui/GoogleSigninButton.tsx'; // Используем ваш компонент
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigation = useAppNavigation();
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -37,16 +39,13 @@ const SignInScreen = () => {
         <Text style={styles.title}>С возвращением</Text>
         <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
 
-        <TouchableOpacity style={styles.appleButton}>
-          <Text style={styles.appleText}>
-             Войти при помощи аккаунта Apple
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.googleButton}>
-          <Text style={styles.googleText}>
-            Войти при помощи аккаунта Google
-          </Text>
-        </TouchableOpacity>
+        {/*<TouchableOpacity style={styles.appleButton}>*/}
+        {/*  <Text style={styles.appleText}>*/}
+        {/*     Войти при помощи аккаунта Apple*/}
+        {/*  </Text>*/}
+        {/*</TouchableOpacity>*/}
+
+        <GoogleSigninButton2 />
 
         <Text style={styles.dividerText}>
           Или войдите при помощи email аккаунта
@@ -77,7 +76,7 @@ const SignInScreen = () => {
         />
         <CustomButton
           title="Создать аккаунт"
-          onPress={() => Alert.alert('Создать аккаунт')}
+          onPress={() => navigation.navigate(AppNavigation.REGISTRATION)}
           style={styles.registerButton}
           textStyle={styles.registerButtonText}
         />
@@ -115,18 +114,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  googleButton: {
-    backgroundColor: '#F44336',
-    paddingVertical: 15,
-    borderRadius: 33,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  googleText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
-  },
+
   dividerText: {
     fontSize: 14,
     color: '#aaa',

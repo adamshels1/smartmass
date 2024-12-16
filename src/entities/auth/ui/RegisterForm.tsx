@@ -1,35 +1,60 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   StyleSheet,
-  Alert,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import CustomButton from 'shared/ui/CustomButton/CustomButton';
-import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
+import {useSelector} from 'react-redux';
+import {registerUser, setMessage, logout} from '../model/authSlice.ts';
+import {RootState} from 'app/providers/StoreProvider/config/store.ts';
+import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import {AppNavigation} from 'shared/config/navigation';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 const RegisterForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
+  const authState = useSelector((state: RootState) => state.auth);
+  const {loading, error, message} = authState;
+  const navigation = useAppNavigation();
 
   const handleRegister = () => {
     if (!email || !password || !confirmPassword) {
-      setError('Введите все поля!');
+      dispatch(setMessage('Введите все поля!'));
       return;
     }
     if (password !== confirmPassword) {
-      setError('Пароли не совпадают!');
+      dispatch(setMessage('Пароли не совпадают!'));
       return;
     }
 
-    // Пример обработки регистрации
-    setError('');
-    Alert.alert('Регистрация', `Зарегистрированы как: ${email}`);
+    dispatch(registerUser({email, password, name: email}));
+    navigation.navigate(AppNavigation.VERIFY);
   };
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Ошибка',
+        textBody: error,
+      });
+    }
+    if (message) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Сообщение',
+        textBody: message,
+      });
+    }
+  }, [error, message]);
 
   return (
     <KeyboardAvoidingView
@@ -57,7 +82,7 @@ const RegisterForm = () => {
           secureTextEntry
         />
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {loading ? <Text style={styles.loadingText}>Loading...</Text> : null}
 
         <Text style={styles.acceptText}>
           Нажимая кнопку зарегистрироваться вы принимаете{' '}
@@ -71,7 +96,7 @@ const RegisterForm = () => {
         />
         <CustomButton
           title="У меня уже есть аккаунт"
-          onPress={() => Alert.alert('Уже есть аккаунт')}
+          onPress={() => navigation.navigate(AppNavigation.AUTH)}
           style={styles.existingAccountButton}
           textStyle={styles.existingAccountButtonText}
         />
@@ -117,8 +142,8 @@ const styles = StyleSheet.create({
   existingAccountButtonText: {
     color: '#31D6D6',
   },
-  errorText: {
-    color: 'red',
+  loadingText: {
+    color: '#000',
     fontSize: 14,
     textAlign: 'center',
     marginVertical: 10,

@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import EmailVerificationForm from 'features/Auth/components/EmailVerificationForm.tsx';
+import {View, StyleSheet} from 'react-native';
+import EmailVerificationForm from 'entities/auth/ui/EmailVerificationForm.tsx';
 
 const EmailVerificationScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
       <EmailVerificationForm />
     </View>
   );
