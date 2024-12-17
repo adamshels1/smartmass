@@ -10,6 +10,9 @@ interface UserDetailsState {
   firstMeal: string;
   lastMeal: string;
   mealCount: string;
+  preferredFoods: string[];
+  avoidFoods: string[];
+  allergens: string[];
 }
 
 const initialState: UserDetailsState = {
@@ -21,6 +24,9 @@ const initialState: UserDetailsState = {
   firstMeal: '',
   lastMeal: '',
   mealCount: '',
+  preferredFoods: [],
+  avoidFoods: [],
+  allergens: [],
 };
 
 const userDetailsSlice = createSlice({
@@ -47,9 +53,22 @@ const userDetailsSlice = createSlice({
       state.lastMeal = action.payload.lastMeal || state.lastMeal;
       state.mealCount = action.payload.mealCount || state.mealCount;
     },
+    updateFoodPreferences: (
+      state,
+      action: PayloadAction<Partial<UserDetailsState>>,
+    ) => {
+      state.preferredFoods =
+        action.payload.preferredFoods || state.preferredFoods;
+      state.avoidFoods = action.payload.avoidFoods || state.avoidFoods;
+      state.allergens = action.payload.allergens || state.allergens;
+    },
   },
 });
 
-export const {selectGoal, updatePersonalData, updateMealData} =
-  userDetailsSlice.actions;
+export const {
+  selectGoal,
+  updatePersonalData,
+  updateMealData,
+  updateFoodPreferences,
+} = userDetailsSlice.actions;
 export default userDetailsSlice.reducer;

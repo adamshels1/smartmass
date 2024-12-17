@@ -1,5 +1,9 @@
-import React, {useState} from 'react';
+// src/components/FoodPreferencesForm.tsx
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
+import {updateFoodPreferences} from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 
@@ -16,15 +20,16 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
   onNext,
   onBack,
 }) => {
-  const [preferredFoods, setPreferredFoods] = useState<string[]>([]);
-  const [avoidFoods, setAvoidFoods] = useState<string[]>([]);
-  const [allergens, setAllergens] = useState<string[]>([]);
+  const dispatch: AppDispatch = useDispatch();
+  const {preferredFoods, avoidFoods, allergens} = useSelector(
+    (state: RootState) => state.userDetails,
+  );
 
   const handleInputChange = (
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-    value: string,
+    field: keyof RootState['userDetails'],
+    value: string[],
   ) => {
-    setter(value.split(',').map(item => item.trim()));
+    dispatch(updateFoodPreferences({[field]: value}));
   };
 
   return (
@@ -33,17 +38,32 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
       <CustomTextInput
         placeholder="Предпочитаемые продукты (через запятую)"
         value={preferredFoods.join(', ')}
-        onChangeText={text => handleInputChange(setPreferredFoods, text)}
+        onChangeText={text =>
+          handleInputChange(
+            'preferredFoods',
+            text.split(',').map(item => item.trim()),
+          )
+        }
       />
       <CustomTextInput
         placeholder="Не предлагать продукты (через запятую)"
         value={avoidFoods.join(', ')}
-        onChangeText={text => handleInputChange(setAvoidFoods, text)}
+        onChangeText={text =>
+          handleInputChange(
+            'avoidFoods',
+            text.split(',').map(item => item.trim()),
+          )
+        }
       />
       <CustomTextInput
         placeholder="Аллергены (через запятую)"
         value={allergens.join(', ')}
-        onChangeText={text => handleInputChange(setAllergens, text)}
+        onChangeText={text =>
+          handleInputChange(
+            'allergens',
+            text.split(',').map(item => item.trim()),
+          )
+        }
       />
       <View style={styles.buttonContainer}>
         <CustomButton
