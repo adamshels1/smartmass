@@ -26,7 +26,7 @@ interface FormData {
 }
 
 const HealthTrackingForm: React.FC = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [formData, setFormData] = useState<FormData>({});
 
   const handleNext = (data: FormData) => {
