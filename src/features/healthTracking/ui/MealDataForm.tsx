@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
+// src/components/MealDataForm.tsx
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
-import SelectInput from 'shared/ui/SelectInput/SelectInput.tsx';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
+import {updateMealData} from 'entities/userDetails/model/slices/userDetailsSlice';
+import CustomButton from 'shared/ui/CustomButton/CustomButton';
+import SelectInput from 'shared/ui/SelectInput/SelectInput';
 
 interface MealDataFormProps {
   onNext: (data: {
@@ -13,9 +17,17 @@ interface MealDataFormProps {
 }
 
 const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
-  const [firstMeal, setFirstMeal] = useState('');
-  const [lastMeal, setLastMeal] = useState('');
-  const [mealCount, setMealCount] = useState('');
+  const dispatch: AppDispatch = useDispatch();
+  const {firstMeal, lastMeal, mealCount} = useSelector(
+    (state: RootState) => state.userDetails,
+  );
+
+  const handleChange = (
+    field: keyof RootState['userDetails'],
+    value: string,
+  ) => {
+    dispatch(updateMealData({[field]: value}));
+  };
 
   return (
     <View style={styles.stepContainer}>
@@ -23,7 +35,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
       <SelectInput
         label="Первый прием"
         value={firstMeal}
-        onValueChange={setFirstMeal}
+        onValueChange={value => handleChange('firstMeal', value)}
         items={[
           {label: '6:00', value: '6:00'},
           {label: '7:00', value: '7:00'},
@@ -37,7 +49,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
       <SelectInput
         label="Последний прием"
         value={lastMeal}
-        onValueChange={setLastMeal}
+        onValueChange={value => handleChange('lastMeal', value)}
         items={[
           {label: '17:00', value: '17:00'},
           {label: '18:00', value: '18:00'},
@@ -51,7 +63,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
       <SelectInput
         label="Количество приемов"
         value={mealCount}
-        onValueChange={setMealCount}
+        onValueChange={value => handleChange('mealCount', value)}
         items={[
           {label: '1', value: '1'},
           {label: '2', value: '2'},
@@ -75,7 +87,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
           title="Далее"
           onPress={() => onNext({firstMeal, lastMeal, mealCount})}
           style={styles.wideButton}
-          disabled={!firstMeal || !lastMeal || !mealCount} // Кнопка "Далее" неактивна, если данные не введены
+          disabled={!firstMeal || !lastMeal || !mealCount}
         />
       </View>
     </View>

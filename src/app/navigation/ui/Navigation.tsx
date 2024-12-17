@@ -56,6 +56,13 @@ const AuthNavigator = () => (
 const AppNavigator = () => (
   <AppStack.Navigator>
     <AppStack.Screen
+      name={AppNavigation.SETTINGS}
+      options={{
+        headerTransparent: true,
+      }}
+      component={HealthTrackingForm}
+    />
+    <AppStack.Screen
       name={AppNavigation.HOME}
       options={{
         headerShown: false,

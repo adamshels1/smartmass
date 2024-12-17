@@ -1,5 +1,9 @@
-import React, {useState} from 'react';
+// src/components/GoalForm.tsx
+import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
+import {selectGoal} from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 
 interface GoalFormProps {
@@ -7,7 +11,11 @@ interface GoalFormProps {
 }
 
 const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
-  const [selectedGoal, setSelectedGoal] = useState('');
+  const selectedGoal = useSelector(
+    (state: RootState) => state.userDetails.selectedGoal,
+  );
+  console.log('selectedGoal', selectedGoal);
+  const dispatch: AppDispatch = useDispatch();
 
   const goals = [
     {label: 'Набор веса', value: 'weight_gain'},
@@ -16,7 +24,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
   ];
 
   const handleSelectGoal = (goal: string) => {
-    setSelectedGoal(goal);
+    dispatch(selectGoal(goal));
   };
 
   return (
@@ -43,7 +51,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
         title="Далее"
         onPress={() => onNext({goal: selectedGoal})}
         style={styles.wideButton}
-        disabled={!selectedGoal} // Кнопка "Далее" неактивна, если цель не выбрана
+        disabled={!selectedGoal}
       />
     </View>
   );

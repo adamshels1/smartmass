@@ -11,6 +11,8 @@ export enum AppNavigation {
   FORGOT = 'Forgot',
   COURSE = 'Course',
   MEAL_CALENDAR = 'MealCalendar',
+
+  SETTINGS = 'Settings',
 }
 
 interface NavigationSplashType {
