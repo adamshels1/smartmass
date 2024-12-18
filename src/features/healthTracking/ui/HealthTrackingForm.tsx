@@ -11,26 +11,10 @@ import PersonalDataForm from './PersonalDataForm';
 import MealDataForm from './MealDataForm';
 import FoodPreferencesForm from './FoodPreferencesForm';
 
-interface FormData {
-  goal?: string;
-  height?: string;
-  weight?: string;
-  age?: string;
-  gender?: string;
-  firstMeal?: string;
-  lastMeal?: string;
-  mealCount?: string;
-  preferredFoods?: string[];
-  avoidFoods?: string[];
-  allergens?: string[];
-}
-
 const HealthTrackingForm: React.FC = () => {
-  const [step, setStep] = useState(4);
-  const [formData, setFormData] = useState<FormData>({});
+  const [step, setStep] = useState(1);
 
-  const handleNext = (data: FormData) => {
-    setFormData({...formData, ...data});
+  const handleNext = () => {
     setStep(step + 1);
   };
 

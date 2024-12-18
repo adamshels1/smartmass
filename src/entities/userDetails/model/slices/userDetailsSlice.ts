@@ -1,74 +1,114 @@
-// src/redux/slices/userDetailsSlice.ts
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
-interface UserDetailsState {
-  selectedGoal: string;
-  height: string;
-  weight: string;
-  age: string;
-  gender: string;
-  firstMeal: string;
-  lastMeal: string;
-  mealCount: string;
-  preferredFoods: string[];
-  avoidFoods: string[];
-  allergens: string[];
-}
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {
+  Gender,
+  UserDetails,
+} from 'entities/userDetails/model/types/userDetailsTypes';
+import {
+  Goal,
+  UserDetailsState,
+} from 'entities/userDetails/model/types/userDetailsTypes.ts';
+import apiInstance from 'shared/api/apiInstance';
+import {RootState} from 'app/providers/StoreProvider/config/store';
 
 const initialState: UserDetailsState = {
-  selectedGoal: '',
-  height: '',
-  weight: '',
-  age: '',
-  gender: '',
-  firstMeal: '',
-  lastMeal: '',
-  mealCount: '',
-  preferredFoods: [],
-  avoidFoods: [],
-  allergens: [],
+  userDetails: {
+    weight: null,
+    height: null,
+    targetWeight: null,
+    goal: null,
+    preferredFoods: [],
+    avoidFoods: [],
+    allergens: [],
+    maxMealPerDay: null,
+    dailyMealStartTime: null,
+    dailyMealEndTime: null,
+    age: null,
+    gender: null,
+    dailyCalories: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  status: 'idle',
+  error: null,
 };
+
+export const fetchUserDetails = createAsyncThunk<UserDetails>(
+  'userDetails/fetchUserDetails',
+  async () => {
+    const response = await apiInstance.get<UserDetails>(
+      '/userDetails/getUserDetails',
+    );
+    return response.data;
+  },
+);
+
+export const updateUserDetails = createAsyncThunk<
+  void,
+  void,
+  {state: RootState}
+>('userDetails/updateUserDetails', async (_, {getState}) => {
+  const userDetails = getState().userDetails.userDetails;
+  await apiInstance.post('/userDetails/updateUserDetails', {userDetails});
+});
 
 const userDetailsSlice = createSlice({
   name: 'userDetails',
   initialState,
   reducers: {
-    selectGoal: (state, action: PayloadAction<string>) => {
-      state.selectedGoal = action.payload;
+    updateGoal: (state, action: PayloadAction<Goal>) => {
+      state.userDetails.goal = action.payload;
     },
     updatePersonalData: (
       state,
-      action: PayloadAction<Partial<UserDetailsState>>,
+      action: PayloadAction<Partial<UserDetails>>,
     ) => {
-      state.height = action.payload.height || state.height;
-      state.weight = action.payload.weight || state.weight;
-      state.age = action.payload.age || state.age;
-      state.gender = action.payload.gender || state.gender;
+      state.userDetails = {...state.userDetails, ...action.payload};
     },
-    updateMealData: (
-      state,
-      action: PayloadAction<Partial<UserDetailsState>>,
-    ) => {
-      state.firstMeal = action.payload.firstMeal || state.firstMeal;
-      state.lastMeal = action.payload.lastMeal || state.lastMeal;
-      state.mealCount = action.payload.mealCount || state.mealCount;
+    updateMealData: (state, action: PayloadAction<Partial<UserDetails>>) => {
+      state.userDetails = {...state.userDetails, ...action.payload};
     },
     updateFoodPreferences: (
       state,
-      action: PayloadAction<Partial<UserDetailsState>>,
+      action: PayloadAction<Partial<UserDetails>>,
     ) => {
-      state.preferredFoods =
-        action.payload.preferredFoods || state.preferredFoods;
-      state.avoidFoods = action.payload.avoidFoods || state.avoidFoods;
-      state.allergens = action.payload.allergens || state.allergens;
+      state.userDetails = {...state.userDetails, ...action.payload};
     },
+    updateDailyCalories: (state, action: PayloadAction<number>) => {
+      state.userDetails.dailyCalories = action.payload;
+    },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchUserDetails.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserDetails.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.userDetails = action.payload;
+      })
+      .addCase(fetchUserDetails.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || null;
+      })
+      .addCase(updateUserDetails.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(updateUserDetails.fulfilled, state => {
+        state.status = 'succeeded';
+      })
+      .addCase(updateUserDetails.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || null;
+      });
   },
 });
 
 export const {
-  selectGoal,
+  updateGoal,
   updatePersonalData,
   updateMealData,
   updateFoodPreferences,
+  updateDailyCalories,
 } = userDetailsSlice.actions;
+
 export default userDetailsSlice.reducer;

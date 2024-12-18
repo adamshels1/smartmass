@@ -1,25 +1,5 @@
 import apiInstance from 'shared/api/apiInstance.ts';
-
-interface Meal {
-  id: number;
-  userId: number;
-  date: Date;
-  isMealTaken: boolean;
-  isPlanned: boolean;
-  time: string;
-  name: string;
-  dish: string;
-  dishEn: string;
-  dishCalories: number;
-  recipe: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface MealResponse {
-  date: string;
-  meals: Meal[];
-}
+import {MealResponse, Meal} from 'entities/meal/model/types/mealTypes.ts';
 
 // Функция для генерации рациона
 export const generateDailyMeals = async (

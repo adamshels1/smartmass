@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 interface CustomTextInputProps {
-  value: string;
+  value: string | undefined;
   onChangeText: (text: string) => void;
   placeholder?: string;
   style?: ViewStyle;

@@ -1,20 +1,17 @@
-// src/components/PersonalDataForm.tsx
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
-import {updatePersonalData} from 'entities/userDetails/model/slices/userDetailsSlice';
+import {
+  updatePersonalData,
+  updateUserDetails,
+} from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
 
 interface PersonalDataFormProps {
-  onNext: (data: {
-    height: string;
-    weight: string;
-    age: string;
-    gender: string;
-  }) => void;
+  onNext: () => void;
   onBack: () => void;
 }
 
@@ -23,17 +20,22 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
   onBack,
 }) => {
   const dispatch: AppDispatch = useDispatch();
-  const {height, weight, age, gender} = useSelector(
-    (state: RootState) => state.userDetails,
+  const {height, weight, targetWeight, age, gender} = useSelector(
+    (state: RootState) => state.userDetails.userDetails,
   );
 
   const validateNumber = (text: string) => text.replace(/[^0-9]/g, '');
 
   const handleChange = (
-    field: keyof RootState['userDetails'],
+    field: keyof RootState['userDetails']['userDetails'],
     value: string,
   ) => {
     dispatch(updatePersonalData({[field]: value}));
+  };
+
+  const handleNext = async () => {
+    await dispatch(updateUserDetails());
+    onNext();
   };
 
   return (
@@ -42,7 +44,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
       <CustomTextInput
         label="Рост (см)"
         placeholder="Введите рост"
-        value={height}
+        value={height?.toString()}
         onChangeText={text => handleChange('height', validateNumber(text))}
         keyboardType="numeric"
         maxLength={3}
@@ -50,15 +52,25 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
       <CustomTextInput
         label="Вес (кг)"
         placeholder="Введите вес"
-        value={weight}
+        value={weight?.toString()}
         onChangeText={text => handleChange('weight', validateNumber(text))}
+        keyboardType="numeric"
+        maxLength={3}
+      />
+      <CustomTextInput
+        label="Целевой вес (кг)"
+        placeholder="Введите целевой вес"
+        value={targetWeight?.toString()}
+        onChangeText={text =>
+          handleChange('targetWeight', validateNumber(text))
+        }
         keyboardType="numeric"
         maxLength={3}
       />
       <CustomTextInput
         label="Возраст (лет)"
         placeholder="Введите возраст"
-        value={age}
+        value={age?.toString()}
         onChangeText={text => handleChange('age', validateNumber(text))}
         keyboardType="numeric"
         maxLength={2}
@@ -82,9 +94,9 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
         />
         <CustomButton
           title="Далее"
-          onPress={() => onNext({height, weight, age, gender})}
+          onPress={handleNext}
           style={styles.wideButton}
-          disabled={!height || !weight || !age || !gender}
+          disabled={!height || !weight || !targetWeight || !age || !gender}
         />
       </View>
     </View>

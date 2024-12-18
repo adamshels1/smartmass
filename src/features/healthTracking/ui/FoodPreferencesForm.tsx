@@ -1,18 +1,16 @@
-// src/components/FoodPreferencesForm.tsx
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
-import {updateFoodPreferences} from 'entities/userDetails/model/slices/userDetailsSlice';
+import {
+  updateFoodPreferences,
+  updateUserDetails,
+} from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import TagsInput from 'shared/ui/TagsInput/TagsInput';
 
 interface FoodPreferencesFormProps {
-  onNext: (data: {
-    preferredFoods: string[];
-    avoidFoods: string[];
-    allergens: string[];
-  }) => void;
+  onNext: () => void;
   onBack: () => void;
 }
 
@@ -22,14 +20,19 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const {preferredFoods, avoidFoods, allergens} = useSelector(
-    (state: RootState) => state.userDetails,
+    (state: RootState) => state.userDetails.userDetails,
   );
 
   const handleTagsChange = (
-    field: keyof RootState['userDetails'],
+    field: keyof RootState['userDetails']['userDetails'],
     value: string[],
   ) => {
     dispatch(updateFoodPreferences({[field]: value}));
+  };
+
+  const handleNext = async () => {
+    await dispatch(updateUserDetails());
+    onNext();
   };
 
   return (
@@ -62,7 +65,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
         />
         <CustomButton
           title="Далее"
-          onPress={() => onNext({preferredFoods, avoidFoods, allergens})}
+          onPress={handleNext}
           style={styles.wideButton}
         />
       </View>

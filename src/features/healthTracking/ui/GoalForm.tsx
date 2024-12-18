@@ -1,30 +1,38 @@
 // src/components/GoalForm.tsx
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
-import {selectGoal} from 'entities/userDetails/model/slices/userDetailsSlice';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from 'app/providers/StoreProvider/config/store';
+import {
+  updateGoal,
+  updateUserDetails,
+} from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
+import {Goal} from 'entities/userDetails/model/types/userDetailsTypes.ts';
 
 interface GoalFormProps {
-  onNext: (data: {goal: string}) => void;
+  onNext: () => void;
 }
 
 const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
   const selectedGoal = useSelector(
-    (state: RootState) => state.userDetails.selectedGoal,
+    (state: RootState) => state.userDetails.userDetails.goal,
   );
-  console.log('selectedGoal', selectedGoal);
   const dispatch: AppDispatch = useDispatch();
 
-  const goals = [
-    {label: 'Набор веса', value: 'weight_gain'},
-    {label: 'Потеря веса', value: 'weight_loss'},
-    {label: 'Поддержание формы', value: 'maintenance'},
+  const goals: {label: string; value: Goal}[] = [
+    {label: 'Набор веса', value: Goal.GainWeight},
+    {label: 'Потеря веса', value: Goal.LoseWeight},
+    {label: 'Поддержание формы', value: Goal.MaintainWeight},
   ];
 
-  const handleSelectGoal = (goal: string) => {
-    dispatch(selectGoal(goal));
+  const handleSelectGoal = (goal: Goal) => {
+    dispatch(updateGoal(goal));
+  };
+
+  const handleNext = async () => {
+    await dispatch(updateUserDetails());
+    onNext();
   };
 
   return (
@@ -49,7 +57,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
       ))}
       <CustomButton
         title="Далее"
-        onPress={() => onNext({goal: selectedGoal})}
+        onPress={handleNext}
         style={styles.wideButton}
         disabled={!selectedGoal}
       />

@@ -14,6 +14,11 @@ export interface Meal {
   updatedAt: Date;
 }
 
+export interface MealResponse {
+  date: string;
+  meals: Meal[];
+}
+
 export interface DayMeals {
   date: string;
   meals: Meal[];
