@@ -6,12 +6,20 @@ import WelcomeScreen from 'screens/WelcomeScreen.js';
 import LoginScreen from 'screens/LoginScreen.tsx';
 import RegisterScreen from 'screens/RegisterScreen.tsx';
 import EmailVerificationForm from 'entities/auth/ui/EmailVerificationForm.tsx';
-import HealthTrackingForm from 'features/healthTracking/ui/HealthTrackingForm.tsx';
+import SettingsSteps from 'features/settings/ui/SettingsSteps.tsx';
 import MealCalendarScreen from 'features/meal/ui/MealCalendarScreen.tsx';
 import TabNavigation from './TabNavigation.tsx';
 import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
+import SettingsScreen from 'screens/Settings/SettingsScreen.tsx';
+
+import GoalScreen from 'screens/Settings/GoalScreen.tsx';
+import PersonalDataScreen from 'screens/Settings/PersonalDataScreen.tsx';
+import MealDataScreen from 'screens/Settings/MealDataScreen.tsx';
+import DailyCaloriesScreen from 'screens/Settings/DailyCaloriesScreen.tsx';
+import FoodPreferencesScreen from 'screens/Settings/FoodPreferencesScreen.tsx';
+import SettingsStepsScreen from 'screens/Settings/SettingsStepsScreen.tsx';
 
 // Create separate stacks for authenticated and unauthenticated routes
 const AuthStack = createNativeStackNavigator();
@@ -56,19 +64,56 @@ const AuthNavigator = () => (
 const AppNavigator = () => (
   <AppStack.Navigator>
     <AppStack.Screen
-      name={AppNavigation.SETTINGS}
-      options={{
-        headerTransparent: true,
-      }}
-      component={HealthTrackingForm}
-    />
-    <AppStack.Screen
       name={AppNavigation.HOME}
       options={{
         headerShown: false,
         headerTransparent: true,
       }}
       component={TabNavigation}
+    />
+
+    <AppStack.Screen
+      name={AppNavigation.SETTINGS_STEPS}
+      options={{
+        headerTransparent: true,
+      }}
+      component={SettingsStepsScreen}
+    />
+
+    <AppStack.Screen
+      name={AppNavigation.GOAL}
+      options={{
+        headerTransparent: true,
+      }}
+      component={GoalScreen}
+    />
+    <AppStack.Screen
+      name={AppNavigation.PERSONAL_DATA}
+      options={{
+        headerTransparent: true,
+      }}
+      component={PersonalDataScreen}
+    />
+    <AppStack.Screen
+      name={AppNavigation.MEAL_DATA}
+      options={{
+        headerTransparent: true,
+      }}
+      component={MealDataScreen}
+    />
+    <AppStack.Screen
+      name={AppNavigation.FOOD_PREFERENCES}
+      options={{
+        headerTransparent: true,
+      }}
+      component={FoodPreferencesScreen}
+    />
+    <AppStack.Screen
+      name={AppNavigation.DAILY_CALORIES}
+      options={{
+        headerTransparent: true,
+      }}
+      component={DailyCaloriesScreen}
     />
     <AppStack.Screen
       name={AppNavigation.MEAL_CALENDAR}

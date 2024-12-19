@@ -1,4 +1,3 @@
-// HealthTrackingForm.tsx
 import React, {useState} from 'react';
 import {
   Text,
@@ -13,7 +12,7 @@ import MealDataForm from './MealDataForm';
 import FoodPreferencesForm from './FoodPreferencesForm';
 import DailyCaloriesForm from './DailyCaloriesForm';
 
-const HealthTrackingForm: React.FC = () => {
+const SettingsSteps: React.FC = () => {
   const [step, setStep] = useState(1);
 
   const handleNext = () => {
@@ -61,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HealthTrackingForm;
+export default SettingsSteps;

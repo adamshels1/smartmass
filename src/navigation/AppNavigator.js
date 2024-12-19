@@ -8,7 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import WelcomeScreen from '../screens/WelcomeScreen';
 import ChatScreen from '../screens/ChatScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import SettingsScreen from 'screens/Settings/SettingsScreen';
 import CartScreen from '../screens/CartScreen';
 import SourcesScreen from '../screens/SourcesScreen';
 import ProductByBarCodeScreen from '../screens/ProductByBarCodeScreen';

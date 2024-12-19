@@ -11,16 +11,18 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 import {sendMessageToAI} from 'entities/chat/model/api/chataiApi';
 import {jsonParse} from 'utils/format.js';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 interface DailyCaloriesFormProps {
-  onNext: () => void;
-  onBack: () => void;
+  onNext?: () => void;
+  onBack?: () => void;
 }
 
 const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
   onNext,
   onBack,
 }) => {
+  const navigation = useAppNavigation();
   const dispatch: AppDispatch = useDispatch();
   const {height, weight, age, gender, targetWeight, goal} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
@@ -62,12 +64,16 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
   const handleChange = (text: string) => {
     const validatedCalories = validateNumber(text);
     setDailyCalories(validatedCalories);
-    dispatch(updatePersonalData({dailyCalories: validatedCalories}));
+    dispatch(updatePersonalData({dailyCalories: Number(validatedCalories)}));
   };
 
   const handleNext = async () => {
     await dispatch(updateUserDetails());
-    onNext();
+    if (onNext) {
+      onNext();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -88,20 +94,32 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
         keyboardType="numeric"
         maxLength={4}
       />
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          title="Назад"
-          onPress={onBack}
-          style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
-          textStyle={styles.backButtonText}
-        />
-        <CustomButton
-          title="Далее"
-          onPress={handleNext}
-          style={styles.wideButton}
-          disabled={!dailyCalories || isLoading}
-        />
-      </View>
+
+      {onNext && onBack ? (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Назад"
+            onPress={onBack}
+            style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
+            textStyle={styles.backButtonText}
+          />
+          <CustomButton
+            title="Далее"
+            onPress={handleNext}
+            style={styles.wideButton}
+            disabled={!dailyCalories || isLoading}
+          />
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Сохранить"
+            onPress={handleNext}
+            style={{width: '100%'}}
+            disabled={!dailyCalories || isLoading}
+          />
+        </View>
+      )}
     </View>
   );
 };

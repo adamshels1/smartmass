@@ -8,13 +8,15 @@ import {
 } from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 interface MealDataFormProps {
-  onNext: () => void;
-  onBack: () => void;
+  onNext?: () => void;
+  onBack?: () => void;
 }
 
 const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
+  const navigation = useAppNavigation();
   const dispatch: AppDispatch = useDispatch();
   const {maxMealPerDay, dailyMealStartTime, dailyMealEndTime} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
@@ -29,7 +31,11 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
 
   const handleNext = async () => {
     await dispatch(updateUserDetails());
-    onNext();
+    if (onNext) {
+      onNext();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -79,20 +85,36 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
         ]}
         placeholder={{label: 'Выберите количество', value: null}}
       />
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          title="Назад"
-          onPress={onBack}
-          style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
-          textStyle={styles.backButtonText}
-        />
-        <CustomButton
-          title="Далее"
-          onPress={handleNext}
-          style={styles.wideButton}
-          disabled={!dailyMealStartTime || !dailyMealEndTime || !maxMealPerDay}
-        />
-      </View>
+
+      {onNext && onBack ? (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Назад"
+            onPress={onBack}
+            style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
+            textStyle={styles.backButtonText}
+          />
+          <CustomButton
+            title="Далее"
+            onPress={handleNext}
+            style={styles.wideButton}
+            disabled={
+              !dailyMealStartTime || !dailyMealEndTime || !maxMealPerDay
+            }
+          />
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Сохранить"
+            onPress={handleNext}
+            style={{width: '100%'}}
+            disabled={
+              !dailyMealStartTime || !dailyMealEndTime || !maxMealPerDay
+            }
+          />
+        </View>
+      )}
     </View>
   );
 };

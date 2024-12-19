@@ -8,16 +8,18 @@ import {
 } from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import TagsInput from 'shared/ui/TagsInput/TagsInput';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 interface FoodPreferencesFormProps {
-  onNext: () => void;
-  onBack: () => void;
+  onNext?: () => void;
+  onBack?: () => void;
 }
 
 const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
   onNext,
   onBack,
 }) => {
+  const navigation = useAppNavigation();
   const dispatch: AppDispatch = useDispatch();
   const {preferredFoods, avoidFoods, allergens} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
@@ -32,7 +34,11 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
 
   const handleNext = async () => {
     await dispatch(updateUserDetails());
-    onNext();
+    if (onNext) {
+      onNext();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -56,19 +62,29 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
         value={allergens}
         onChange={tags => handleTagsChange('allergens', tags)}
       />
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          title="Назад"
-          onPress={onBack}
-          style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
-          textStyle={styles.backButtonText}
-        />
-        <CustomButton
-          title="Далее"
-          onPress={handleNext}
-          style={styles.wideButton}
-        />
-      </View>
+      {onNext && onBack ? (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Назад"
+            onPress={onBack}
+            style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
+            textStyle={styles.backButtonText}
+          />
+          <CustomButton
+            title="Далее"
+            onPress={handleNext}
+            style={styles.wideButton}
+          />
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Сохранить"
+            onPress={handleNext}
+            style={{width: '100%'}}
+          />
+        </View>
+      )}
     </View>
   );
 };

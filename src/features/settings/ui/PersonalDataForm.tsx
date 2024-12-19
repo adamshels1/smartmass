@@ -9,16 +9,18 @@ import {
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 interface PersonalDataFormProps {
-  onNext: () => void;
-  onBack: () => void;
+  onNext?: () => void;
+  onBack?: () => void;
 }
 
 const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
   onNext,
   onBack,
 }) => {
+  const navigation = useAppNavigation();
   const dispatch: AppDispatch = useDispatch();
   const {height, weight, targetWeight, age, gender} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
@@ -35,7 +37,11 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
 
   const handleNext = async () => {
     await dispatch(updateUserDetails());
-    onNext();
+    if (onNext) {
+      onNext();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -85,20 +91,31 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
         ]}
         placeholder={{label: 'Выберите пол', value: null}}
       />
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          title="Назад"
-          onPress={onBack}
-          style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
-          textStyle={styles.backButtonText}
-        />
-        <CustomButton
-          title="Далее"
-          onPress={handleNext}
-          style={styles.wideButton}
-          disabled={!height || !weight || !targetWeight || !age || !gender}
-        />
-      </View>
+      {onNext && onBack ? (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Назад"
+            onPress={onBack}
+            style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
+            textStyle={styles.backButtonText}
+          />
+          <CustomButton
+            title="Далее"
+            onPress={handleNext}
+            style={styles.wideButton}
+            disabled={!height || !weight || !targetWeight || !age || !gender}
+          />
+        </View>
+      ) : (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Сохранить"
+            onPress={handleNext}
+            style={{width: '100%'}}
+            disabled={!height || !weight || !targetWeight || !age || !gender}
+          />
+        </View>
+      )}
     </View>
   );
 };

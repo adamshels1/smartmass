@@ -9,12 +9,15 @@ import {
 } from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import {Goal} from 'entities/userDetails/model/types/userDetailsTypes.ts';
+import {goBack} from '@react-navigation/routers/src/CommonActions.tsx';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 interface GoalFormProps {
-  onNext: () => void;
+  onNext?: () => void;
 }
 
 const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
+  const navigation = useAppNavigation();
   const selectedGoal = useSelector(
     (state: RootState) => state.userDetails.userDetails.goal,
   );
@@ -32,7 +35,11 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
 
   const handleNext = async () => {
     await dispatch(updateUserDetails());
-    onNext();
+    if (onNext) {
+      onNext();
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -56,7 +63,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
         </TouchableOpacity>
       ))}
       <CustomButton
-        title="Далее"
+        title="Сохранить"
         onPress={handleNext}
         style={styles.wideButton}
         disabled={!selectedGoal}

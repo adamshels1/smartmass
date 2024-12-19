@@ -10,7 +10,7 @@ import {
   SettingsIcon,
   ShoppingCar,
 } from 'shared/assets/icons';
-import SettingsScreen from 'screens/SettingsScreen.tsx';
+import SettingsScreen from 'screens/Settings/SettingsScreen.tsx';
 
 const Tab = createBottomTabNavigator<NavigationTabLists>();
 

@@ -12,7 +12,14 @@ export enum AppNavigation {
   COURSE = 'Course',
   MEAL_CALENDAR = 'MealCalendar',
 
-  SETTINGS = 'Settings',
+  SETTINGS_STEPS = 'STEPS',
+
+  SETTINGS_MENU = 'Settings',
+  GOAL = 'Goal',
+  PERSONAL_DATA = 'Personal data',
+  MEAL_DATA = 'Meal data',
+  FOOD_PREFERENCES = 'Food preferences',
+  DAILY_CALORIES = 'Daily calories',
 }
 
 interface NavigationSplashType {
@@ -30,6 +37,14 @@ export type NavigationStackLists = {
   [AppNavigation.FORGOT]: NavigationSplashType | undefined;
   [AppNavigation.COURSE]: {courseId: number};
   [AppNavigation.MEAL_CALENDAR]: undefined;
+
+  [AppNavigation.SETTINGS_STEPS]: undefined;
+  [AppNavigation.SETTINGS_MENU]: undefined;
+  [AppNavigation.GOAL]: undefined;
+  [AppNavigation.PERSONAL_DATA]: undefined;
+  [AppNavigation.MEAL_DATA]: undefined;
+  [AppNavigation.FOOD_PREFERENCES]: undefined;
+  [AppNavigation.DAILY_CALORIES]: undefined;
 };
 
 export type RootStackParamList = NavigationStackLists & NavigationTabLists;

@@ -11,12 +11,12 @@ import {
   Text,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import Input from '../components/Input';
-import Header from '../components/Header';
-import Button from '../components/Button';
+import Input from '../../components/Input';
+import Header from '../../components/Header';
+import Button from '../../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSettingsAction} from '../store/userActions';
-import i18n from '../shared/config/i18n';
+import {setSettingsAction} from '../../store/userActions';
+import i18n from '../../shared/config/i18n';
 import {getDailyDiets} from 'entities/chat/model/services/getDailyDiets/getDailyDiets';
 import {changeDailyDietOne} from 'entities/chat/model/services/getAnotherDailyDiet/getAnotherDailyDiet';
 
@@ -108,7 +108,7 @@ const SettingsScreen = ({navigation}) => {
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
-                  source={require('../assets/icons/goal.png')}
+                  source={require('../../assets/icons/goal.png')}
                 />
 
                 <View
@@ -140,21 +140,21 @@ const SettingsScreen = ({navigation}) => {
                 {Platform.OS === 'ios' && (
                   <Image
                     style={[styles.inputIcon]}
-                    source={require('../assets/icons/chevron-right.png')}
+                    source={require('../../assets/icons/chevron-right.png')}
                   />
                 )}
               </View>
             </TouchableHighlight>
 
             <Input
-              icon={require('../assets/icons/weight.png')}
+              icon={require('../../assets/icons/weight.png')}
               placeholder={i18n.t('Weight (kg)')}
               keyboardType="numeric"
               value={weight}
               onChangeText={text => setWeight(text)}
             />
             <Input
-              icon={require('../assets/icons/height.png')}
+              icon={require('../../assets/icons/height.png')}
               placeholder={i18n.t('Height (cm)')}
               keyboardType="numeric"
               value={height}
@@ -167,7 +167,7 @@ const SettingsScreen = ({navigation}) => {
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
-                  source={require('../assets/icons/start.png')}
+                  source={require('../../assets/icons/start.png')}
                 />
 
                 <View
@@ -212,7 +212,7 @@ const SettingsScreen = ({navigation}) => {
                 {Platform.OS === 'ios' && (
                   <Image
                     style={[styles.inputIcon]}
-                    source={require('../assets/icons/chevron-right.png')}
+                    source={require('../../assets/icons/chevron-right.png')}
                   />
                 )}
               </View>
@@ -224,7 +224,7 @@ const SettingsScreen = ({navigation}) => {
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
-                  source={require('../assets/icons/time-left.png')}
+                  source={require('../../assets/icons/time-left.png')}
                 />
 
                 <View
@@ -269,7 +269,7 @@ const SettingsScreen = ({navigation}) => {
                 {Platform.OS === 'ios' && (
                   <Image
                     style={[styles.inputIcon]}
-                    source={require('../assets/icons/chevron-right.png')}
+                    source={require('../../assets/icons/chevron-right.png')}
                   />
                 )}
               </View>
@@ -281,7 +281,7 @@ const SettingsScreen = ({navigation}) => {
               <View style={styles.inputContainer}>
                 <Image
                   style={styles.inputIcon}
-                  source={require('../assets/icons/eating.png')}
+                  source={require('../../assets/icons/eating.png')}
                 />
 
                 <View
@@ -320,14 +320,14 @@ const SettingsScreen = ({navigation}) => {
                 {Platform.OS === 'ios' && (
                   <Image
                     style={[styles.inputIcon]}
-                    source={require('../assets/icons/chevron-right.png')}
+                    source={require('../../assets/icons/chevron-right.png')}
                   />
                 )}
               </View>
             </TouchableHighlight>
 
             <Input
-              icon={require('../assets/icons/no-food.png')}
+              icon={require('../../assets/icons/no-food.png')}
               style={styles.input}
               placeholder={i18n.t('Exclude foods')}
               value={allergies}
@@ -337,7 +337,7 @@ const SettingsScreen = ({navigation}) => {
               textAlignVertical="center"
             />
             <Input
-              icon={require('../assets/icons/healthy-food.png')}
+              icon={require('../../assets/icons/healthy-food.png')}
               style={styles.input}
               placeholder={i18n.t('Preferred products, dishes')}
               value={preferredProducts}
