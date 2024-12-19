@@ -48,6 +48,7 @@ export const updateUserDetails = createAsyncThunk<
   {state: RootState}
 >('userDetails/updateUserDetails', async (_, {getState}) => {
   const userDetails = getState().userDetails.userDetails;
+  console.log('userDetails', userDetails);
   await apiInstance.post('/userDetails/updateUserDetails', {userDetails});
 });
 

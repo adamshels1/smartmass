@@ -1,3 +1,4 @@
+// HealthTrackingForm.tsx
 import React, {useState} from 'react';
 import {
   Text,
@@ -10,6 +11,7 @@ import GoalForm from './GoalForm';
 import PersonalDataForm from './PersonalDataForm';
 import MealDataForm from './MealDataForm';
 import FoodPreferencesForm from './FoodPreferencesForm';
+import DailyCaloriesForm from './DailyCaloriesForm';
 
 const HealthTrackingForm: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -35,6 +37,9 @@ const HealthTrackingForm: React.FC = () => {
         {step === 3 && <MealDataForm onNext={handleNext} onBack={handleBack} />}
         {step === 4 && (
           <FoodPreferencesForm onNext={handleNext} onBack={handleBack} />
+        )}
+        {step === 5 && (
+          <DailyCaloriesForm onNext={handleNext} onBack={handleBack} />
         )}
       </ScrollView>
     </KeyboardAvoidingView>
