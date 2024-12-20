@@ -1,18 +1,15 @@
 import React, {memo} from 'react';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {AppNavigation, NavigationStackLists} from 'shared/config/navigation';
+import {AppNavigation} from 'shared/config/navigation';
 import WelcomeScreen from 'screens/WelcomeScreen.js';
 import LoginScreen from 'screens/LoginScreen.tsx';
 import RegisterScreen from 'screens/RegisterScreen.tsx';
 import EmailVerificationForm from 'entities/auth/ui/EmailVerificationForm.tsx';
-import SettingsSteps from 'features/settings/ui/SettingsSteps.tsx';
 import MealCalendarScreen from 'features/meal/ui/MealCalendarScreen.tsx';
 import TabNavigation from './TabNavigation.tsx';
-import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
-import SettingsScreen from 'screens/Settings/SettingsScreen.tsx';
 
 import GoalScreen from 'screens/Settings/GoalScreen.tsx';
 import PersonalDataScreen from 'screens/Settings/PersonalDataScreen.tsx';

@@ -12,8 +12,9 @@ interface DateProgressComponentProps {
 
 const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
   const days = useSelector((state: RootState) => state.meal.days);
+  console.log('days', days);
 
-  const day = days.find(day => day.date === date);
+  const day = days?.find(day => day.date === date);
   console.log('day', day);
 
   const progress =

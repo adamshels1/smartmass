@@ -1,5 +1,6 @@
 import apiInstance from 'shared/api/apiInstance.ts';
 import {MealResponse, Meal} from 'entities/meal/model/types/mealTypes.ts';
+import moment from 'moment';
 
 // Функция для генерации рациона
 export const generateDailyMeals = async (
@@ -73,6 +74,24 @@ export const addUnplannedMeal = async (
     console.log('Unplanned meal added:', response.data);
   } catch (error) {
     console.error('Error adding unplanned meal:', error);
+    throw error;
+  }
+};
+
+export const getDaysWithMeals = async (
+  startDate: string = moment().startOf('month').format('YYYY-MM-DD'),
+  endDate: string = moment().endOf('month').format('YYYY-MM-DD'),
+): Promise<any> => {
+  try {
+    const response = await apiInstance.get<any>('/meal/getDaysWithMeals', {
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error getting days with meals:', error);
     throw error;
   }
 };

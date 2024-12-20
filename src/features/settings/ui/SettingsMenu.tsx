@@ -1,20 +1,18 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {
-  AppDispatch,
-  RootState,
-} from 'app/providers/StoreProvider/config/store.ts';
-import {useDispatch, useSelector} from 'react-redux';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from 'app/providers/StoreProvider/config/store.ts';
 import {fetchLogout} from 'entities/auth/model/authSlice.ts';
-import {AppNavigation} from 'shared/config/navigation';
-import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import MenuItem from './MenuItem.tsx';
+import {AppNavigation} from 'shared/config/navigation';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts'; // Adjust the import path
 
 export const SettingsMenu: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {user} = useSelector((state: RootState) => state.auth);
   console.log('user', user);
-  const navigation = useAppNavigation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings</Text>
@@ -34,40 +32,27 @@ export const SettingsMenu: React.FC = () => {
       {/* Profile Section */}
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Меню</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(AppNavigation.GOAL)}
-          style={styles.sectionItem}>
-          <>
-            <Text style={styles.sectionItemText}>Цель</Text>
-            <Image
-              style={styles.inputIcon}
-              source={require('assets/icons/chevron-right.png')}
-            />
-          </>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(AppNavigation.PERSONAL_DATA)}
-          style={styles.sectionItem}>
-          <Text style={styles.sectionItemText}>Персональные данные</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.sectionItem}
-          onPress={() => navigation.navigate(AppNavigation.MEAL_DATA)}>
-          <Text style={styles.sectionItemText}>Прием пищи</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.sectionItem}
-          onPress={() => navigation.navigate(AppNavigation.FOOD_PREFERENCES)}>
-          <Text style={styles.sectionItemText}>Пищевые предпочтения</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.sectionItem}
-          onPress={() => navigation.navigate(AppNavigation.DAILY_CALORIES)}>
-          <Text style={styles.sectionItemText}>Количество калорий в день</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sectionItem}>
-          <Text style={styles.sectionItemText}>Настройки аккаунта</Text>
-        </TouchableOpacity>
+        <MenuItem title="Цель" navigationTarget={AppNavigation.GOAL} />
+        <MenuItem
+          title="Персональные данные"
+          navigationTarget={AppNavigation.PERSONAL_DATA}
+        />
+        <MenuItem
+          title="Прием пищи"
+          navigationTarget={AppNavigation.MEAL_DATA}
+        />
+        <MenuItem
+          title="Пищевые предпочтения"
+          navigationTarget={AppNavigation.FOOD_PREFERENCES}
+        />
+        <MenuItem
+          title="Количество калорий в день"
+          navigationTarget={AppNavigation.DAILY_CALORIES}
+        />
+        {/*<MenuItem*/}
+        {/*  title="Настройки аккаунта"*/}
+        {/*  navigationTarget={AppNavigation.ACCOUNT_SETTINGS}*/}
+        {/*/>*/}
       </View>
 
       <CustomButton title={'Выход'} onPress={() => dispatch(fetchLogout())} />
@@ -79,7 +64,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9F9F9',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingTop: 24,
   },
   title: {
@@ -119,32 +104,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-  },
-  sectionItem: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE',
-  },
-  sectionItemText: {
-    fontSize: 15,
-  },
-  logoutButton: {
-    marginTop: 16,
-    paddingVertical: 12,
-    backgroundColor: '#FF6B6B',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  logoutButtonText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  inputIcon: {
-    width: 24,
-    height: 24,
-    top: 12,
-    right: 15,
-    position: 'absolute',
   },
 });

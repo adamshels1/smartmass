@@ -1,6 +1,12 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {MealsState, DayMeals, Meal} from '../types/mealTypes';
-import {generateDailyMeals, getDailyMeals, updateMeal} from '../api/mealApi.ts';
+import {
+  generateDailyMeals,
+  getDailyMeals,
+  updateMeal,
+  getDaysWithMeals,
+} from '../api/mealApi.ts';
+import moment from 'moment';
 
 const initialState: MealsState = {
   days: [],
@@ -12,6 +18,15 @@ export const fetchDailyMeals = createAsyncThunk(
   'meals/fetchDailyMeals',
   async (params: {date: string; userId: number}) => {
     const response = await getDailyMeals(params.date, params.userId);
+    return response;
+  },
+);
+
+export const fetchDaysWithMeals = createAsyncThunk(
+  'meals/fetchDaysWithMeals',
+  async (params: {startDate: string; endDate: string}) => {
+    const response = await getDaysWithMeals(params.startDate, params.endDate);
+    console.log('response', response);
     return response;
   },
 );
@@ -93,6 +108,20 @@ const mealsSlice = createSlice({
       .addCase(initiateUpdateMeal.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message ?? 'Failed to update meal';
+      })
+      .addCase(fetchDaysWithMeals.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(
+        fetchDaysWithMeals.fulfilled,
+        (state, action: PayloadAction<{data: DayMeals[]; message: string}>) => {
+          state.status = 'succeeded';
+          state.days = action.payload.data;
+        },
+      )
+      .addCase(fetchDaysWithMeals.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? 'Failed to fetch days with meals';
       });
   },
 });

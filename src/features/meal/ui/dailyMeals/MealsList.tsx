@@ -30,7 +30,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
   }
 
   const meals =
-    days.length > 0 ? days.find(day => day.date === date)?.meals : [];
+    days?.length > 0 ? days?.find(day => day.date === date)?.meals : [];
 
   return (
     <View style={styles.container}>

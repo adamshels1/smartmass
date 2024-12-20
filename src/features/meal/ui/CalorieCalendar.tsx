@@ -1,53 +1,59 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {ProgressBar} from 'react-native-paper';
-
-type DataItem = {
-  day: string;
-  date: string;
-  kcal: number;
-  progress: number;
-};
-
-const data: DataItem[] = [
-  {day: 'Понедельник', date: '18', kcal: 2456, progress: 1.2},
-  {day: 'Вторник', date: '19', kcal: 2456, progress: 0.8},
-  {day: 'Среда', date: '20', kcal: 2456, progress: 1.0},
-  {day: 'Четверг', date: '21', kcal: 2456, progress: 1.4},
-  {day: 'Пятница', date: '22', kcal: 2456, progress: 0.9},
-  {day: 'Суббота', date: '23', kcal: 2456, progress: 1.1},
-  {day: 'Воскресенье', date: '24', kcal: 2456, progress: 1.0},
-];
+import {useSelector} from 'react-redux';
+import {fetchDaysWithMeals} from 'entities/meal/model/slices/mealSlice';
+import {RootState} from 'app/providers/StoreProvider/config/store';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import moment from 'moment';
+import {DayMeals} from 'entities/meal/model/types/mealTypes.ts';
 
 const CalorieCalendar = () => {
-  const renderItem = ({item}: {item: DataItem}) => (
-    <View style={styles.card}>
-      <View style={styles.dateContainer}>
-        <Text style={styles.date}>{item.date}</Text>
+  const dispatch = useAppDispatch();
+  const daysWithMeals = useSelector((state: RootState) => state.meal.days);
+  console.log('daysWithMeals', daysWithMeals);
+
+  useEffect(() => {
+    const startDate = moment().startOf('month').format('YYYY-MM-DD');
+    const endDate = moment().endOf('month').format('YYYY-MM-DD');
+    dispatch(fetchDaysWithMeals({startDate, endDate}));
+  }, [dispatch]);
+
+  const renderItem = ({item}: {item: DayMeals}) => {
+    const progress =
+      item?.takenCalories && item?.totalCalories
+        ? item?.takenCalories / item?.totalCalories
+        : 0;
+    return (
+      <View style={styles.card}>
+        <View style={styles.dateContainer}>
+          <Text style={styles.date}>{moment(item.date).format('DD')}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.day}>{moment(item.date).format('dddd')}</Text>
+          <ProgressBar
+            // progress={item.progress > 1 ? 1 : item.progress}
+            progress={progress}
+            color={'#31D6D6'}
+            style={styles.progressBar}
+          />
+          <Text style={styles.kcal}>{item.takenCalories}kcal</Text>
+        </View>
+        <View style={styles.actionContainer}>
+          <View style={styles.square} />
+          <View style={styles.square} />
+          <View style={styles.square} />
+        </View>
       </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.day}>{item.day}</Text>
-        <ProgressBar
-          progress={item.progress > 1 ? 1 : item.progress}
-          color={item.progress > 1 ? 'red' : '#31D6D6'}
-          style={styles.progressBar}
-        />
-        <Text style={styles.kcal}>{item.kcal}kcal</Text>
-      </View>
-      <View style={styles.actionContainer}>
-        <View style={styles.square} />
-        <View style={styles.square} />
-        <View style={styles.square} />
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.month}>Ноябрь, 2024</Text>
       <Text style={styles.week}>Четвертая неделя</Text>
       <FlatList
-        data={data}
+        data={daysWithMeals}
         renderItem={renderItem}
         keyExtractor={item => item.date}
         contentContainerStyle={styles.list}

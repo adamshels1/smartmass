@@ -20,6 +20,7 @@ export enum AppNavigation {
   MEAL_DATA = 'Meal data',
   FOOD_PREFERENCES = 'Food preferences',
   DAILY_CALORIES = 'Daily calories',
+  ACCOUNT_SETTINGS = 'Account settings',
 }
 
 interface NavigationSplashType {
