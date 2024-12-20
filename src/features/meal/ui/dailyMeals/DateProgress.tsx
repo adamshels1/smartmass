@@ -36,7 +36,7 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <Text style={styles.kcalProgress}>{day?.takenCalories} kcal</Text>
+          <Text style={styles.kcalProgress}>{day?.takenCalories} ккал</Text>
         </View>
       </View>
 
