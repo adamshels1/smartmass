@@ -27,17 +27,13 @@ export const generateDailyMeals = async (
 };
 
 // Функция для получения рациона
-export const getDailyMeals = async (
-  date: string,
-  userId: number,
-): Promise<MealResponse> => {
+export const getDailyMeals = async (date: string): Promise<MealResponse> => {
   try {
     const response = await apiInstance.get<MealResponse>(
       '/meal/getDailyMeals',
       {
         params: {
           date,
-          userId,
         },
       },
     );
@@ -92,6 +88,22 @@ export const getDaysWithMeals = async (
     return response.data;
   } catch (error) {
     console.error('Error getting days with meals:', error);
+    throw error;
+  }
+};
+
+export const updateIsMealTaken = async (
+  id: number,
+  isMealTaken: boolean,
+): Promise<any> => {
+  try {
+    const response = await apiInstance.put<any>('/meal/updateIsMealTaken', {
+      id,
+      isMealTaken,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating meal status:', error);
     throw error;
   }
 };

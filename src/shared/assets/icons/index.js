@@ -7,6 +7,7 @@ import ShoppingCar from './shopping-cart.svg';
 import BurgerIcon from './burger.svg';
 import PlusIcon from './plus.svg';
 import RefreshIcon from './refresh.svg';
+import CheckIcon from './check.svg';
 
 export {
   BackIcon,
@@ -18,4 +19,5 @@ export {
   BurgerIcon,
   PlusIcon,
   RefreshIcon,
+  CheckIcon,
 };

@@ -21,6 +21,7 @@ const TabNavigation: React.FC = () => {
         name={AppTabNavigation.HOME}
         component={DailyMealsScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({color, size}) => <HomeIcon color={color} size={size} />,
         }}
       />
@@ -28,6 +29,7 @@ const TabNavigation: React.FC = () => {
         name={AppTabNavigation.CALENDAR}
         component={CalorieCalendarScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <CalendarIcon color={color} size={size} />
           ),
@@ -37,6 +39,7 @@ const TabNavigation: React.FC = () => {
         name={AppTabNavigation.CART}
         component={Cart}
         options={{
+          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <ShoppingCar width={size} height={size} />
           ),
@@ -46,6 +49,7 @@ const TabNavigation: React.FC = () => {
         name={AppTabNavigation.SETTINGS}
         component={SettingsScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <SettingsIcon color={color} size={size} />
           ),

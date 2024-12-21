@@ -26,6 +26,7 @@ const DailyMeals: React.FC = () => {
       <MealsList date={date} />
       {/*<CustomButton title={'Добавить продукты в корзину'} onPress={() => {}} />*/}
       <CustomButton
+        style={{marginBottom: 10}}
         title={'Другая диета на весь день'}
         onPress={handleGenerateMeals}
       />

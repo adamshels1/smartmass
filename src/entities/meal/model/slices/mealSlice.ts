@@ -16,8 +16,8 @@ const initialState: MealsState = {
 
 export const fetchDailyMeals = createAsyncThunk(
   'meals/fetchDailyMeals',
-  async (params: {date: string; userId: number}) => {
-    const response = await getDailyMeals(params.date, params.userId);
+  async (params: {date: string}) => {
+    const response = await getDailyMeals(params.date);
     return response;
   },
 );
