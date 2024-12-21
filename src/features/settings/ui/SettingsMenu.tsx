@@ -11,11 +11,10 @@ import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts'; // A
 export const SettingsMenu: React.FC = () => {
   const dispatch = useAppDispatch();
   const {user} = useSelector((state: RootState) => state.auth);
-  console.log('user', user);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.title}>Настройки</Text>
 
       {/* User Info Section */}
       <View style={styles.userInfoContainer}>
@@ -63,13 +62,13 @@ export const SettingsMenu: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#F8F8F8',
     paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingTop: 10,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     marginBottom: 24,
   },
   userInfoContainer: {
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
   userEmail: {
     fontSize: 14,
@@ -102,7 +100,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 8,
   },
 });

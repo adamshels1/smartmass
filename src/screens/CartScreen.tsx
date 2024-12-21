@@ -1,19 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import Cart from 'features/cart/ui/Cart';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const CartScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <Cart />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default CartScreen;

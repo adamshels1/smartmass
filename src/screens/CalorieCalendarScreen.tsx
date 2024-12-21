@@ -1,19 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import CalorieCalendar from 'features/meal/ui/CalorieCalendar';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const CalorieCalendarScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <CalorieCalendar />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default CalorieCalendarScreen;

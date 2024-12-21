@@ -1,19 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import DailyMeals from 'features/meal/ui/dailyMeals/DailyMeals.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const DailyMealsScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <DailyMeals />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default DailyMealsScreen;

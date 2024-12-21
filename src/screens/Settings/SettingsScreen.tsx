@@ -1,19 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import {SettingsMenu} from 'features/settings/ui/SettingsMenu.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const SettingsScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <SettingsMenu />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default SettingsScreen;

@@ -12,17 +12,12 @@ interface DateProgressComponentProps {
 
 const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
   const days = useSelector((state: RootState) => state.meal.days);
-  console.log('days', days);
-
   const day = days?.find(day => day.date === date);
-  console.log('day', day);
 
   const progress =
     day?.takenCalories && day?.totalCalories
       ? day?.takenCalories / day?.totalCalories
       : 0;
-
-  console.log('progress', progress);
 
   return (
     <View style={styles.container}>
@@ -49,7 +44,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 20,
   },
   dateText: {

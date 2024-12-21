@@ -53,7 +53,7 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
     try {
       setIsButtonLoading(true);
       await addUnplannedMeal(date, food, time, parseInt(calories, 10));
-      dispatch(fetchDailyMeals({date, userId: 1}));
+      dispatch(fetchDailyMeals({date}));
       resetState();
       actionSheetRef.current?.hide(); // Закрыть ActionSheet после добавления
     } catch (error: any) {
@@ -90,7 +90,7 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{marginRight: 20}} onPress={handleShowSheet}>
+      <TouchableOpacity onPress={handleShowSheet}>
         <BurgerIcon width={50} height={50} fill={'#ff0000'} />
       </TouchableOpacity>
       <ActionSheet
@@ -145,11 +145,8 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f8f9fa', // Светлый фон для проверки
   },
   sheetContainer: {
     borderTopLeftRadius: 20,
