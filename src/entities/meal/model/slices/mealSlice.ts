@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {MealsState, DayMeals, Meal, MealDetails} from '../types/mealTypes';
+import {MealsState, DayMeals, Meal} from '../types/mealTypes';
 import {
   generateDailyMeals,
   getDailyMeals,
@@ -57,7 +57,7 @@ export const initiateGenerateDailyMeals = createAsyncThunk(
       params.totalCalories,
       params.userId,
     );
-    dispatch(fetchDailyMeals({date: params.date, userId: params.userId}));
+    dispatch(fetchDailyMeals({date: params.date}));
   },
 );
 
@@ -136,13 +136,10 @@ const mealsSlice = createSlice({
       })
       .addCase(
         fetchMealDetails.fulfilled,
-        (
-          state,
-          action: PayloadAction<{data: MealDetails; message: string}>,
-        ) => {
+        (state, action: PayloadAction<{data: Meal; message: string}>) => {
           state.status = 'succeeded';
           const existingIndex = state.mealsDetails.findIndex(
-            meal => meal.mealId === action.payload.data.mealId,
+            meal => meal.id === action.payload.data.id,
           );
 
           if (existingIndex !== -1) {

@@ -1,16 +1,7 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppNavigation, NavigationStackLists} from 'shared/config/navigation';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {useAppSelector} from 'shared/lib/state/selector/useAppSelector.ts';
 import {fetchMealDetails} from 'entities/meal/model/slices/mealSlice'; // Импортируйте ваш action
@@ -19,28 +10,17 @@ import {useSelector} from 'react-redux';
 import ImagePexels from 'shared/ui/ImageByDescription/ui/ImagePixabay.tsx';
 import {LightningIcon} from 'shared/assets/icons';
 import {SkeletonLoader} from 'shared/ui';
-import {useRoute} from '@react-navigation/native';
+import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 
-type TaskEditScreenProps = NativeStackScreenProps<
-  NavigationStackLists,
-  AppNavigation.MEAL_DETAILS
->;
-
-const MealDetails = ({}: TaskEditScreenProps) => {
-  const route = useRoute();
-  console.log('route', route);
-  const {mealId} = route.params; // Получение параметров маршрута
-
+const MealDetails = () => {
   const dispatch = useAppDispatch();
-  const state = useAppSelector(state => state);
-  console.log('state', state);
-
-  const mealDetails = useAppSelector((state: RootState) =>
-    state.meal.mealsDetails.find(meal => meal.mealId === mealId),
-  );
-
+  const route = useAppRoute();
+  const {mealId} = route.params; // Получение параметров маршрута
   const status = useSelector((state: RootState) => state.meal.status);
   const error = useSelector((state: RootState) => state.meal.error);
+  const mealDetail = useAppSelector((state: RootState) =>
+    state.meal.mealsDetails.find(meal => meal.id === mealId),
+  );
 
   // const meal = useAppSelector((state: RootState) => {
   //   const day = state.meal.days.find(day =>
@@ -48,8 +28,6 @@ const MealDetails = ({}: TaskEditScreenProps) => {
   //   );
   //   return day ? day.meals.find(meal => meal.id === mealId) : undefined;
   // });
-
-  console.log('mealDetails', mealDetails);
 
   useEffect(() => {
     dispatch(fetchMealDetails({mealId}));
@@ -63,25 +41,18 @@ const MealDetails = ({}: TaskEditScreenProps) => {
     return <Text>Error: {error}</Text>;
   }
 
-  if (!mealDetails) {
+  if (!mealDetail) {
     return <SkeletonLoader />;
   }
 
   return (
     <>
-      <AppHeader title={mealDetails?.dish} />
+      <AppHeader title={mealDetail?.dish} />
       <ScrollView style={styles.container}>
-        {/* Header */}
-        {/*<View style={styles.header}>*/}
-        {/*  <Text style={styles.title}>*/}
-        {/*    {mealDetails?.dish || 'Grilled Lamb'}*/}
-        {/*  </Text>*/}
-        {/*</View>*/}
-
         {/* Image */}
         <View style={{alignItems: 'center', marginTop: 10}}>
           <ImagePexels
-            description={mealDetails.dishEn}
+            description={mealDetail.dishEn}
             style={styles.image}
             width={500}
             height={300}
@@ -101,53 +72,59 @@ const MealDetails = ({}: TaskEditScreenProps) => {
               <AnimatedCircularProgress
                 size={50}
                 width={4}
-                fill={mealDetails ? mealDetails.dishCalories / 10 : 0} // Подстройте процент на основе значения калорий
+                fill={mealDetail ? mealDetail.dishCalories / 10 : 0} // Подстройте процент на основе значения калорий
                 tintColor="#FF6347"
                 backgroundColor="#E0E0E0">
                 {() => <LightningIcon />}
               </AnimatedCircularProgress>
               <Text style={styles.nutritionText}>
                 Calorie{'\n'}
-                {mealDetails.dishCalories || 0} Kcal
+                {mealDetail.dishCalories || 0} Kcal
               </Text>
             </View>
             <View style={styles.nutritionItem}>
               <AnimatedCircularProgress
                 size={50}
                 width={4}
-                fill={mealDetails ? mealDetails.proteins : 0} // Подстройте процент на основе значения белков
+                fill={
+                  mealDetail?.mealDetail ? mealDetail?.mealDetail?.proteins : 0
+                } // Подстройте процент на основе значения белков
                 tintColor="#1E90FF"
                 backgroundColor="#E0E0E0"
               />
               <Text style={styles.nutritionText}>
                 Protein{'\n'}
-                {mealDetails?.proteins || 0}g
+                {mealDetail?.mealDetail?.proteins || 0}g
               </Text>
             </View>
             <View style={styles.nutritionItem}>
               <AnimatedCircularProgress
                 size={50}
                 width={4}
-                fill={mealDetails ? mealDetails.fats : 0} // Подстройте процент на основе значения жиров
+                fill={mealDetail?.mealDetail ? mealDetail?.mealDetail?.fats : 0} // Подстройте процент на основе значения жиров
                 tintColor="#FFD700"
                 backgroundColor="#E0E0E0"
               />
               <Text style={styles.nutritionText}>
                 Fat{'\n'}
-                {mealDetails?.fats || 0}g
+                {mealDetail?.mealDetail?.fats || 0}g
               </Text>
             </View>
             <View style={styles.nutritionItem}>
               <AnimatedCircularProgress
                 size={50}
                 width={4}
-                fill={mealDetails ? mealDetails.carbohydrates : 0} // Подстройте процент на основе значения клетчатки
+                fill={
+                  mealDetail?.mealDetail
+                    ? mealDetail?.mealDetail?.carbohydrates
+                    : 0
+                } // Подстройте процент на основе значения клетчатки
                 tintColor="#32CD32"
                 backgroundColor="#E0E0E0"
               />
               <Text style={styles.nutritionText}>
                 Carbohydrates{'\n'}
-                {mealDetails?.carbohydrates || 0}g
+                {mealDetail?.mealDetail?.carbohydrates || 0}g
               </Text>
             </View>
           </View>
@@ -155,15 +132,9 @@ const MealDetails = ({}: TaskEditScreenProps) => {
           {/* Nutrition Facts */}
           <View style={styles.nutritionFacts}>
             <Text style={styles.nutritionFactsText}>
-              {mealDetails?.fullRecipe ||
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ullamcorper sed vulputate lobortis interdum tempor odio. Cras dolor ultrices et blandit sem non, commodo.'}
+              {mealDetail?.mealDetail?.fullRecipe}
             </Text>
           </View>
-
-          {/* Add to Diet Button */}
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add to your daily Diet</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </>

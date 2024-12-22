@@ -12,7 +12,7 @@ export interface Meal {
   recipe: string;
   createdAt: Date;
   updatedAt: Date;
-  mealDetails?: MealDetails;
+  mealDetail?: MealDetails;
 }
 
 // Ingredient type
@@ -30,16 +30,16 @@ export interface MealDetails {
   mealId: number;
   date: string;
   fullRecipe: string;
-  proteins: string;
-  fats: string;
-  carbohydrates: string;
+  proteins: number;
+  fats: number;
+  carbohydrates: number;
   cookingTime: string;
   updatedAt: string;
   createdAt: string;
 }
 
 export interface MealDetailsResponse {
-  data: MealDetails;
+  data: Meal;
 }
 
 export interface MealResponse {
@@ -56,7 +56,7 @@ export interface DayMeals {
 
 export interface MealsState {
   days: DayMeals[];
-  mealsDetails: MealDetails[];
+  mealsDetails: Meal[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
