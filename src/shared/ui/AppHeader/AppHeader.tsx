@@ -24,7 +24,9 @@ export const AppHeader = ({title, showBackButton = true}: Props) => {
           <BackIcon />
         </TouchableOpacity>
       )}
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
     </View>
   );
 };
@@ -40,9 +42,10 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
   },
   title: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: 'normal',
     marginLeft: 16,
+    width: '70%',
   },
   backButton: {
     padding: 8,

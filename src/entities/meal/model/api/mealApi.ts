@@ -1,5 +1,9 @@
 import apiInstance from 'shared/api/apiInstance.ts';
-import {MealResponse, Meal} from 'entities/meal/model/types/mealTypes.ts';
+import {
+  MealResponse,
+  Meal,
+  MealDetailsResponse,
+} from 'entities/meal/model/types/mealTypes.ts';
 import moment from 'moment';
 
 // Функция для генерации рациона
@@ -104,6 +108,23 @@ export const updateIsMealTaken = async (
     return response.data;
   } catch (error) {
     console.error('Error updating meal status:', error);
+    throw error;
+  }
+};
+
+export const getMealDetails = async (mealId: number): Promise<any> => {
+  try {
+    const response = await apiInstance.get<MealDetailsResponse>(
+      '/meal/getMealDetails',
+      {
+        params: {
+          mealId,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error getting days with meals:', error);
     throw error;
   }
 };

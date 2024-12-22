@@ -8,6 +8,7 @@ import BurgerIcon from './burger.svg';
 import PlusIcon from './plus.svg';
 import RefreshIcon from './refresh.svg';
 import CheckIcon from './check.svg';
+import LightningIcon from './lightning.svg';
 
 export {
   BackIcon,
@@ -20,4 +21,5 @@ export {
   PlusIcon,
   RefreshIcon,
   CheckIcon,
+  LightningIcon,
 };

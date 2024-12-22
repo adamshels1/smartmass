@@ -16,6 +16,8 @@ import {
 } from 'entities/meal/model/slices/mealSlice';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {updateIsMealTaken} from 'entities/meal/model/api/mealApi.ts';
+import {AppNavigation} from 'shared/config/navigation';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 interface MealItemProps {
   item: Meal;
@@ -23,12 +25,21 @@ interface MealItemProps {
 
 const MealItem: React.FC<MealItemProps> = ({item}) => {
   const dispatch = useAppDispatch();
+  const navigation = useAppNavigation();
   const [loading, setLoading] = useState(false);
   const isPastTime = moment(item.time, 'HH:mm').isBefore(moment());
   const isCurrentMeal = moment().isBetween(
     moment(item.time, 'HH:mm'),
     moment(item.time, 'HH:mm').add(1, 'hours'), // Предполагаем, что текущий прием пищи длится 1 час
   );
+
+  let mealStyle: any = '';
+  if (isPastTime) {
+    mealStyle = styles.pastMeal;
+  }
+  if (isCurrentMeal) {
+    mealStyle = styles.currentMeal;
+  }
 
   const handleUpdateMeal = async () => {
     setLoading(true);
@@ -87,16 +98,12 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     }
   };
 
-  let mealStyle: any = '';
-  if (isPastTime) {
-    mealStyle = styles.pastMeal;
-  }
-  if (isCurrentMeal) {
-    mealStyle = styles.currentMeal;
-  }
-
   return (
-    <View style={[styles.mealCard, mealStyle]}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate(AppNavigation.MEAL_DETAILS, {mealId: item.id})
+      }
+      style={[styles.mealCard, mealStyle]}>
       <ImagePexels
         description={item.dishEn}
         imageStyle={styles.mealImage}
@@ -113,7 +120,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
       </View>
 
       <View style={styles.rightButtonWrap}>{renderRightButton()}</View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,18 +1,27 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {MealsState, DayMeals, Meal} from '../types/mealTypes';
+import {MealsState, DayMeals, Meal, MealDetails} from '../types/mealTypes';
 import {
   generateDailyMeals,
   getDailyMeals,
   updateMeal,
   getDaysWithMeals,
+  getMealDetails,
 } from '../api/mealApi.ts';
-import moment from 'moment';
 
 const initialState: MealsState = {
   days: [],
+  mealsDetails: [],
   status: 'idle',
   error: null,
 };
+
+export const fetchMealDetails = createAsyncThunk(
+  'meals/fetchMealDetails',
+  async (params: {mealId: number}) => {
+    const response = await getMealDetails(params.mealId);
+    return response;
+  },
+);
 
 export const fetchDailyMeals = createAsyncThunk(
   'meals/fetchDailyMeals',
@@ -71,7 +80,6 @@ const mealsSlice = createSlice({
       .addCase(
         fetchDailyMeals.fulfilled,
         (state, action: PayloadAction<{data: Meal[]; message: string}>) => {
-          console.log('action', action.meta.arg.date);
           const dayMeals: DayMeals = {
             date: action.meta.arg.date,
             meals: action.payload.data.meals,
@@ -122,6 +130,31 @@ const mealsSlice = createSlice({
       .addCase(fetchDaysWithMeals.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message ?? 'Failed to fetch days with meals';
+      })
+      .addCase(fetchMealDetails.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(
+        fetchMealDetails.fulfilled,
+        (
+          state,
+          action: PayloadAction<{data: MealDetails; message: string}>,
+        ) => {
+          state.status = 'succeeded';
+          const existingIndex = state.mealsDetails.findIndex(
+            meal => meal.mealId === action.payload.data.mealId,
+          );
+
+          if (existingIndex !== -1) {
+            state.mealsDetails[existingIndex] = action.payload.data;
+          } else {
+            state.mealsDetails.push(action.payload.data);
+          }
+        },
+      )
+      .addCase(fetchMealDetails.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? 'Failed to fetch meal details';
       });
   },
 });

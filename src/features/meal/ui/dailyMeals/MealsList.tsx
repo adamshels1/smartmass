@@ -18,7 +18,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
   const error = useSelector((state: RootState) => state.meal.error);
 
   useEffect(() => {
-    dispatch(fetchDailyMeals({date: date, userId: 1}));
+    dispatch(fetchDailyMeals({date: date}));
   }, [dispatch, date]);
 
   if (status === 'loading') {

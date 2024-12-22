@@ -17,6 +17,7 @@ import MealDataScreen from 'screens/Settings/MealDataScreen.tsx';
 import DailyCaloriesScreen from 'screens/Settings/DailyCaloriesScreen.tsx';
 import FoodPreferencesScreen from 'screens/Settings/FoodPreferencesScreen.tsx';
 import SettingsStepsScreen from 'screens/Settings/SettingsStepsScreen.tsx';
+import MealDetailsScreen from 'screens/MealDetailsScreen.tsx';
 
 // Create separate stacks for authenticated and unauthenticated routes
 const AuthStack = createNativeStackNavigator();
@@ -118,6 +119,14 @@ const AppNavigator = () => (
         headerTransparent: true,
       }}
       component={MealCalendarScreen}
+    />
+    <AppStack.Screen
+      name={AppNavigation.MEAL_DETAILS}
+      options={{
+        headerShown: false,
+        headerTransparent: true,
+      }}
+      component={MealDetailsScreen}
     />
   </AppStack.Navigator>
 );
