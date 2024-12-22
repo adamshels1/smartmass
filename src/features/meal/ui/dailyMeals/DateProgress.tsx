@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {ProgressBar} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
 import moment from 'moment';
 import UnplannedMealModal from 'features/meal/ui/dailyMeals/UnplannedMealModal.tsx';
+import {BackIcon} from 'shared/assets/icons';
+import {useNavigation} from '@react-navigation/native';
 
 interface DateProgressComponentProps {
   date: string;
@@ -13,14 +15,24 @@ interface DateProgressComponentProps {
 const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
   const days = useSelector((state: RootState) => state.meal.days);
   const day = days?.find(day => day.date === date);
+  const navigation = useNavigation();
 
   const progress =
     day?.takenCalories && day?.totalCalories
       ? day?.takenCalories / day?.totalCalories
       : 0;
 
+  const specificDate = moment(date);
+  const isToday = moment().isSame(specificDate, 'day');
+
   return (
     <View style={styles.container}>
+      {!isToday && (
+        <TouchableOpacity onPress={navigation.goBack} style={styles.backButton}>
+          <BackIcon />
+        </TouchableOpacity>
+      )}
+
       <View>
         <Text style={styles.dateText}>
           {moment(date).format('DD MMMM, dddd')}
@@ -64,6 +76,10 @@ const styles = StyleSheet.create({
   },
   kcalProgress: {
     fontSize: 14,
+  },
+  backButton: {
+    padding: 8,
+    marginLeft: -10,
   },
 });
 

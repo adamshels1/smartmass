@@ -34,7 +34,6 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.timer}>До следующего приема пищи: 2ч 31м</Text>
       <FlatList
         data={meals || []}
         renderItem={({item}) => <MealItem item={item} />}
@@ -48,11 +47,6 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  timer: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 20,
   },
   mealList: {
     paddingBottom: 20,

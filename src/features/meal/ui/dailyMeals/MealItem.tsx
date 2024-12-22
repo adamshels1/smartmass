@@ -27,11 +27,29 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
   const [loading, setLoading] = useState(false);
-  const isPastTime = moment(item.time, 'HH:mm').isBefore(moment());
+  const isPastTime = moment(
+    `${item.date} ${item.time}`,
+    'YYYY-MM-DD HH:mm',
+  ).isBefore(moment());
   const isCurrentMeal = moment().isBetween(
-    moment(item.time, 'HH:mm'),
-    moment(item.time, 'HH:mm').add(1, 'hours'), // Предполагаем, что текущий прием пищи длится 1 час
+    moment(`${item.date} ${item.time}`, 'YYYY-MM-DD HH:mm').add(-2, 'hours'),
+    moment(`${item.date} ${item.time}`, 'YYYY-MM-DD HH:mm').add(0.5, 'hours'),
   );
+
+  const getTimeUntilNextMeal = () => {
+    const nextMealTime = moment(
+      `${item.date} ${item.time}`,
+      'YYYY-MM-DD HH:mm',
+    );
+    const now = moment();
+    if (nextMealTime.isBefore(now)) {
+      return 'Время настало';
+    }
+    const diff = moment.duration(nextMealTime.diff(now));
+    const hours = diff.hours();
+    const minutes = diff.minutes();
+    return `${hours}ч ${minutes}м`;
+  };
 
   let mealStyle: any = '';
   if (isPastTime) {
@@ -99,28 +117,35 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
   };
 
   return (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate(AppNavigation.MEAL_DETAILS, {mealId: item.id})
-      }
-      style={[styles.mealCard, mealStyle]}>
-      <ImagePexels
-        description={item.dishEn}
-        imageStyle={styles.mealImage}
-        width={80}
-        height={80}
-      />
-      <View style={styles.mealInfo}>
-        <Text style={styles.mealTime}>
-          {item.time} - {item.name}
+    <>
+      {isCurrentMeal && (
+        <Text style={styles.timer}>
+          До следующего приема пищи: {getTimeUntilNextMeal()}
         </Text>
-        <Text style={styles.mealTime}>{item.dish}</Text>
-        <Text style={styles.mealKcal}>{item.dishCalories} ккал</Text>
-        {renderMealTakenButtons()}
-      </View>
+      )}
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(AppNavigation.MEAL_DETAILS, {mealId: item.id})
+        }
+        style={[styles.mealCard, mealStyle]}>
+        <ImagePexels
+          description={item.dishEn}
+          imageStyle={styles.mealImage}
+          width={80}
+          height={80}
+        />
+        <View style={styles.mealInfo}>
+          <Text style={styles.mealTime}>
+            {item.time} - {item.name}
+          </Text>
+          <Text style={styles.mealTime}>{item.dish}</Text>
+          <Text style={styles.mealKcal}>{item.dishCalories} ккал</Text>
+          {renderMealTakenButtons()}
+        </View>
 
-      <View style={styles.rightButtonWrap}>{renderRightButton()}</View>
-    </TouchableOpacity>
+        <View style={styles.rightButtonWrap}>{renderRightButton()}</View>
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -135,15 +160,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   pastMeal: {
-    // borderColor: 'green',
-    // borderWidth: 1,
     opacity: 0.7,
   },
   currentMeal: {
-    // backgroundColor: '#FFEB3B', // Светло-желтый цвет для выделения текущего приема пищи
-    // Тень для Android
     elevation: 5,
-    // Тень для iOS
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -193,6 +213,18 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  timer: {
+    fontSize: 14,
+    color: 'red',
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  mealHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
   },
 });
 
