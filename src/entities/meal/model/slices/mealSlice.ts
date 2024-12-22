@@ -73,14 +73,16 @@ const mealsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
+    // @ts-ignore
     builder
       .addCase(fetchDailyMeals.pending, state => {
         state.status = 'loading';
       })
       .addCase(
         fetchDailyMeals.fulfilled,
-        (state, action: PayloadAction<{data: Meal[]; message: string}>) => {
+        (state, action: PayloadAction<{data: DayMeals; message: string}>) => {
           const dayMeals: DayMeals = {
+            // @ts-ignore
             date: action.meta.arg.date,
             meals: action.payload.data.meals,
             totalCalories: action.payload.data.totalCalories,
@@ -88,6 +90,7 @@ const mealsSlice = createSlice({
           };
           state.status = 'succeeded';
           state.days = state.days.filter(
+            // @ts-ignore
             day => day.date !== action.meta.arg.date,
           );
           state.days.push(dayMeals);

@@ -23,6 +23,8 @@ export enum AppNavigation {
   ACCOUNT_SETTINGS = 'Account settings',
 
   MEAL_DETAILS = 'Meal Details',
+
+  DAILY_MEALS = 'Daily Meals',
 }
 
 interface NavigationSplashType {
@@ -50,6 +52,7 @@ export type NavigationStackLists = {
   [AppNavigation.DAILY_CALORIES]: undefined;
 
   [AppNavigation.MEAL_DETAILS]: {mealId: number};
+  [AppNavigation.DAILY_MEALS]: {date?: string};
 };
 
 export type RootStackParamList = NavigationStackLists & NavigationTabLists;

@@ -5,10 +5,14 @@ import MealsList from './MealsList.tsx';
 import {initiateGenerateDailyMeals} from 'entities/meal/model/slices/mealSlice.ts';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts'; // Импортируем useAppRoute
+import moment from 'moment';
 
 const DailyMeals: React.FC = () => {
   const dispatch = useAppDispatch();
-  const date = new Date().toISOString().split('T')[0];
+  const route = useAppRoute(); // Используем useAppRoute
+  const date = route.params?.date || moment().format('YYYY-MM-DD'); // Устанавливаем текущую дату по умолчанию с использованием moment
+
   const handleGenerateMeals = () => {
     dispatch(
       initiateGenerateDailyMeals({

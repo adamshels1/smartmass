@@ -1,57 +1,105 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import CheckBox from './Checkbox.tsx';
-
-const shoppingData = [
-  {
-    date: '18 ноября, Понедельник',
-    items: [
-      {id: '1', name: 'Бекон', quantity: '4 ломтика', checked: true},
-      {id: '2', name: 'Броколи', quantity: '100 гр.', checked: false},
-      {id: '3', name: 'Бурый рис', quantity: '150 гр.', checked: false},
-      {id: '4', name: 'Говядина', quantity: '200 гр.', checked: true},
-    ],
-  },
-  {
-    date: '19 ноября, Вторник',
-    items: [
-      {id: '5', name: 'Картофель', quantity: '2 шт.', checked: false},
-      {id: '6', name: 'Куриная грудка', quantity: '250 гр.', checked: false},
-      {id: '7', name: 'Лапша', quantity: '50 гр.', checked: true},
-      {id: '8', name: 'Лосось', quantity: '250 гр.', checked: true},
-      {id: '9', name: 'Лук репчатый', quantity: '50 гр.', checked: false},
-      {id: '10', name: 'Масло оливковое', quantity: '1 ст.л.', checked: false},
-    ],
-  },
-  {
-    date: '20 ноября, Среда',
-    items: [
-      {id: '11', name: 'Овсяные хлопья', quantity: '30 гр.', checked: false},
-    ],
-  },
-];
+import CheckBox from './Checkbox';
+import {useAppSelector} from 'shared/lib/state/selector/useAppSelector';
+import {RootState} from 'app/providers/StoreProvider';
+import moment from 'moment';
+import {Meal} from 'entities/meal/model/types/mealTypes.ts';
+import 'moment/locale/ru';
+moment.locale('ru');
 
 const Cart = () => {
-  const renderItem = ({item}) => (
-    <View style={styles.itemContainer}>
-      <CheckBox value={item.checked} />
+  const mealsDetails = useAppSelector(
+    (state: RootState) => state.meal.mealsDetails as Meal[],
+  );
+
+  const [shoppingData, setShoppingData] = useState<
+    {
+      date: string;
+      items: {id: string; name: string; quantity: string; checked: boolean}[];
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const allItems = mealsDetails.flatMap(mealDetail =>
+      mealDetail.mealDetail.ingredients.map((ingredient, index) => ({
+        id: `${mealDetail.id}-${index}`,
+        name: ingredient.name,
+        quantity: `${ingredient.amount} ${ingredient.units}`,
+        checked: false,
+        date: mealDetail.date, // добавляем дату к каждому ингредиенту
+      })),
+    );
+
+    // Группировка ингредиентов по датам
+    const groupedItems = allItems.reduce<{
+      [date: string]: {
+        id: string;
+        name: string;
+        quantity: string;
+        checked: boolean;
+      }[];
+    }>((acc, item) => {
+      const date = item.date;
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(item);
+      return acc;
+    }, {});
+
+    setShoppingData(
+      Object.entries(groupedItems).map(([date, items]) => ({date, items})),
+    );
+  }, [mealsDetails]);
+
+  const toggleCheckBox = (id: string) => {
+    setShoppingData(prevData =>
+      prevData.map(section => ({
+        ...section,
+        items: section.items.map(item =>
+          item.id === id ? {...item, checked: !item.checked} : item,
+        ),
+      })),
+    );
+  };
+
+  const formatDate = (date: string) => {
+    const momentDate = moment(date);
+    const isPast = momentDate.isBefore(moment(), 'day');
+    const formattedDate = momentDate.format('D MMMM, dddd');
+    return isPast ? (
+      <Text style={styles.checkedText}>{formattedDate}</Text>
+    ) : (
+      formattedDate
+    );
+  };
+
+  const renderItem = ({
+    item,
+  }: {
+    item: {id: string; name: string; quantity: string; checked: boolean};
+  }) => (
+    <TouchableOpacity
+      onPress={() => toggleCheckBox(item.id)}
+      style={styles.itemContainer}>
+      <CheckBox value={item.checked} onPress={() => toggleCheckBox(item.id)} />
       <Text style={[styles.itemText, item.checked && styles.checkedText]}>
         {item.name}
       </Text>
       <Text style={styles.quantityText}>{item.quantity}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Список продуктов</Text>
-      <Text style={styles.subtitle}>Продукты по дням</Text>
       <FlatList
         data={shoppingData}
-        keyExtractor={item => item.date}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>{item.date}</Text>
+            <Text style={styles.sectionTitle}>{formatDate(item.date)}</Text>
             <FlatList
               data={item.items}
               keyExtractor={subItem => subItem.id}
@@ -78,11 +126,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'normal',
     marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 16,
   },
   sectionContainer: {
     marginBottom: 16,

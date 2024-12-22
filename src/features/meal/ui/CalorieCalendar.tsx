@@ -7,9 +7,12 @@ import {RootState} from 'app/providers/StoreProvider/config/store';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import moment from 'moment';
 import {DayMeals} from 'entities/meal/model/types/mealTypes.ts';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import {AppNavigation} from 'shared/config/navigation';
 
 const CalorieCalendar = () => {
   const dispatch = useAppDispatch();
+  const navigation = useAppNavigation();
   const daysWithMeals = useSelector((state: RootState) => state.meal.days);
   console.log('daysWithMeals', daysWithMeals);
 
@@ -25,26 +28,50 @@ const CalorieCalendar = () => {
         ? item?.takenCalories / item?.totalCalories
         : 0;
     return (
-      <View style={styles.card}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(AppNavigation.DAILY_MEALS, {date: item.date})
+        }
+        style={styles.card}>
         <View style={styles.dateContainer}>
           <Text style={styles.date}>{moment(item.date).format('DD')}</Text>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.day}>{moment(item.date).format('dddd')}</Text>
           <ProgressBar
-            // progress={item.progress > 1 ? 1 : item.progress}
             progress={progress}
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <Text style={styles.kcal}>{item.takenCalories}kcal</Text>
+          <Text style={styles.kcal}>{item?.takenCalories}kcal</Text>
         </View>
         <View style={styles.actionContainer}>
           <View style={styles.square} />
           <View style={styles.square} />
           <View style={styles.square} />
         </View>
-      </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderFooter = () => {
+    const lastDate = moment(daysWithMeals[daysWithMeals.length - 1].date);
+    const nextDate = lastDate.add(1, 'day').format('YYYY-MM-DD');
+
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(AppNavigation.DAILY_MEALS, {date: nextDate})
+        }
+        style={[styles.card, styles.footerCard]}>
+        <View style={styles.dateContainer}>
+          <Text style={styles.date}>{moment(nextDate).format('DD')}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.day}>{moment(nextDate).format('dddd')}</Text>
+          <Text style={styles.day}>Запланировать рацион</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -57,6 +84,7 @@ const CalorieCalendar = () => {
         renderItem={renderItem}
         keyExtractor={item => item.date}
         contentContainerStyle={styles.list}
+        ListFooterComponent={renderFooter}
       />
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Получить диету на неделю</Text>
@@ -156,6 +184,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     fontWeight: 'normal',
+  },
+  footerCard: {
+    borderColor: '#31D6D6',
+    borderWidth: 1,
   },
 });
 
