@@ -15,4 +15,5 @@ export interface AuthState {
   error: string | null;
   message: string;
   isAuth: boolean;
+  showWelcomeScreen: boolean;
 }

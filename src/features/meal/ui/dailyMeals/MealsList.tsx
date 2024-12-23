@@ -2,10 +2,14 @@ import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {RootState} from 'app/providers/StoreProvider';
-import {fetchDailyMeals} from 'entities/meal/model/slices/mealSlice';
+import {
+  fetchDailyMeals,
+  initiateGenerateDailyMeals,
+} from 'entities/meal/model/slices/mealSlice';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import MealItem from './MealItem';
 import {SkeletonLoader} from 'shared/ui';
+import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 
 type MealsListProps = {
   date: string;
@@ -16,6 +20,9 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
   const days = useSelector((state: RootState) => state.meal.days);
   const status = useSelector((state: RootState) => state.meal.status);
   const error = useSelector((state: RootState) => state.meal.error);
+  const {maxMealPerDay, dailyCalories} = useSelector(
+    (state: RootState) => state.userDetails.userDetails,
+  );
 
   useEffect(() => {
     dispatch(fetchDailyMeals({date: date}));
@@ -25,12 +32,24 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
     return <SkeletonLoader />;
   }
 
-  if (status === 'failed') {
-    return <Text>Error: {error}</Text>;
-  }
+  // if (status === 'failed') {
+  //   return <Text>Error: {error}</Text>;
+  // }
 
   const meals =
     days?.length > 0 ? days?.find(day => day.date === date)?.meals : [];
+
+  const handleGenerateMeals = () => {
+    if (maxMealPerDay && dailyCalories) {
+      dispatch(
+        initiateGenerateDailyMeals({
+          date: date,
+          mealCount: maxMealPerDay,
+          totalCalories: dailyCalories,
+        }),
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -39,6 +58,13 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
         renderItem={({item}) => <MealItem item={item} />}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.mealList}
+        ListEmptyComponent={
+          <CustomButton
+            style={{marginBottom: 10}}
+            title={'Получить диету на весь день'}
+            onPress={handleGenerateMeals}
+          />
+        }
       />
     </View>
   );

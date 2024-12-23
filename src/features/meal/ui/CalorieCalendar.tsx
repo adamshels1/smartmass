@@ -9,6 +9,7 @@ import moment from 'moment';
 import {DayMeals} from 'entities/meal/model/types/mealTypes.ts';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import {AppNavigation} from 'shared/config/navigation';
+import {isDateToday} from 'shared/lib/utils/date.ts';
 
 const CalorieCalendar = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const CalorieCalendar = () => {
   }, [dispatch]);
 
   const renderItem = ({item}: {item: DayMeals}) => {
+    const isToday = isDateToday(item.date);
     const progress =
       item?.takenCalories && item?.totalCalories
         ? item?.takenCalories / item?.totalCalories
@@ -30,11 +32,16 @@ const CalorieCalendar = () => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(AppNavigation.DAILY_MEALS, {date: item.date})
+          isToday
+            ? navigation.navigate(AppNavigation.HOME)
+            : navigation.navigate(AppNavigation.DAILY_MEALS, {date: item.date})
         }
         style={styles.card}>
-        <View style={styles.dateContainer}>
-          <Text style={styles.date}>{moment(item.date).format('DD')}</Text>
+        <View
+          style={isToday ? styles.todayDateContainer : styles.dateContainer}>
+          <Text style={isToday ? styles.todayDate : styles.date}>
+            {moment(item.date).format('DD')}
+          </Text>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.day}>{moment(item.date).format('dddd')}</Text>
@@ -130,9 +137,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  todayDateContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#31D6D6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   date: {
     fontSize: 16,
     fontWeight: 'normal',
+  },
+  todayDate: {
+    fontSize: 16,
+    fontWeight: 'normal',
+    color: '#fff',
   },
   infoContainer: {
     flex: 1,

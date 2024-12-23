@@ -1,32 +1,35 @@
 import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
-import Button from '../components/Button';
 import LottieView from 'lottie-react-native';
-import {setShowWelcomeScreen} from '../store/userActions';
-import {useDispatch} from 'react-redux';
-import i18n from '../shared/config/i18n';
+import {setShowWelcomeScreen} from 'entities/auth/model/authSlice';
+import i18n from 'shared/config/i18n';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation';
+import {AppNavigation} from 'shared/config/navigation';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
+import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 
-const MySwiper = ({navigation}) => {
-  const dispatch = useDispatch();
-  const swiperRef = useRef(null);
+export const Welcome = () => {
+  const dispatch = useAppDispatch();
+  const navigation = useAppNavigation();
+  const swiperRef = useRef<Swiper>(null); // Specify the type here
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = [
     {
       text: i18n.t(
         'Get your meal plan quickly and conveniently with Artificial Intelligence.',
       ),
-      animation: require('../assets/animations/Animation - 1716491891171.json'),
+      animation: require('shared/assets/animations/1716491891171.json'),
     },
     {
       text: i18n.t('Plan notifications to always eat on time and hassle-free.'),
-      animation: require('../assets/animations/Animation - 1716487145324.json'),
+      animation: require('shared/assets/animations/1716487145324.json'),
     },
     {
       text: i18n.t(
         'Easily track the contents of your grocery basket with our app.',
       ),
-      animation: require('../assets/animations/Animation - 1716491430846.json'),
+      animation: require('shared/assets/animations/1716491430846.json'),
     },
   ];
 
@@ -37,7 +40,7 @@ const MySwiper = ({navigation}) => {
   };
 
   const handleFinish = () => {
-    navigation.navigate('SettingsScreen');
+    navigation.navigate(AppNavigation.AUTH);
     dispatch(setShowWelcomeScreen(false));
   };
 
@@ -69,16 +72,16 @@ const MySwiper = ({navigation}) => {
       </Swiper>
       <View style={styles.buttonContainer}>
         {currentIndex < slides.length - 1 ? (
-          <Button
+          <CustomButton
             title={i18n.t('Next')}
             onPress={handleNext}
-            style={{flex: 1, marginLeft: 10}}
+            style={styles.button}
           />
         ) : (
-          <Button
+          <CustomButton
             title={i18n.t("Let's Get Started")}
             onPress={handleFinish}
-            style={{flex: 1, marginLeft: 10}}
+            style={styles.button}
           />
         )}
       </View>
@@ -113,6 +116,5 @@ const styles = StyleSheet.create({
     color: '#67CFCF',
     width: '90%',
   },
+  button: {flex: 1, marginLeft: 10},
 });
-
-export default MySwiper;

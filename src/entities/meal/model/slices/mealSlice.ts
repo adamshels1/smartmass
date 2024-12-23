@@ -47,7 +47,6 @@ export const initiateGenerateDailyMeals = createAsyncThunk(
       date: string;
       mealCount: number;
       totalCalories: number;
-      userId: number;
     },
     {dispatch},
   ) => {
@@ -55,7 +54,6 @@ export const initiateGenerateDailyMeals = createAsyncThunk(
       params.date,
       params.mealCount,
       params.totalCalories,
-      params.userId,
     );
     dispatch(fetchDailyMeals({date: params.date}));
   },

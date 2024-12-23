@@ -1,24 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import LoginForm from '../entities/auth/ui/LoginForm.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const LoginScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <LoginForm />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-  },
-});
 
 export default LoginScreen;

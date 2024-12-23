@@ -14,6 +14,7 @@ const initialState: AuthState = {
   error: null,
   message: '',
   isAuth: false,
+  showWelcomeScreen: true,
 };
 
 // Асинхронные действия
@@ -88,6 +89,9 @@ const authSlice = createSlice({
     resetAuthState(state) {
       state.user = null;
       state.isAuth = false;
+    },
+    setShowWelcomeScreen(state, action: PayloadAction<boolean>) {
+      state.showWelcomeScreen = action.payload;
     },
   },
   extraReducers: builder => {
@@ -167,5 +171,6 @@ const authSlice = createSlice({
   },
 });
 
-export const {setMessage, resetAuthState} = authSlice.actions;
+export const {setMessage, resetAuthState, setShowWelcomeScreen} =
+  authSlice.actions;
 export default authSlice.reducer;
