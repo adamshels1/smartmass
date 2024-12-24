@@ -1,13 +1,8 @@
 import apiInstance from 'shared/api/apiInstance.ts';
-
-interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
-  token: string;
-}
+import {
+  AuthResponse,
+  VerifyEmailResponse,
+} from 'entities/auth/types/authTypes.ts';
 
 export const signInWithEmail = async (
   email: string,
@@ -50,6 +45,7 @@ export const registerWithEmail = async (
       password,
       name,
     });
+    console.log('response', response);
     return response.data;
   } catch (error) {
     console.error('Error registering with email:', error);
@@ -68,5 +64,24 @@ export const registerWithGoogle = async (
   } catch (error) {
     console.error('Error registering with Google:', error);
     throw error;
+  }
+};
+
+export const verifyEmail = async (
+  email: string,
+  code: string,
+): Promise<VerifyEmailResponse> => {
+  try {
+    const response = await apiInstance.post<VerifyEmailResponse>(
+      '/auth/verifyEmail',
+      {
+        email,
+        code,
+      },
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error('Error verifying email:', error);
+    throw error.response?.data || {message: 'An unknown error occurred'};
   }
 };

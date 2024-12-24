@@ -1,19 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import RegisterForm from '../entities/auth/ui/RegisterForm.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const RegisterScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <RegisterForm />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default RegisterScreen;

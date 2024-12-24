@@ -1,10 +1,12 @@
-// shared/lib/hooks/useAppRoute.ts
 import {useRoute, RouteProp} from '@react-navigation/native';
-import {AppNavigation, NavigationStackLists} from 'shared/config/navigation';
+import {NavigationStackLists} from 'shared/config/navigation';
 
-type AppRouteProp = RouteProp<NavigationStackLists, AppNavigation.MEAL_DETAILS>;
+type AppRouteProp<T extends keyof NavigationStackLists> = RouteProp<
+  NavigationStackLists,
+  T
+>;
 
-export const useAppRoute = () => {
-  const route = useRoute<AppRouteProp>();
+export const useAppRoute = <T extends keyof NavigationStackLists>() => {
+  const route = useRoute<AppRouteProp<T>>();
   return route;
 };

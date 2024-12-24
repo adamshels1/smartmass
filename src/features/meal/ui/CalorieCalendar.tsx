@@ -62,7 +62,7 @@ const CalorieCalendar = () => {
   };
 
   const renderFooter = () => {
-    const lastDate = moment(daysWithMeals[daysWithMeals.length - 1].date);
+    const lastDate = moment(daysWithMeals[daysWithMeals.length - 1]?.date);
     const nextDate = lastDate.add(1, 'day').format('YYYY-MM-DD');
 
     return (

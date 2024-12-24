@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -17,44 +17,63 @@ import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 const RegisterForm = () => {
+  const [name, setName] = useState(''); // Добавлен name
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const dispatch = useAppDispatch();
   const authState = useSelector((state: RootState) => state.auth);
-  const {loading, error, message} = authState;
+  const {loading} = authState; // Добавлен isAuth
   const navigation = useAppNavigation();
 
-  const handleRegister = () => {
-    if (!email || !password || !confirmPassword) {
+  const handleRegister = async () => {
+    if (!name || !email || !password || !confirmPassword) {
       dispatch(setMessage('Введите все поля!'));
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Сообщение',
+        textBody: 'Введите все поля!',
+      });
       return;
     }
     if (password !== confirmPassword) {
       dispatch(setMessage('Пароли не совпадают!'));
-      return;
-    }
-
-    dispatch(registerUser({email, password, name: email}));
-    navigation.navigate(AppNavigation.VERIFY);
-  };
-
-  useEffect(() => {
-    if (error) {
-      Toast.show({
-        type: ALERT_TYPE.DANGER,
-        title: 'Ошибка',
-        textBody: error,
-      });
-    }
-    if (message) {
       Toast.show({
         type: ALERT_TYPE.WARNING,
         title: 'Сообщение',
-        textBody: message,
+        textBody: 'Пароли не совпадают!',
       });
+      return;
     }
-  }, [error, message]);
+
+    try {
+      const result = await dispatch(
+        registerUser({email, password, name}),
+      ).unwrap();
+      console.log('Result:', result); // Логирование результата
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Успех',
+        textBody: result.message || 'Регистрация прошла успешно',
+      });
+      navigation.navigate(AppNavigation.VERIFY, {email, password});
+    } catch (err: any) {
+      console.error('Error:', err); // Логирование ошибки
+      if (err.response && err.response.data && err.response.data.message) {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Ошибка',
+          textBody: err.response.data.message,
+        });
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Ошибка',
+          textBody: err.message,
+        });
+      }
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -64,6 +83,11 @@ const RegisterForm = () => {
         <Text style={styles.title}>Создание аккаунта</Text>
         <Text style={styles.subtitle}>Создайте аккаунт чтобы</Text>
 
+        <CustomTextInput
+          placeholder="Ваше имя"
+          value={name}
+          onChangeText={setName}
+        />
         <CustomTextInput
           placeholder="Адрес электронной почты"
           value={email}
@@ -82,7 +106,7 @@ const RegisterForm = () => {
           secureTextEntry
         />
 
-        {loading ? <Text style={styles.loadingText}>Loading...</Text> : null}
+        {loading ? <Text style={styles.loadingText}>Загрузка...</Text> : null}
 
         <Text style={styles.acceptText}>
           Нажимая кнопку зарегистрироваться вы принимаете{' '}

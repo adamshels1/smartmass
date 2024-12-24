@@ -8,6 +8,7 @@ export enum AppNavigation {
   AUTH = 'Auth',
   REGISTRATION = 'Registration',
   VERIFY = 'Verify',
+  SUCCESS_VERIFY = 'Success Verify',
   FORGOT = 'Forgot',
   COURSE = 'Course',
   MEAL_CALENDAR = 'MealCalendar',
@@ -38,7 +39,8 @@ export type NavigationStackLists = {
   [AppNavigation.MAIN]: undefined;
   [AppNavigation.AUTH]: NavigationSplashType | undefined;
   [AppNavigation.REGISTRATION]: NavigationSplashType | undefined;
-  [AppNavigation.VERIFY]: undefined;
+  [AppNavigation.VERIFY]: {email: string; password: string};
+  [AppNavigation.SUCCESS_VERIFY]: undefined;
   [AppNavigation.FORGOT]: NavigationSplashType | undefined;
   [AppNavigation.COURSE]: {courseId: number};
   [AppNavigation.MEAL_CALENDAR]: undefined;

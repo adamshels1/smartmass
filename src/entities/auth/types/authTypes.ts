@@ -17,3 +17,16 @@ export interface AuthState {
   isAuth: boolean;
   showWelcomeScreen: boolean;
 }
+
+export interface VerifyEmailResponse {
+  message: string;
+}
+
+export interface AuthResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  token: string;
+}

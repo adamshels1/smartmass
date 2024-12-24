@@ -1,87 +1,118 @@
 import React, {useState} from 'react';
 import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
-import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx'; // Используем ваш компонент
-import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
-import {AppNavigation} from 'shared/config/navigation';
+import {useDispatch} from 'react-redux';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
-import GoogleSigninButton2 from 'features/googleSignin/ui/GoogleSigninButton.tsx'; // Используем ваш компонент
+import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
+import GoogleSigninButton2 from 'features/googleSignin/ui/GoogleSigninButton.tsx';
+import {AppNavigation} from 'shared/config/navigation';
+import {loginWithEmail} from 'entities/auth/model/authSlice.ts';
+import {
+  ALERT_TYPE,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
-      setError('Введите все поля!');
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Ошибка',
+        textBody: 'Введите все поля!',
+      });
       return;
     }
 
-    // Пример обработки авторизации
-    setError('');
-    Alert.alert('Вход', `Вошли как: ${email}`);
+    try {
+      const result = await dispatch(loginWithEmail({email, password})).unwrap();
+      await AsyncStorage.setItem('userToken', result.token);
+      Toast.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Вход',
+        textBody: `Вошли как: ${email}`,
+      });
+    } catch (err: any) {
+      // Приведение err к типу any
+      if (err.response && err.response.data && err.response.data.message) {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Ошибка',
+          textBody: err.response.data.message,
+        });
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Ошибка',
+          textBody: err.message,
+        });
+      }
+      setError(err.message);
+    }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>С возвращением</Text>
-        <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
+    <AlertNotificationRoot>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Text style={styles.title}>С возвращением</Text>
+          <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
 
-        {/*<TouchableOpacity style={styles.appleButton}>*/}
-        {/*  <Text style={styles.appleText}>*/}
-        {/*     Войти при помощи аккаунта Apple*/}
-        {/*  </Text>*/}
-        {/*</TouchableOpacity>*/}
+          <GoogleSigninButton2 />
 
-        <GoogleSigninButton2 />
+          <Text style={styles.dividerText}>
+            Или войдите при помощи email аккаунта
+          </Text>
 
-        <Text style={styles.dividerText}>
-          Или войдите при помощи email аккаунта
-        </Text>
+          <CustomTextInput
+            placeholder="Адрес электронной почты"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <CustomTextInput
+            placeholder="Пароль"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
-        <CustomTextInput
-          placeholder="Адрес электронной почты"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <CustomTextInput
-          placeholder="Пароль"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          <TouchableOpacity>
+            <Text style={styles.forgotPassword}>Я забыл пароль</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword}>Я забыл пароль</Text>
-        </TouchableOpacity>
-
-        <CustomButton
-          title="Войти"
-          onPress={handleLogin}
-          style={styles.loginButton}
-        />
-        <CustomButton
-          title="Создать аккаунт"
-          onPress={() => navigation.navigate(AppNavigation.REGISTRATION)}
-          style={styles.registerButton}
-          textStyle={styles.registerButtonText}
-        />
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <CustomButton
+            title="Войти"
+            onPress={handleLogin}
+            style={styles.loginButton}
+          />
+          <CustomButton
+            title="Создать аккаунт"
+            onPress={() => navigation.navigate(AppNavigation.REGISTRATION)}
+            style={styles.registerButton}
+            textStyle={styles.registerButtonText}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </AlertNotificationRoot>
   );
 };
 
@@ -102,19 +133,6 @@ const styles = StyleSheet.create({
     color: '#888',
     marginBottom: 20,
   },
-  appleButton: {
-    backgroundColor: '#000',
-    paddingVertical: 15,
-    borderRadius: 33,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  appleText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-
   dividerText: {
     fontSize: 14,
     color: '#aaa',

@@ -19,6 +19,8 @@ import FoodPreferencesScreen from 'screens/Settings/FoodPreferencesScreen.tsx';
 import SettingsStepsScreen from 'screens/Settings/SettingsStepsScreen.tsx';
 import MealDetailsScreen from 'screens/MealDetailsScreen.tsx';
 import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
+import EmailVerificationScreen from 'screens/EmailVerificationScreen.tsx';
+import SuccessEmailVerificationScreen from 'screens/SuccessEmailVerificationScreen.tsx';
 
 // Create separate stacks for authenticated and unauthenticated routes
 const AuthStack = createNativeStackNavigator();
@@ -60,9 +62,10 @@ const AuthNavigator = () => {
       <AuthStack.Screen
         name={AppNavigation.VERIFY}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
-        component={EmailVerificationForm}
+        component={EmailVerificationScreen}
       />
     </AuthStack.Navigator>
   );
@@ -70,6 +73,13 @@ const AuthNavigator = () => {
 
 const AppNavigator = () => (
   <AppStack.Navigator>
+    <AppStack.Screen
+      name={AppNavigation.SETTINGS_STEPS}
+      options={{
+        headerTransparent: true,
+      }}
+      component={SettingsStepsScreen}
+    />
     <AppStack.Screen
       name={AppNavigation.HOME}
       options={{
@@ -80,20 +90,21 @@ const AppNavigator = () => (
     />
 
     <AppStack.Screen
+      name={AppNavigation.SUCCESS_VERIFY}
+      options={{
+        headerShown: false,
+        headerTransparent: true,
+      }}
+      component={SuccessEmailVerificationScreen}
+    />
+
+    <AppStack.Screen
       name={AppNavigation.DAILY_MEALS}
       options={{
         headerShown: false,
         headerTransparent: true,
       }}
       component={DailyMealsScreen}
-    />
-
-    <AppStack.Screen
-      name={AppNavigation.SETTINGS_STEPS}
-      options={{
-        headerTransparent: true,
-      }}
-      component={SettingsStepsScreen}
     />
 
     <AppStack.Screen
