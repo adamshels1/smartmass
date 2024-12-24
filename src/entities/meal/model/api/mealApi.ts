@@ -21,6 +21,7 @@ export const generateDailyMeals = async (
         totalCalories,
       },
     );
+    console.log('response', response);
     return response.data;
   } catch (error) {
     console.error('Error generating daily meals:', error);

@@ -44,8 +44,8 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
       dispatch(
         initiateGenerateDailyMeals({
           date: date,
-          mealCount: maxMealPerDay,
-          totalCalories: dailyCalories,
+          mealCount: Number(maxMealPerDay),
+          totalCalories: Number(dailyCalories),
         }),
       );
     }

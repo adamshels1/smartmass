@@ -1,20 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {SettingsMenu} from 'features/settings/ui/SettingsMenu.tsx';
 import SettingsSteps from 'features/settings/ui/SettingsSteps.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const SettingsStepsScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <AppLayout>
       <SettingsSteps />
-    </View>
+    </AppLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default SettingsStepsScreen;

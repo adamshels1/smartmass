@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  View,
   Text,
   StyleSheet,
   ScrollView,
@@ -11,6 +12,7 @@ import PersonalDataForm from './PersonalDataForm';
 import MealDataForm from './MealDataForm';
 import FoodPreferencesForm from './FoodPreferencesForm';
 import DailyCaloriesForm from './DailyCaloriesForm';
+import {Success} from 'screens/Settings/Success.tsx';
 
 const SettingsSteps: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -23,12 +25,33 @@ const SettingsSteps: React.FC = () => {
     setStep(step - 1);
   };
 
+  const renderStepIndicators = () => {
+    const steps = [1, 2, 3, 4, 5];
+    return (
+      <View style={styles.stepsContainer}>
+        {steps.map((item, index) => (
+          <View key={index} style={styles.stepWrapper}>
+            <View
+              style={[
+                styles.stepCircle,
+                step >= item && styles.stepCircleActive,
+              ]}>
+              <Text style={styles.stepText}>{item}</Text>
+            </View>
+            {index < steps.length - 1 && <View style={styles.stepLine} />}
+          </View>
+        ))}
+      </View>
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Добро пожаловать</Text>
+        {/*<Text style={styles.title}>Добро пожаловать</Text>*/}
+        {step !== 6 && renderStepIndicators()}
         {step === 1 && <GoalForm onNext={handleNext} />}
         {step === 2 && (
           <PersonalDataForm onNext={handleNext} onBack={handleBack} />
@@ -40,6 +63,7 @@ const SettingsSteps: React.FC = () => {
         {step === 5 && (
           <DailyCaloriesForm onNext={handleNext} onBack={handleBack} />
         )}
+        {step === 6 && <Success />}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -57,6 +81,39 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 20,
     textAlign: 'center',
+  },
+  stepsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  stepWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  stepCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  stepCircleActive: {
+    backgroundColor: '#31D6D6',
+    borderColor: '#31D6D6',
+  },
+  stepText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  stepLine: {
+    width: 20,
+    height: 1,
+    backgroundColor: '#ccc',
   },
 });
 

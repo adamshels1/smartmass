@@ -7,6 +7,7 @@ import {
   getDaysWithMeals,
   getMealDetails,
 } from '../api/mealApi.ts';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 const initialState: MealsState = {
   days: [],
@@ -50,12 +51,25 @@ export const initiateGenerateDailyMeals = createAsyncThunk(
     },
     {dispatch},
   ) => {
-    await generateDailyMeals(
-      params.date,
-      params.mealCount,
-      params.totalCalories,
-    );
-    dispatch(fetchDailyMeals({date: params.date}));
+    try {
+      await generateDailyMeals(
+        params.date,
+        params.mealCount,
+        params.totalCalories,
+      );
+      dispatch(fetchDailyMeals({date: params.date}));
+    } catch (error) {
+      console.error('Failed to generate daily meals:', error);
+
+      // Показать сообщение об ошибке от сервера
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: error.response?.data?.message || 'Ошибка',
+        textBody:
+          error.response?.data?.error ||
+          'Произошла ошибка при генерации рациона.',
+      });
+    }
   },
 );
 

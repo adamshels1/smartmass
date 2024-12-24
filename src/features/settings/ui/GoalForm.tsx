@@ -63,7 +63,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
         </TouchableOpacity>
       ))}
       <CustomButton
-        title="Сохранить"
+        title={onNext ? 'Далее' : 'Сохранить'}
         onPress={handleNext}
         style={styles.wideButton}
         disabled={!selectedGoal}
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '500',
     marginBottom: 10,
   },

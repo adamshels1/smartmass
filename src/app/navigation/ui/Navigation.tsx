@@ -5,7 +5,6 @@ import {AppNavigation} from 'shared/config/navigation';
 import WelcomeScreen from 'screens/WelcomeScreen.tsx';
 import LoginScreen from 'screens/LoginScreen.tsx';
 import RegisterScreen from 'screens/RegisterScreen.tsx';
-import EmailVerificationForm from 'entities/auth/ui/EmailVerificationForm.tsx';
 import MealCalendarScreen from 'features/meal/ui/MealCalendarScreen.tsx';
 import TabNavigation from './TabNavigation.tsx';
 import {useSelector} from 'react-redux';
@@ -71,94 +70,106 @@ const AuthNavigator = () => {
   );
 };
 
-const AppNavigator = () => (
-  <AppStack.Navigator>
-    <AppStack.Screen
-      name={AppNavigation.SETTINGS_STEPS}
-      options={{
-        headerTransparent: true,
-      }}
-      component={SettingsStepsScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.HOME}
-      options={{
-        headerShown: false,
-        headerTransparent: true,
-      }}
-      component={TabNavigation}
-    />
+const AppNavigator = () => {
+  const {maxMealPerDay, dailyCalories, goal} = useSelector(
+    (state: RootState) => state.userDetails.userDetails,
+  );
+  const state = useSelector((state: RootState) => state);
+  console.log('state1', state);
+  const isFilledUserDetails = maxMealPerDay && dailyCalories && goal;
+  return (
+    <AppStack.Navigator
+      initialRouteName={
+        isFilledUserDetails ? AppNavigation.HOME : AppNavigation.SETTINGS_STEPS
+      }>
+      <AppStack.Screen
+        name={AppNavigation.SETTINGS_STEPS}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={SettingsStepsScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.HOME}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={TabNavigation}
+      />
 
-    <AppStack.Screen
-      name={AppNavigation.SUCCESS_VERIFY}
-      options={{
-        headerShown: false,
-        headerTransparent: true,
-      }}
-      component={SuccessEmailVerificationScreen}
-    />
+      <AppStack.Screen
+        name={AppNavigation.SUCCESS_VERIFY}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={SuccessEmailVerificationScreen}
+      />
 
-    <AppStack.Screen
-      name={AppNavigation.DAILY_MEALS}
-      options={{
-        headerShown: false,
-        headerTransparent: true,
-      }}
-      component={DailyMealsScreen}
-    />
+      <AppStack.Screen
+        name={AppNavigation.DAILY_MEALS}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={DailyMealsScreen}
+      />
 
-    <AppStack.Screen
-      name={AppNavigation.GOAL}
-      options={{
-        headerTransparent: true,
-      }}
-      component={GoalScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.PERSONAL_DATA}
-      options={{
-        headerTransparent: true,
-      }}
-      component={PersonalDataScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.MEAL_DATA}
-      options={{
-        headerTransparent: true,
-      }}
-      component={MealDataScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.FOOD_PREFERENCES}
-      options={{
-        headerTransparent: true,
-      }}
-      component={FoodPreferencesScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.DAILY_CALORIES}
-      options={{
-        headerTransparent: true,
-      }}
-      component={DailyCaloriesScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.MEAL_CALENDAR}
-      options={{
-        headerTransparent: true,
-      }}
-      component={MealCalendarScreen}
-    />
-    <AppStack.Screen
-      name={AppNavigation.MEAL_DETAILS}
-      options={{
-        headerShown: false,
-        headerTransparent: true,
-      }}
-      component={MealDetailsScreen}
-    />
-  </AppStack.Navigator>
-);
+      <AppStack.Screen
+        name={AppNavigation.GOAL}
+        options={{
+          headerTransparent: true,
+        }}
+        component={GoalScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.PERSONAL_DATA}
+        options={{
+          headerTransparent: true,
+        }}
+        component={PersonalDataScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.MEAL_DATA}
+        options={{
+          headerTransparent: true,
+        }}
+        component={MealDataScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.FOOD_PREFERENCES}
+        options={{
+          headerTransparent: true,
+        }}
+        component={FoodPreferencesScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.DAILY_CALORIES}
+        options={{
+          headerTransparent: true,
+        }}
+        component={DailyCaloriesScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.MEAL_CALENDAR}
+        options={{
+          headerTransparent: true,
+        }}
+        component={MealCalendarScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.MEAL_DETAILS}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={MealDetailsScreen}
+      />
+    </AppStack.Navigator>
+  );
+};
 
 const Navigation = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
