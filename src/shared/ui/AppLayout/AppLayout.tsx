@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {Platform, SafeAreaView, StyleSheet} from 'react-native';
 
 interface Props {
   children: ReactNode;
@@ -13,5 +13,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F8F8',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
 });

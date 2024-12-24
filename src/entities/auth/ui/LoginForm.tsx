@@ -7,18 +7,13 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
 import GoogleSigninButton2 from 'features/googleSignin/ui/GoogleSigninButton.tsx';
 import {AppNavigation} from 'shared/config/navigation';
 import {loginWithEmail} from 'entities/auth/model/authSlice.ts';
-import {
-  ALERT_TYPE,
-  AlertNotificationRoot,
-  Toast,
-} from 'react-native-alert-notification';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 
@@ -67,53 +62,53 @@ const SignInScreen = () => {
   };
 
   return (
-    <AlertNotificationRoot>
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.title}>С возвращением</Text>
-          <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled">
+        <Text style={styles.title}>С возвращением</Text>
+        <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
 
-          <GoogleSigninButton2 />
+        <GoogleSigninButton2 />
 
-          <Text style={styles.dividerText}>
-            Или войдите при помощи email аккаунта
-          </Text>
+        <Text style={styles.dividerText}>
+          Или войдите при помощи email аккаунта
+        </Text>
 
-          <CustomTextInput
-            placeholder="Адрес электронной почты"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
-          <CustomTextInput
-            placeholder="Пароль"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+        <CustomTextInput
+          placeholder="Адрес электронной почты"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+        <CustomTextInput
+          placeholder="Пароль"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-          <TouchableOpacity>
-            <Text style={styles.forgotPassword}>Я забыл пароль</Text>
-          </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.forgotPassword}>Я забыл пароль</Text>
+        </TouchableOpacity>
 
-          <CustomButton
-            title="Войти"
-            onPress={handleLogin}
-            style={styles.loginButton}
-          />
-          <CustomButton
-            title="Создать аккаунт"
-            onPress={() => navigation.navigate(AppNavigation.REGISTRATION)}
-            style={styles.registerButton}
-            textStyle={styles.registerButtonText}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </AlertNotificationRoot>
+        <CustomButton
+          title="Войти"
+          onPress={handleLogin}
+          style={styles.loginButton}
+        />
+        <CustomButton
+          title="Создать аккаунт"
+          onPress={() => navigation.navigate(AppNavigation.REGISTRATION)}
+          style={styles.registerButton}
+          textStyle={styles.registerButtonText}
+        />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -35,6 +35,7 @@ const GoogleSigninButton2 = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
+      console.log('userInfo', userInfo);
       // @ts-ignore
       const {idToken} = userInfo.data;
       dispatch(loginWithGoogle(idToken));

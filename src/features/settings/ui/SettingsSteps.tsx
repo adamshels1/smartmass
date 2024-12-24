@@ -49,7 +49,9 @@ const SettingsSteps: React.FC = () => {
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled">
         {/*<Text style={styles.title}>Добро пожаловать</Text>*/}
         {step !== 6 && renderStepIndicators()}
         {step === 1 && <GoalForm onNext={handleNext} />}

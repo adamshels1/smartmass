@@ -11,10 +11,11 @@ import ImagePexels from 'shared/ui/ImageByDescription/ui/ImagePixabay.tsx';
 import {LightningIcon} from 'shared/assets/icons';
 import {SkeletonLoader} from 'shared/ui';
 import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
+import {AppNavigation} from 'shared/config/navigation';
 
 const MealDetails = () => {
   const dispatch = useAppDispatch();
-  const route = useAppRoute();
+  const route = useAppRoute<AppNavigation.MEAL_DETAILS>();
   const {mealId} = route.params; // Получение параметров маршрута
   const status = useSelector((state: RootState) => state.meal.status);
   const error = useSelector((state: RootState) => state.meal.error);
@@ -177,6 +178,7 @@ const styles = StyleSheet.create({
   },
   nutritionFacts: {
     marginBottom: 20,
+    minHeight: '100%',
   },
   nutritionFactsText: {
     fontSize: 16,

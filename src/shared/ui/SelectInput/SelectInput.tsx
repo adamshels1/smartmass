@@ -32,12 +32,10 @@ const SelectInput: React.FC<SelectInputProps> = ({
           useNativeAndroidPickerStyle={false}
           {...rest}
         />
-        {Platform.OS === 'ios' && (
-          <Image
-            style={styles.inputIcon}
-            source={require('assets/icons/chevron-right.png')}
-          />
-        )}
+        <Image
+          style={styles.inputIcon}
+          source={require('assets/icons/chevron-right.png')}
+        />
       </View>
     </View>
   );
@@ -54,20 +52,17 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   inputContainer: {
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 33,
-    backgroundColor: '#fff',
     position: 'relative',
+    paddingHorizontal: 10,
   },
   input: {
-    flex: 1,
     height: 48,
     paddingHorizontal: 12,
     fontSize: 16,
     color: '#000',
-    backgroundColor: 'rgba(0,0,0,0)',
   },
   inputIcon: {
     width: 24,

@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    color: '#3d3d3d',
   },
   label: {
     fontSize: 14,

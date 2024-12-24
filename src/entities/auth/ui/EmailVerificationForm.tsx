@@ -78,7 +78,7 @@ const EmailVerificationForm: React.FC = () => {
           title: 'Успех',
           textBody: 'Код успешно верифицирован!',
         });
-        await sleep(2000);
+        // await sleep(2000);
         // Автоматическая авторизация после успешной верификации
         dispatch(loginWithEmail({email, password}))
           .unwrap()
@@ -142,7 +142,9 @@ const EmailVerificationForm: React.FC = () => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps="handled">
           <Text style={styles.title}>Подтвердите Email</Text>
           <Text style={styles.subtitle}>
             Мы отправили код вам на почту. Введите его в поле ниже чтобы
@@ -219,6 +221,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     marginHorizontal: 5, // Добавляем отступы между ячейками
+    color: '#000',
   },
   verifyButton: {
     backgroundColor: '#31D6D6',

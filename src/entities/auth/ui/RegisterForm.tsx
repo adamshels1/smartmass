@@ -79,7 +79,9 @@ const RegisterForm = () => {
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled">
         <Text style={styles.title}>Создание аккаунта</Text>
         <Text style={styles.subtitle}>Создайте аккаунт чтобы</Text>
 
