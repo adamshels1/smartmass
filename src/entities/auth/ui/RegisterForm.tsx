@@ -87,11 +87,13 @@ const RegisterForm = () => {
           placeholder="Ваше имя"
           value={name}
           onChangeText={setName}
+          autoCapitalize="words"
         />
         <CustomTextInput
           placeholder="Адрес электронной почты"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
         />
         <CustomTextInput
           placeholder="Пароль"

@@ -20,6 +20,7 @@ interface CustomTextInputProps {
   secureTextEntry?: boolean; // Для ввода пароля
   keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad'; // Тип клавиатуры
   maxLength?: number; // Максимальная длина ввода
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'; // Новый пропс для автокапитализации
 }
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
@@ -33,6 +34,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   secureTextEntry = false,
   keyboardType = 'default',
   maxLength,
+  autoCapitalize = 'none', // Значение по умолчанию для автокапитализации
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry); // По умолчанию видимость соответствует secureTextEntry
 
@@ -49,6 +51,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
           style={[styles.input, inputStyle]}
           keyboardType={keyboardType}
           maxLength={maxLength}
+          autoCapitalize={autoCapitalize} // Добавляем пропс автокапитализации
         />
         {secureTextEntry && (
           <TouchableOpacity

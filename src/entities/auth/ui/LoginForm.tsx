@@ -85,6 +85,7 @@ const SignInScreen = () => {
             placeholder="Адрес электронной почты"
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
           />
           <CustomTextInput
             placeholder="Пароль"
