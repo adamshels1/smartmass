@@ -11,6 +11,7 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import {Goal} from 'entities/userDetails/model/types/userDetailsTypes.ts';
 import {goBack} from '@react-navigation/routers/src/CommonActions.tsx';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface GoalFormProps {
   onNext?: () => void;
@@ -44,7 +45,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
 
   return (
     <View style={styles.stepContainer}>
-      <Text style={styles.sectionTitle}>Цель</Text>
+      <CustomText style={styles.sectionTitle}>Цель</CustomText>
       {goals.map(goal => (
         <TouchableOpacity
           key={goal.value}
@@ -53,13 +54,13 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
             selectedGoal === goal.value && styles.selectedGoalButton,
           ]}
           onPress={() => handleSelectGoal(goal.value)}>
-          <Text
+          <CustomText
             style={[
               styles.goalButtonText,
               selectedGoal === goal.value && styles.selectedGoalButtonText,
             ]}>
             {goal.label}
-          </Text>
+          </CustomText>
         </TouchableOpacity>
       ))}
       <CustomButton

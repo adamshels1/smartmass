@@ -15,6 +15,7 @@ import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const RegisterForm = () => {
   const [name, setName] = useState(''); // Добавлен name
@@ -82,8 +83,8 @@ const RegisterForm = () => {
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>Создание аккаунта</Text>
-        <Text style={styles.subtitle}>Создайте аккаунт чтобы</Text>
+        <CustomText style={styles.title}>Создание аккаунта</CustomText>
+        <CustomText style={styles.subtitle}>Создайте аккаунт чтобы</CustomText>
 
         <CustomTextInput
           placeholder="Ваше имя"
@@ -110,12 +111,16 @@ const RegisterForm = () => {
           secureTextEntry
         />
 
-        {loading ? <Text style={styles.loadingText}>Загрузка...</Text> : null}
+        {loading ? (
+          <CustomText style={styles.loadingText}>Загрузка...</CustomText>
+        ) : null}
 
-        <Text style={styles.acceptText}>
+        <CustomText style={styles.acceptText}>
           Нажимая кнопку зарегистрироваться вы принимаете{' '}
-          <Text style={styles.termsText}>Условия использования</Text>
-        </Text>
+          <CustomText style={styles.termsText}>
+            Условия использования
+          </CustomText>
+        </CustomText>
 
         <CustomButton
           title="Зарегистрироваться"

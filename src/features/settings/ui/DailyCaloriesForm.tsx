@@ -12,6 +12,7 @@ import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 import {sendMessageToAI} from 'entities/chat/model/api/chataiApi';
 import {jsonParse} from 'utils/format.js';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface DailyCaloriesFormProps {
   onNext?: () => void;
@@ -81,11 +82,11 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
     <View style={styles.stepContainer}>
       {isLoading && <ActivityIndicator size="large" color="#31D6D6" />}
       {recommendedCalories && (
-        <Text style={styles.caloriesText}>
+        <CustomText style={styles.caloriesText}>
           Вам необходимо употреблять {recommendedCalories} ккал в день, чтобы
           достичь цели: {goal}. Примерное время для достижения цели:{' '}
           {timeToReachGoal} месяцев.
-        </Text>
+        </CustomText>
       )}
       <CustomTextInput
         label="Введите количество калорий"

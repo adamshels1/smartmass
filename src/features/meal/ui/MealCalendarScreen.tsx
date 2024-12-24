@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CalorieCalendar from './CalorieCalendar.tsx';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const MealCalendarScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>MealCalendar</Text>
+      <CustomText style={styles.title}>MealCalendar</CustomText>
       <CalorieCalendar />
     </View>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import {AppNavigation} from 'shared/config/navigation';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface MenuItemProps {
   title: string;
@@ -15,7 +16,7 @@ const MenuItem: React.FC<MenuItemProps> = ({title, navigationTarget}) => {
     <TouchableOpacity
       onPress={() => navigation.navigate(navigationTarget)}
       style={styles.sectionItem}>
-      <Text style={styles.sectionItemText}>{title}</Text>
+      <CustomText style={styles.sectionItemText}>{title}</CustomText>
       <Image
         style={styles.inputIcon}
         source={require('assets/icons/chevron-right.png')}

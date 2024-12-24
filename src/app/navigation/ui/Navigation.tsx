@@ -120,6 +120,7 @@ const AppNavigator = () => {
       <AppStack.Screen
         name={AppNavigation.GOAL}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
         component={GoalScreen}
@@ -127,6 +128,7 @@ const AppNavigator = () => {
       <AppStack.Screen
         name={AppNavigation.PERSONAL_DATA}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
         component={PersonalDataScreen}
@@ -134,6 +136,7 @@ const AppNavigator = () => {
       <AppStack.Screen
         name={AppNavigation.MEAL_DATA}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
         component={MealDataScreen}
@@ -141,6 +144,7 @@ const AppNavigator = () => {
       <AppStack.Screen
         name={AppNavigation.FOOD_PREFERENCES}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
         component={FoodPreferencesScreen}
@@ -148,6 +152,7 @@ const AppNavigator = () => {
       <AppStack.Screen
         name={AppNavigation.DAILY_CALORIES}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
         component={DailyCaloriesScreen}
@@ -155,6 +160,7 @@ const AppNavigator = () => {
       <AppStack.Screen
         name={AppNavigation.MEAL_CALENDAR}
         options={{
+          headerShown: false,
           headerTransparent: true,
         }}
         component={MealCalendarScreen}

@@ -5,18 +5,22 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import MealDataForm from 'features/settings/ui/MealDataForm.tsx';
 import FoodPreferencesForm from 'features/settings/ui/FoodPreferencesForm.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
+import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
 
 const FoodPreferencesScreen: React.FC = () => {
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <FoodPreferencesForm />
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <AppLayout>
+      <AppHeader title={'Пищевые предпочтения'} />
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <FoodPreferencesForm />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </AppLayout>
   );
 };
 

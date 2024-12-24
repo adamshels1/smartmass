@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {ProgressBar} from 'react-native-paper';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 type DataItem = {
   day: string;
@@ -23,7 +24,7 @@ const MealCalendar = () => {
   const renderItem = ({item}: {item: DataItem}) => (
     <View style={styles.card}>
       <View style={styles.dateContainer}>
-        <Text style={styles.date}>{item.date}</Text>
+        <CustomText style={styles.date}>{item.date}</CustomText>
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.day}>{item.day}</Text>

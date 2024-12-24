@@ -1,21 +1,17 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Platform,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import DailyCaloriesForm from 'features/settings/ui/DailyCaloriesForm.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
+import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
 
 const DailyCaroliesScreen: React.FC = () => {
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <AppLayout>
+      <AppHeader title="Калории" />
       <ScrollView contentContainerStyle={styles.container}>
         <DailyCaloriesForm />
       </ScrollView>
-    </KeyboardAvoidingView>
+    </AppLayout>
   );
 };
 

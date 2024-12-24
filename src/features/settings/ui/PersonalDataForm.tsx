@@ -10,6 +10,7 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface PersonalDataFormProps {
   onNext?: () => void;
@@ -46,7 +47,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
 
   return (
     <View style={styles.stepContainer}>
-      <Text style={styles.sectionTitle}>Персональные данные</Text>
+      <CustomText style={styles.sectionTitle}>Персональные данные</CustomText>
       <CustomTextInput
         label="Рост (см)"
         placeholder="Введите рост"

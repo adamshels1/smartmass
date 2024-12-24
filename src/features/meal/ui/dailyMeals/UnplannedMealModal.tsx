@@ -19,6 +19,7 @@ import {fetchDailyMeals} from 'entities/meal/model/slices/mealSlice.ts';
 import {timeItems} from 'features/meal/constants/timeItems.ts';
 import {getCurrentTime} from 'shared/lib/utils/timeUtils.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 interface UnplannedMealFormProps {
   date: string;
 }
@@ -98,7 +99,9 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
         gestureEnabled={true}
         containerStyle={styles.sheetContainer}>
         <ScrollView style={styles.sheetContent}>
-          <Text style={styles.title}>Незапланированный прием пищи</Text>
+          <CustomText style={styles.title}>
+            Незапланированный прием пищи
+          </CustomText>
           <CustomTextInput
             label="Пища"
             placeholder="Введите пищу"

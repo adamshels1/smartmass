@@ -9,6 +9,7 @@ import {
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface MealDataFormProps {
   onNext?: () => void;
@@ -40,7 +41,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
 
   return (
     <View style={styles.stepContainer}>
-      <Text style={styles.sectionTitle}>Прием пищи</Text>
+      <CustomText style={styles.sectionTitle}>Прием пищи</CustomText>
       <SelectInput
         label="Первый прием"
         value={dailyMealStartTime}

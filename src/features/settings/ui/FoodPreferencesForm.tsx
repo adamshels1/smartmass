@@ -9,6 +9,7 @@ import {
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import TagsInput from 'shared/ui/TagsInput/TagsInput';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface FoodPreferencesFormProps {
   onNext?: () => void;
@@ -43,7 +44,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
 
   return (
     <View style={styles.stepContainer}>
-      <Text style={styles.sectionTitle}>Пищевые предпочтения</Text>
+      <CustomText style={styles.sectionTitle}>Пищевые предпочтения</CustomText>
       <TagsInput
         label="Предпочитаемые продукты"
         placeholder="Добавить предпочитаемый продукт"

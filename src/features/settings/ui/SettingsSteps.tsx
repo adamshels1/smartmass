@@ -13,6 +13,7 @@ import MealDataForm from './MealDataForm';
 import FoodPreferencesForm from './FoodPreferencesForm';
 import DailyCaloriesForm from './DailyCaloriesForm';
 import {Success} from 'screens/Settings/Success.tsx';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const SettingsSteps: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -36,7 +37,7 @@ const SettingsSteps: React.FC = () => {
                 styles.stepCircle,
                 step >= item && styles.stepCircleActive,
               ]}>
-              <Text style={styles.stepText}>{item}</Text>
+              <CustomText style={styles.stepText}>{item}</CustomText>
             </View>
             {index < steps.length - 1 && <View style={styles.stepLine} />}
           </View>
@@ -52,7 +53,7 @@ const SettingsSteps: React.FC = () => {
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled">
-        {/*<Text style={styles.title}>Добро пожаловать</Text>*/}
+        {/*<CustomText style={styles.title}>Добро пожаловать</CustomText>*/}
         {step !== 6 && renderStepIndicators()}
         {step === 1 && <GoalForm onNext={handleNext} />}
         {step === 2 && (

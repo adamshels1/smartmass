@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import i18n from 'shared/config/i18n';
 import {useNavigation} from '@react-navigation/core';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface InformationSourcesButtonProps {}
 
@@ -15,7 +16,9 @@ const InformationSourcesButton: React.FC<
       style={styles.container}
       // @ts-ignore
       onPress={() => navigation.navigate('SourcesScreen')}>
-      <Text style={styles.text}>{i18n.t('Information Sources')}</Text>
+      <CustomText style={styles.text}>
+        {i18n.t('Information Sources')}
+      </CustomText>
     </TouchableOpacity>
   );
 };

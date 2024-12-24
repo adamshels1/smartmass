@@ -6,7 +6,8 @@ import {fetchLogout} from 'entities/auth/model/authSlice.ts';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import MenuItem from './MenuItem.tsx';
 import {AppNavigation} from 'shared/config/navigation';
-import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts'; // Adjust the import path
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx'; // Adjust the import path
 
 export const SettingsMenu: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -14,7 +15,7 @@ export const SettingsMenu: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Настройки</Text>
+      <CustomText style={styles.title}>Настройки</CustomText>
 
       {/* User Info Section */}
       <View style={styles.userInfoContainer}>
@@ -23,14 +24,14 @@ export const SettingsMenu: React.FC = () => {
           style={styles.avatar}
         />
         <View style={styles.userInfoTextContainer}>
-          <Text style={styles.userName}>{user?.name}</Text>
-          <Text style={styles.userEmail}>{user?.email}</Text>
+          <CustomText style={styles.userName}>{user?.name}</CustomText>
+          <CustomText style={styles.userEmail}>{user?.email}</CustomText>
         </View>
       </View>
 
       {/* Profile Section */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Меню</Text>
+        <CustomText style={styles.sectionTitle}>Меню</CustomText>
         <MenuItem title="Цель" navigationTarget={AppNavigation.GOAL} />
         <MenuItem
           title="Персональные данные"

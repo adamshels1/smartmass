@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {BackIcon} from 'shared/assets/icons';
 
 interface Props {
-  title: string;
+  title?: string;
   showBackButton?: boolean;
 }
 

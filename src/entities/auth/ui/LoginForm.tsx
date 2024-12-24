@@ -16,6 +16,7 @@ import {loginWithEmail} from 'entities/auth/model/authSlice.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -68,14 +69,14 @@ const SignInScreen = () => {
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>С возвращением</Text>
-        <Text style={styles.subtitle}>Войдите в ваш аккаунт</Text>
+        <CustomText style={styles.title}>С возвращением</CustomText>
+        <CustomText style={styles.subtitle}>Войдите в ваш аккаунт</CustomText>
 
         <GoogleSigninButton2 />
 
-        <Text style={styles.dividerText}>
+        <CustomText style={styles.dividerText}>
           Или войдите при помощи email аккаунта
-        </Text>
+        </CustomText>
 
         <CustomTextInput
           placeholder="Адрес электронной почты"
@@ -90,10 +91,12 @@ const SignInScreen = () => {
           secureTextEntry
         />
 
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {error ? (
+          <CustomText style={styles.errorText}>{error}</CustomText>
+        ) : null}
 
         <TouchableOpacity>
-          <Text style={styles.forgotPassword}>Я забыл пароль</Text>
+          <CustomText style={styles.forgotPassword}>Я забыл пароль</CustomText>
         </TouchableOpacity>
 
         <CustomButton

@@ -6,6 +6,7 @@ import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 export const SuccessEmailVerification = () => {
   const navigation = useAppNavigation();
@@ -13,7 +14,9 @@ export const SuccessEmailVerification = () => {
   return (
     <View style={styles.container}>
       <View style={styles.slide}>
-        <Text style={styles.text}>Поздравляем с успешной регистрацией</Text>
+        <CustomText style={styles.text}>
+          Поздравляем с успешной регистрацией
+        </CustomText>
         <LottieView
           style={{
             width: 300, // Adjust width for different animations

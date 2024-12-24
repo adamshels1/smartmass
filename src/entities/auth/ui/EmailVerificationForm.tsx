@@ -23,6 +23,7 @@ import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import {sleep} from 'shared/lib/utils/sleep.js';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const EmailVerificationForm: React.FC = () => {
   const [code, setCode] = useState(['', '', '', '']);
@@ -75,20 +76,14 @@ const EmailVerificationForm: React.FC = () => {
       .then(async () => {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
-          title: 'Успех',
-          textBody: 'Код успешно верифицирован!',
+          title: 'Подтверждение Email',
+          textBody: 'Ваш email успешно подтвержден!',
         });
         // await sleep(2000);
         // Автоматическая авторизация после успешной верификации
         dispatch(loginWithEmail({email, password}))
           .unwrap()
           .then(async () => {
-            await sleep(100);
-            Toast.show({
-              type: ALERT_TYPE.SUCCESS,
-              title: 'Успех',
-              textBody: 'Вы успешно авторизовались!',
-            });
             navigation.navigate(AppNavigation.SETTINGS_MENU); // Замените 'Home' на название экрана после авторизации
           })
           .catch((error: any) => {
@@ -145,11 +140,11 @@ const EmailVerificationForm: React.FC = () => {
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled">
-          <Text style={styles.title}>Подтвердите Email</Text>
-          <Text style={styles.subtitle}>
+          <CustomText style={styles.title}>Подтвердите Email</CustomText>
+          <CustomText style={styles.subtitle}>
             Мы отправили код вам на почту. Введите его в поле ниже чтобы
             подтвердить ваш аккаунт
-          </Text>
+          </CustomText>
           <View style={styles.codeContainer}>
             {code.map((digit, index) => (
               <TextInput
@@ -170,18 +165,20 @@ const EmailVerificationForm: React.FC = () => {
             style={styles.verifyButton}
             disabled={loading}
           />
-          <Text style={styles.infoText}>
+          <CustomText style={styles.infoText}>
             Не пришла почта? Проверьте папку спам или{' '}
             {timer > 0 ? (
-              <Text style={styles.timerText}>
+              <CustomText style={styles.timerText}>
                 Отправить повторно через {timer} сек
-              </Text>
+              </CustomText>
             ) : (
               <TouchableOpacity onPress={handleResendCode}>
-                <Text style={styles.resendText}>Отправить повторно</Text>
+                <CustomText style={styles.resendText}>
+                  Отправить повторно
+                </CustomText>
               </TouchableOpacity>
             )}
-          </Text>
+          </CustomText>
         </ScrollView>
       </KeyboardAvoidingView>
     </>

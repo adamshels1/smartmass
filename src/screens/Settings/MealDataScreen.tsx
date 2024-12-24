@@ -7,16 +7,21 @@ import {
   ScrollView,
 } from 'react-native';
 import MealDataForm from 'features/settings/ui/MealDataForm.tsx';
+import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
+import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 
 const MealDataScreen: React.FC = () => {
   return (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <MealDataForm />
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <AppLayout>
+      <AppHeader title="Прием пищи" />
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <MealDataForm />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </AppLayout>
   );
 };
 

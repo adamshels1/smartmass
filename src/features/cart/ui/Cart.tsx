@@ -6,6 +6,7 @@ import {RootState} from 'app/providers/StoreProvider';
 import moment from 'moment';
 import {Meal} from 'entities/meal/model/types/mealTypes.ts';
 import 'moment/locale/ru';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 moment.locale('ru');
 
 const Cart = () => {
@@ -22,7 +23,7 @@ const Cart = () => {
 
   useEffect(() => {
     const allItems = mealsDetails.flatMap(mealDetail =>
-      mealDetail.mealDetail.ingredients.map((ingredient, index) => ({
+      mealDetail?.mealDetail?.ingredients.map((ingredient, index) => ({
         id: `${mealDetail.id}-${index}`,
         name: ingredient.name,
         quantity: `${ingredient.amount} ${ingredient.units}`,
@@ -69,7 +70,7 @@ const Cart = () => {
     const isPast = momentDate.isBefore(moment(), 'day');
     const formattedDate = momentDate.format('D MMMM, dddd');
     return isPast ? (
-      <Text style={styles.checkedText}>{formattedDate}</Text>
+      <CustomText style={styles.checkedText}>{formattedDate}</CustomText>
     ) : (
       formattedDate
     );
@@ -84,22 +85,24 @@ const Cart = () => {
       onPress={() => toggleCheckBox(item.id)}
       style={styles.itemContainer}>
       <CheckBox value={item.checked} onPress={() => toggleCheckBox(item.id)} />
-      <Text style={[styles.itemText, item.checked && styles.checkedText]}>
+      <CustomText style={[styles.itemText, item.checked && styles.checkedText]}>
         {item.name}
-      </Text>
-      <Text style={styles.quantityText}>{item.quantity}</Text>
+      </CustomText>
+      <CustomText style={styles.quantityText}>{item.quantity}</CustomText>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Список продуктов</Text>
+      <CustomText style={styles.title}>Список продуктов</CustomText>
       <FlatList
         data={shoppingData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>{formatDate(item.date)}</Text>
+            <CustomText style={styles.sectionTitle}>
+              {formatDate(item.date)}
+            </CustomText>
             <FlatList
               data={item.items}
               keyExtractor={subItem => subItem.id}
@@ -109,7 +112,9 @@ const Cart = () => {
         )}
       />
       <TouchableOpacity style={styles.confirmButton}>
-        <Text style={styles.confirmButtonText}>Подтвердить покупку</Text>
+        <CustomText style={styles.confirmButtonText}>
+          Подтвердить покупку
+        </CustomText>
       </TouchableOpacity>
     </View>
   );

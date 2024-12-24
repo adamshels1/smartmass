@@ -12,6 +12,7 @@ import {LightningIcon} from 'shared/assets/icons';
 import {SkeletonLoader} from 'shared/ui';
 import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 import {AppNavigation} from 'shared/config/navigation';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const MealDetails = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ const MealDetails = () => {
   }
 
   if (status === 'failed') {
-    return <Text>Error: {error}</Text>;
+    return <CustomText>Error: {error}</CustomText>;
   }
 
   if (!mealDetail) {
@@ -78,10 +79,10 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0">
                 {() => <LightningIcon />}
               </AnimatedCircularProgress>
-              <Text style={styles.nutritionText}>
+              <CustomText style={styles.nutritionText}>
                 Calorie{'\n'}
                 {mealDetail.dishCalories || 0} Kcal
-              </Text>
+              </CustomText>
             </View>
             <View style={styles.nutritionItem}>
               <AnimatedCircularProgress
@@ -93,10 +94,10 @@ const MealDetails = () => {
                 tintColor="#1E90FF"
                 backgroundColor="#E0E0E0"
               />
-              <Text style={styles.nutritionText}>
+              <CustomText style={styles.nutritionText}>
                 Protein{'\n'}
                 {mealDetail?.mealDetail?.proteins || 0}g
-              </Text>
+              </CustomText>
             </View>
             <View style={styles.nutritionItem}>
               <AnimatedCircularProgress
@@ -106,10 +107,10 @@ const MealDetails = () => {
                 tintColor="#FFD700"
                 backgroundColor="#E0E0E0"
               />
-              <Text style={styles.nutritionText}>
+              <CustomText style={styles.nutritionText}>
                 Fat{'\n'}
                 {mealDetail?.mealDetail?.fats || 0}g
-              </Text>
+              </CustomText>
             </View>
             <View style={styles.nutritionItem}>
               <AnimatedCircularProgress
@@ -123,18 +124,18 @@ const MealDetails = () => {
                 tintColor="#32CD32"
                 backgroundColor="#E0E0E0"
               />
-              <Text style={styles.nutritionText}>
+              <CustomText style={styles.nutritionText}>
                 Carbohydrates{'\n'}
                 {mealDetail?.mealDetail?.carbohydrates || 0}g
-              </Text>
+              </CustomText>
             </View>
           </View>
 
           {/* Nutrition Facts */}
           <View style={styles.nutritionFacts}>
-            <Text style={styles.nutritionFactsText}>
+            <CustomText style={styles.nutritionFactsText}>
               {mealDetail?.mealDetail?.fullRecipe}
-            </Text>
+            </CustomText>
           </View>
         </View>
       </ScrollView>

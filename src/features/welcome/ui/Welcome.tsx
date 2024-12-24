@@ -8,6 +8,7 @@ import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 export const Welcome = () => {
   const dispatch = useAppDispatch();
@@ -55,7 +56,7 @@ export const Welcome = () => {
         onIndexChanged={index => setCurrentIndex(index)}>
         {slides.map((slide, index) => (
           <View style={styles.slide} key={index}>
-            <Text style={styles.text}>{slide.text}</Text>
+            <CustomText style={styles.text}>{slide.text}</CustomText>
             <LottieView
               style={{
                 width: index === 0 ? 200 : 300, // Adjust width for different animations

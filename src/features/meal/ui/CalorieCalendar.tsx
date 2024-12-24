@@ -10,6 +10,7 @@ import {DayMeals} from 'entities/meal/model/types/mealTypes.ts';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {isDateToday} from 'shared/lib/utils/date.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const CalorieCalendar = () => {
   const dispatch = useAppDispatch();
@@ -39,18 +40,20 @@ const CalorieCalendar = () => {
         style={styles.card}>
         <View
           style={isToday ? styles.todayDateContainer : styles.dateContainer}>
-          <Text style={isToday ? styles.todayDate : styles.date}>
+          <CustomText style={isToday ? styles.todayDate : styles.date}>
             {moment(item.date).format('DD')}
-          </Text>
+          </CustomText>
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.day}>{moment(item.date).format('dddd')}</Text>
+          <CustomText style={styles.day}>
+            {moment(item.date).format('dddd')}
+          </CustomText>
           <ProgressBar
             progress={progress}
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <Text style={styles.kcal}>{item?.takenCalories}kcal</Text>
+          <CustomText style={styles.kcal}>{item?.takenCalories}kcal</CustomText>
         </View>
         <View style={styles.actionContainer}>
           <View style={styles.square} />
@@ -72,11 +75,15 @@ const CalorieCalendar = () => {
         }
         style={[styles.card, styles.footerCard]}>
         <View style={styles.dateContainer}>
-          <Text style={styles.date}>{moment(nextDate).format('DD')}</Text>
+          <CustomText style={styles.date}>
+            {moment(nextDate).format('DD')}
+          </CustomText>
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.day}>{moment(nextDate).format('dddd')}</Text>
-          <Text style={styles.day}>Запланировать рацион</Text>
+          <CustomText style={styles.day}>
+            {moment(nextDate).format('dddd')}
+          </CustomText>
+          <CustomText style={styles.day}>Запланировать рацион</CustomText>
         </View>
       </TouchableOpacity>
     );
@@ -84,8 +91,8 @@ const CalorieCalendar = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.month}>Ноябрь, 2024</Text>
-      <Text style={styles.week}>Четвертая неделя</Text>
+      <CustomText style={styles.month}>Ноябрь, 2024</CustomText>
+      <CustomText style={styles.week}>Четвертая неделя</CustomText>
       <FlatList
         data={daysWithMeals}
         renderItem={renderItem}
@@ -94,7 +101,9 @@ const CalorieCalendar = () => {
         ListFooterComponent={renderFooter}
       />
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Получить диету на неделю</Text>
+        <CustomText style={styles.buttonText}>
+          Получить диету на неделю
+        </CustomText>
       </TouchableOpacity>
     </View>
   );

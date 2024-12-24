@@ -7,6 +7,7 @@ import moment from 'moment';
 import UnplannedMealModal from 'features/meal/ui/dailyMeals/UnplannedMealModal.tsx';
 import {BackIcon} from 'shared/assets/icons';
 import {useNavigation} from '@react-navigation/native';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface DateProgressComponentProps {
   date: string;
@@ -34,16 +35,18 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
       )}
 
       <View>
-        <Text style={styles.dateText}>
+        <CustomText style={styles.dateText}>
           {moment(date).format('DD MMMM, dddd')}
-        </Text>
+        </CustomText>
         <View style={styles.progressContainer}>
           <ProgressBar
             progress={progress}
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <Text style={styles.kcalProgress}>{day?.takenCalories} ккал</Text>
+          <CustomText style={styles.kcalProgress}>
+            {day?.takenCalories} ккал
+          </CustomText>
         </View>
       </View>
 

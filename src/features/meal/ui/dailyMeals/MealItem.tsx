@@ -18,6 +18,7 @@ import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {updateIsMealTaken} from 'entities/meal/model/api/mealApi.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface MealItemProps {
   item: Meal;
@@ -98,17 +99,17 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     if (item.isMealTaken === null && isPastTime) {
       return (
         <View style={styles.mealActions}>
-          <Text>Был ли принят прием пищи?</Text>
+          <CustomText>Был ли принят прием пищи?</CustomText>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => handleUpdateIsMealTaken(true)}
               style={styles.button}>
-              <Text>Да</Text>
+              <CustomText>Да</CustomText>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleUpdateIsMealTaken(false)}
               style={styles.button}>
-              <Text>Нет</Text>
+              <CustomText>Нет</CustomText>
             </TouchableOpacity>
           </View>
         </View>
@@ -119,9 +120,9 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
   return (
     <>
       {isCurrentMeal && (
-        <Text style={styles.timer}>
+        <CustomText style={styles.timer}>
           До следующего приема пищи: {getTimeUntilNextMeal()}
-        </Text>
+        </CustomText>
       )}
       <TouchableOpacity
         onPress={() =>
@@ -135,11 +136,13 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
           height={80}
         />
         <View style={styles.mealInfo}>
-          <Text style={styles.mealTime}>
+          <CustomText style={styles.mealTime}>
             {item.time} - {item.name}
-          </Text>
-          <Text style={styles.mealTime}>{item.dish}</Text>
-          <Text style={styles.mealKcal}>{item.dishCalories} ккал</Text>
+          </CustomText>
+          <CustomText style={styles.mealTime}>{item.dish}</CustomText>
+          <CustomText style={styles.mealKcal}>
+            {item.dishCalories} ккал
+          </CustomText>
           {renderMealTakenButtons()}
         </View>
 

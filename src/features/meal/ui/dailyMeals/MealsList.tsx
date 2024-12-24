@@ -33,7 +33,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
   }
 
   // if (status === 'failed') {
-  //   return <Text>Error: {error}</Text>;
+  //   return <CustomText>Error: {error}</CustomText>;
   // }
 
   const meals =
