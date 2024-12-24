@@ -11,6 +11,8 @@ import {
   VerifyEmailResponse,
 } from '../types/authTypes.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {resetMealState} from 'entities/meal/model/slices/mealSlice.ts';
+import {resetUserDetailsState} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
 
 const initialState: AuthState = {
   user: null,
@@ -98,11 +100,13 @@ export const fetchAuth = createAsyncThunk(
 // Действие для выхода из аккаунта
 export const fetchLogout = createAsyncThunk(
   'auth/fetchLogout',
-  async (_, {rejectWithValue}) => {
+  async (_, thunkAPI) => {
     try {
       await AsyncStorage.removeItem('userToken');
+      thunkAPI.dispatch(resetMealState());
+      thunkAPI.dispatch(resetUserDetailsState());
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   },
 );

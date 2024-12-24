@@ -77,6 +77,7 @@ const userDetailsSlice = createSlice({
     updateDailyCalories: (state, action: PayloadAction<number>) => {
       state.userDetails.dailyCalories = action.payload;
     },
+    resetUserDetailsState: () => initialState,
   },
   extraReducers: builder => {
     builder
@@ -110,6 +111,7 @@ export const {
   updateMealData,
   updateFoodPreferences,
   updateDailyCalories,
+  resetUserDetailsState,
 } = userDetailsSlice.actions;
 
 export default userDetailsSlice.reducer;
