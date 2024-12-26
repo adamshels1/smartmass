@@ -11,6 +11,7 @@ export const generateDailyMeals = async (
   date: string,
   mealCount: number,
   totalCalories: number,
+  description: string,
 ): Promise<MealResponse> => {
   try {
     const response = await apiInstance.post<MealResponse>(
@@ -19,6 +20,7 @@ export const generateDailyMeals = async (
         date,
         mealCount,
         totalCalories,
+        description,
       },
     );
     console.log('response', response);

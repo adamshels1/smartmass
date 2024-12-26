@@ -8,6 +8,7 @@ import {
   getMealDetails,
 } from '../api/mealApi.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {RootState} from 'app/providers/StoreProvider';
 
 const initialState: MealsState = {
   days: [],
@@ -41,24 +42,25 @@ export const fetchDaysWithMeals = createAsyncThunk(
   },
 );
 
-export const initiateGenerateDailyMeals = createAsyncThunk(
+export const initiateGenerateDailyMeals = createAsyncThunk<
+  void, // Тип возвращаемого значения
+  {date: string; description: string}, // Тип параметров
+  {state: RootState} // Тип thunkAPI
+>(
   'meals/generateDailyMeals',
-  async (
-    params: {
-      date: string;
-      mealCount: number;
-      totalCalories: number;
-    },
-    {dispatch},
-  ) => {
+  async ({date, description}, {dispatch, getState}) => {
     try {
-      await generateDailyMeals(
-        params.date,
-        params.mealCount,
-        params.totalCalories,
-      );
-      dispatch(fetchDailyMeals({date: params.date}));
-    } catch (error) {
+      const {maxMealPerDay, dailyCalories} = getState().userDetails.userDetails;
+      if (maxMealPerDay && dailyCalories) {
+        await generateDailyMeals(
+          date,
+          maxMealPerDay,
+          dailyCalories,
+          description,
+        );
+        dispatch(fetchDailyMeals({date}));
+      }
+    } catch (error: any) {
       console.error('Failed to generate daily meals:', error);
 
       // Показать сообщение об ошибке от сервера

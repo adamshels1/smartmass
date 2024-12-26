@@ -94,6 +94,7 @@ const TagsInput: FC<TagsInputProps> = ({
       />
       <ScrollView
         contentContainerStyle={styles.tagsContainer}
+        keyboardShouldPersistTaps="handled"
         horizontal={false}>
         <View style={styles.tagsWrapper}>
           {tags.map((tag, index) => (
@@ -111,6 +112,7 @@ const TagsInput: FC<TagsInputProps> = ({
       </ScrollView>
 
       <FlatList
+        style={{maxHeight: 300}}
         data={suggestions}
         renderItem={({item}) => (
           <TouchableOpacity onPress={() => addTag(item)}>
