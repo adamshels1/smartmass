@@ -49,9 +49,11 @@ export const getDailyMeals = async (date: string): Promise<MealResponse> => {
   }
 };
 
-export const updateMeal = async (meal: Meal): Promise<void> => {
+export const updateMeal = async (id: number): Promise<void> => {
   try {
-    const response = await apiInstance.put('/meal/updateMeal', meal);
+    const response = await apiInstance.put('/meal/updateMeal', {
+      id,
+    });
     console.log('Meal updated successfully:', response.data);
   } catch (error) {
     console.error('Error updating meal:', error);
@@ -126,6 +128,24 @@ export const getMealDetails = async (mealId: number): Promise<any> => {
     return response.data;
   } catch (error) {
     console.error('Error getting days with meals:', error);
+    throw error;
+  }
+};
+
+export const updateMealRequests = async (
+  mealId: number,
+  requestDescription: string,
+  requestIngredients: string[],
+): Promise<any> => {
+  try {
+    const response = await apiInstance.put<any>('/meal/updateMealRequests', {
+      mealId,
+      requestDescription,
+      requestIngredients,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating meal status:', error);
     throw error;
   }
 };

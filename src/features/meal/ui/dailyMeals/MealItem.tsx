@@ -19,6 +19,7 @@ import {updateIsMealTaken} from 'entities/meal/model/api/mealApi.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import {UpdateMealModal} from 'features/meal/ui/dailyMeals/UpdateMealModal.tsx';
 
 interface MealItemProps {
   item: Meal;
@@ -63,7 +64,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
   const handleUpdateMeal = async () => {
     setLoading(true);
     try {
-      await dispatch(initiateUpdateMeal(item));
+      await dispatch(initiateUpdateMeal(item.id));
       await dispatch(fetchDailyMeals({date: item.date}));
     } finally {
       setLoading(false);
@@ -76,16 +77,19 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     }
     if (!isPastTime && item.isPlanned) {
       return (
-        <TouchableOpacity
-          style={styles.refreshButton}
-          onPress={handleUpdateMeal}
-          disabled={loading}>
-          {loading ? (
-            <ActivityIndicator size="small" color="gray" />
-          ) : (
-            <RefreshIcon width={25} height={25} fill={'gray'} />
-          )}
-        </TouchableOpacity>
+        <View>
+          <UpdateMealModal item={item} />
+          <TouchableOpacity
+            style={styles.refreshButton}
+            onPress={handleUpdateMeal}
+            disabled={loading}>
+            {loading ? (
+              <ActivityIndicator size="small" color="gray" />
+            ) : (
+              <RefreshIcon width={25} height={25} />
+            )}
+          </TouchableOpacity>
+        </View>
       );
     }
   };

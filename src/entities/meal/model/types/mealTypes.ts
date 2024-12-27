@@ -10,6 +10,8 @@ export interface Meal {
   dishEn: string;
   dishCalories: number;
   recipe: string;
+  requestDescription: string;
+  requestIngredients: string[];
   createdAt: Date;
   updatedAt: Date;
   mealDetail?: MealDetails;

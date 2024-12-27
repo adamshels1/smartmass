@@ -77,8 +77,8 @@ export const initiateGenerateDailyMeals = createAsyncThunk<
 
 export const initiateUpdateMeal = createAsyncThunk(
   'meals/updateMeal',
-  async (meal: Meal) => {
-    await updateMeal(meal);
+  async (id: number) => {
+    await updateMeal(id);
   },
 );
 
