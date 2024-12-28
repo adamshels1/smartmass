@@ -43,9 +43,9 @@ export const fetchDaysWithMeals = createAsyncThunk(
 );
 
 export const initiateGenerateDailyMeals = createAsyncThunk<
-  void, // Тип возвращаемого значения
-  {date: string; description: string}, // Тип параметров
-  {state: RootState} // Тип thunkAPI
+  void,
+  {date: string; description: string},
+  {state: RootState}
 >(
   'meals/generateDailyMeals',
   async ({date, description}, {dispatch, getState}) => {
@@ -63,7 +63,6 @@ export const initiateGenerateDailyMeals = createAsyncThunk<
     } catch (error: any) {
       console.error('Failed to generate daily meals:', error);
 
-      // Показать сообщение об ошибке от сервера
       Toast.show({
         type: ALERT_TYPE.DANGER,
         title: error.response?.data?.message || 'Ошибка',
@@ -79,6 +78,32 @@ export const initiateUpdateMeal = createAsyncThunk(
   'meals/updateMeal',
   async (id: number) => {
     await updateMeal(id);
+  },
+);
+
+export const fetchUnloadedMealsDetails = createAsyncThunk(
+  'meals/fetchUnloadedMealsDetails',
+  async (_, {getState, dispatch}) => {
+    const state = getState() as RootState;
+    const now = new Date();
+    const futureMeals: Meal[] = [];
+
+    state.meal.days.forEach(day => {
+      day.meals.forEach(meal => {
+        const mealTime = new Date(`${day.date}T${meal.time}`);
+        if (
+          mealTime > now &&
+          !state.meal.mealsDetails.some(detail => detail.id === meal.id)
+        ) {
+          futureMeals.push(meal);
+        }
+      });
+    });
+
+    // Выполнение запросов последовательно
+    for (const meal of futureMeals) {
+      await dispatch(fetchMealDetails({mealId: meal.id})).unwrap();
+    }
   },
 );
 
@@ -174,6 +199,16 @@ const mealsSlice = createSlice({
       .addCase(fetchMealDetails.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message ?? 'Failed to fetch meal details';
+      })
+      .addCase(fetchUnloadedMealsDetails.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUnloadedMealsDetails.fulfilled, state => {
+        state.status = 'succeeded';
+      })
+      .addCase(fetchUnloadedMealsDetails.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? 'Failed to fetch future meals';
       });
   },
 });

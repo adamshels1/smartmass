@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
 import CheckBox from './Checkbox';
 import {useAppSelector} from 'shared/lib/state/selector/useAppSelector';
 import {RootState} from 'app/providers/StoreProvider';
@@ -8,9 +8,15 @@ import {Meal} from 'entities/meal/model/types/mealTypes.ts';
 import 'moment/locale/ru';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts';
-import {updateMealDetailsLocally} from 'entities/meal/model/slices/mealSlice.ts';
+import {
+  fetchUnloadedMealsDetails,
+  updateMealDetailsLocally,
+} from 'entities/meal/model/slices/mealSlice.ts';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {FilterIcon} from 'shared/assets/icons';
+import LottieView from 'lottie-react-native';
+import i18n from 'shared/config/i18n';
+import {useFocusEffect} from '@react-navigation/native';
 
 moment.locale('ru');
 
@@ -19,6 +25,7 @@ const Cart = () => {
   const mealsDetails = useAppSelector(
     (state: RootState) => state.meal.mealsDetails as Meal[],
   );
+  const status = useAppSelector((state: RootState) => state.meal.status);
 
   // Локальное состояние для хранения данных покупок
   const [shoppingData, setShoppingData] = useState<
@@ -42,6 +49,13 @@ const Cart = () => {
     from: moment().startOf('month').format('YYYY-MM-DD'),
     to: moment().endOf('month').format('YYYY-MM-DD'),
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      //Здесь мы получаем продукты
+      dispatch(fetchUnloadedMealsDetails());
+    }, [dispatch]),
+  );
 
   useEffect(() => {
     const allItems = mealsDetails.flatMap(mealDetail =>
@@ -251,24 +265,42 @@ const Cart = () => {
           <FilterIcon width={30} height={30} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={shoppingData}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <View style={styles.sectionContainer}>
-            <CustomText style={styles.sectionTitle}>
-              {groupByDate
-                ? formatDate(item.date)
-                : `Даты: ${formatRange(dateRange.from, dateRange.to)}`}
-            </CustomText>
-            <FlatList
-              data={item.items}
-              keyExtractor={subItem => subItem.id}
-              renderItem={renderItem}
-            />
-          </View>
-        )}
-      />
+      {status === 'loading' ? (
+        <View>
+          <Text style={styles.loadingText}>
+            Фомирование корзины, это может занять некоторое время
+          </Text>
+          <LottieView
+            style={{
+              width: 300,
+              height: 300,
+              alignSelf: 'center',
+            }}
+            source={require('shared/assets/animations/1715423113634.json')} // Путь к файлу анимации
+            autoPlay
+            loop
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={shoppingData}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => (
+            <View style={styles.sectionContainer}>
+              <CustomText style={styles.sectionTitle}>
+                {groupByDate
+                  ? formatDate(item.date)
+                  : `Даты: ${formatRange(dateRange.from, dateRange.to)}`}
+              </CustomText>
+              <FlatList
+                data={item.items}
+                keyExtractor={subItem => subItem.id}
+                renderItem={renderItem}
+              />
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -327,6 +359,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'normal',
+  },
+  loadingText: {
+    textAlign: 'center',
+    marginTop: 40,
+    color: '#67CFCF',
+    fontSize: 20,
   },
 });
 

@@ -100,11 +100,6 @@ const CalorieCalendar = () => {
         contentContainerStyle={styles.list}
         ListFooterComponent={renderFooter}
       />
-      <TouchableOpacity style={styles.button}>
-        <CustomText style={styles.buttonText}>
-          Получить диету на неделю
-        </CustomText>
-      </TouchableOpacity>
     </View>
   );
 };
