@@ -14,10 +14,7 @@ import {Meal} from 'entities/meal/model/types/mealTypes.ts';
 import 'moment/locale/ru';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts'; // Импорт API функции
-import {
-  fetchMealDetails,
-  updateMealDetailsLocally,
-} from 'entities/meal/model/slices/mealSlice.ts'; // Импорт экшена
+import {updateMealDetailsLocally} from 'entities/meal/model/slices/mealSlice.ts'; // Импорт экшена
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts'; // Импорт диспатча
 
 moment.locale('ru');
@@ -32,7 +29,13 @@ const Cart = () => {
   const [shoppingData, setShoppingData] = useState<
     {
       date: string;
-      items: {id: string; name: string; quantity: string; checked: boolean}[];
+      items: {
+        id: string;
+        name: string;
+        quantity: string;
+        checked: boolean;
+        date: string;
+      }[];
     }[]
   >([]);
 
@@ -74,6 +77,7 @@ const Cart = () => {
         name: string;
         quantity: string;
         checked: boolean;
+        date: string;
       }[];
     }>((acc, item) => {
       const key = groupByDate ? item.date : 'all';
@@ -136,7 +140,7 @@ const Cart = () => {
     try {
       const updatedMealsDetails = mealsDetails.map(mealDetail => {
         if (groupByDate && date) {
-          if (mealDetail.date === date) {
+          if (mealDetail.date === date && mealDetail.mealDetail) {
             const updatedIngredients = mealDetail.mealDetail.ingredients.map(
               ingredient =>
                 ingredient.name === name
@@ -151,7 +155,7 @@ const Cart = () => {
               },
             };
           }
-        } else {
+        } else if (mealDetail.mealDetail) {
           const updatedIngredients = mealDetail.mealDetail.ingredients.map(
             ingredient =>
               ingredient.name === name ? {...ingredient, checked} : ingredient,
@@ -171,7 +175,7 @@ const Cart = () => {
 
       for (const mealDetail of mealsDetails) {
         if (groupByDate && date) {
-          if (mealDetail.date === date) {
+          if (mealDetail.date === date && mealDetail.mealDetail) {
             const ingredient = mealDetail.mealDetail.ingredients.find(
               ingredient => ingredient.name === name,
             );
@@ -179,7 +183,7 @@ const Cart = () => {
               await updateIngredientChecked(mealDetail.id, name, checked);
             }
           }
-        } else {
+        } else if (mealDetail.mealDetail) {
           const ingredient = mealDetail.mealDetail.ingredients.find(
             ingredient => ingredient.name === name,
           );
@@ -188,7 +192,7 @@ const Cart = () => {
           }
         }
       }
-      // Закомментируем следующую часть кода:
+      // Закомментируем следующую часть кода для быстрой работы чтобы постоянно не дергалась API:
       // for (const mealDetail of mealsDetails) {
       //   dispatch(fetchMealDetails({ mealId: mealDetail.id }));
       // }
