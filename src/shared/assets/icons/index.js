@@ -10,6 +10,8 @@ import RefreshIcon from './refresh3.svg';
 import CheckIcon from './check.svg';
 import LightningIcon from './lightning.svg';
 import EditIcon from './edit.svg';
+import TimeIcon from './time.svg';
+import FilterIcon from './filter.svg';
 
 export {
   BackIcon,
@@ -24,4 +26,6 @@ export {
   CheckIcon,
   LightningIcon,
   EditIcon,
+  TimeIcon,
+  FilterIcon,
 };

@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {BackIcon} from 'shared/assets/icons';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface Props {
   title?: string;
@@ -24,9 +25,9 @@ export const AppHeader = ({title, showBackButton = true}: Props) => {
           <BackIcon />
         </TouchableOpacity>
       )}
-      <Text style={styles.title} numberOfLines={1}>
+      <CustomText style={styles.title} numberOfLines={1}>
         {title}
-      </Text>
+      </CustomText>
     </View>
   );
 };

@@ -35,7 +35,7 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
       )}
 
       <View>
-        <CustomText style={styles.dateText}>
+        <CustomText numberOfLines={1} style={styles.dateText}>
           {moment(date).format('DD MMMM, dddd')}
         </CustomText>
         <View style={styles.progressContainer}>
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 24,
     fontWeight: 'normal',
+    width: 235,
   },
   progressContainer: {
     flexDirection: 'row',

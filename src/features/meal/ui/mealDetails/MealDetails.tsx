@@ -8,7 +8,7 @@ import {fetchMealDetails} from 'entities/meal/model/slices/mealSlice'; // Имп
 import {RootState} from 'app/providers/StoreProvider/config/store';
 import {useSelector} from 'react-redux';
 import ImagePexels from 'shared/ui/ImageByDescription/ui/ImagePixabay.tsx';
-import {LightningIcon} from 'shared/assets/icons';
+import {LightningIcon, TimeIcon} from 'shared/assets/icons';
 import {SkeletonLoader} from 'shared/ui';
 import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 import {AppNavigation} from 'shared/config/navigation';
@@ -23,13 +23,6 @@ const MealDetails = () => {
   const mealDetail = useAppSelector((state: RootState) =>
     state.meal.mealsDetails.find(meal => meal.id === mealId),
   );
-
-  // const meal = useAppSelector((state: RootState) => {
-  //   const day = state.meal.days.find(day =>
-  //     day.meals.some(meal => meal.id === mealId),
-  //   );
-  //   return day ? day.meals.find(meal => meal.id === mealId) : undefined;
-  // });
 
   useEffect(() => {
     dispatch(fetchMealDetails({mealId}));
@@ -49,7 +42,7 @@ const MealDetails = () => {
 
   return (
     <>
-      <AppHeader title={mealDetail?.name} />
+      <AppHeader title={`${mealDetail.time} - ${mealDetail.name}`} />
       <ScrollView style={styles.container}>
         {/* Image */}
         <View style={{alignItems: 'center', marginTop: 10}}>
@@ -60,6 +53,27 @@ const MealDetails = () => {
             height={300}
             size={'large'}
           />
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              left: 40,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              padding: 5,
+              borderRadius: 2,
+              width: '87%',
+            }}>
+            <CustomText style={{color: '#fff', fontSize: 18}}>
+              {mealDetail.dish}
+            </CustomText>
+            <View style={{flexDirection: 'row', marginTop: 3}}>
+              <TimeIcon width={20} height={20} />
+              <CustomText
+                style={{color: '#fff', fontSize: 18, bottom: 1, marginLeft: 5}}>
+                {mealDetail.mealDetail?.cookingTime}
+              </CustomText>
+            </View>
+          </View>
         </View>
 
         {/* Nutrition Details */}
@@ -80,7 +94,7 @@ const MealDetails = () => {
                 {() => <LightningIcon />}
               </AnimatedCircularProgress>
               <CustomText style={styles.nutritionText}>
-                Calorie{'\n'}
+                Калории{'\n'}
                 {mealDetail.dishCalories || 0} Kcal
               </CustomText>
             </View>
@@ -95,7 +109,7 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0"
               />
               <CustomText style={styles.nutritionText}>
-                Protein{'\n'}
+                Белки{'\n'}
                 {mealDetail?.mealDetail?.proteins || 0}g
               </CustomText>
             </View>
@@ -108,7 +122,7 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0"
               />
               <CustomText style={styles.nutritionText}>
-                Fat{'\n'}
+                Жиры{'\n'}
                 {mealDetail?.mealDetail?.fats || 0}g
               </CustomText>
             </View>
@@ -125,14 +139,33 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0"
               />
               <CustomText style={styles.nutritionText}>
-                Carbohydrates{'\n'}
+                Углеводы{'\n'}
                 {mealDetail?.mealDetail?.carbohydrates || 0}g
               </CustomText>
             </View>
           </View>
 
+          {/* Ingredients */}
+          <View style={styles.ingredientsContainer}>
+            <CustomText style={styles.ingredientsTitle}>
+              Ингридиенты:
+            </CustomText>
+            {mealDetail?.mealDetail?.ingredients.map((ingredient, index) => (
+              <CustomText
+                key={index}
+                style={[
+                  styles.ingredientText,
+                  ingredient.checked && styles.checkedText,
+                ]}>
+                {ingredient.amount} {ingredient.units} {ingredient.name}
+                {ingredient.checked && ' ✔'}
+              </CustomText>
+            ))}
+          </View>
+
           {/* Nutrition Facts */}
           <View style={styles.nutritionFacts}>
+            <CustomText style={styles.ingredientsTitle}>Рецепт:</CustomText>
             <CustomText style={styles.nutritionFactsText}>
               {mealDetail?.mealDetail?.fullRecipe}
             </CustomText>
@@ -176,6 +209,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: '#333',
+  },
+  ingredientsContainer: {
+    marginBottom: 20,
+  },
+  ingredientsTitle: {
+    fontSize: 18,
+    fontWeight: 'normal',
+    marginBottom: 10,
+    color: '#333',
+  },
+  ingredientText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  checkedText: {
+    textDecorationLine: 'line-through',
+    color: '#888',
   },
   nutritionFacts: {
     marginBottom: 20,

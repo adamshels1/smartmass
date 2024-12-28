@@ -15,7 +15,9 @@ import 'moment/locale/ru';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts'; // Импорт API функции
 import {updateMealDetailsLocally} from 'entities/meal/model/slices/mealSlice.ts'; // Импорт экшена
-import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts'; // Импорт диспатча
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import {Filter} from 'react-native-svg';
+import {FilterIcon} from 'shared/assets/icons'; // Импорт диспатча
 
 moment.locale('ru');
 
@@ -250,10 +252,11 @@ const Cart = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <CustomText style={styles.title}>Список продуктов</CustomText>
-        <Button
-          title="Группировка"
+        <TouchableOpacity
           onPress={() => setGroupByDate(!groupByDate)}
-        />
+          style={{marginTop: 5}}>
+          <FilterIcon width={30} height={30} />
+        </TouchableOpacity>
       </View>
       <FlatList
         data={shoppingData}
@@ -273,11 +276,6 @@ const Cart = () => {
           </View>
         )}
       />
-      <TouchableOpacity style={styles.confirmButton}>
-        <CustomText style={styles.confirmButtonText}>
-          Подтвердить покупку
-        </CustomText>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -301,11 +299,12 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     marginBottom: 16,
+    marginTop: 15,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'normal',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   itemContainer: {
     flexDirection: 'row',
