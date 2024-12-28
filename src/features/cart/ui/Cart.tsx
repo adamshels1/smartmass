@@ -1,11 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import CheckBox from './Checkbox';
 import {useAppSelector} from 'shared/lib/state/selector/useAppSelector';
 import {RootState} from 'app/providers/StoreProvider';
@@ -13,11 +7,10 @@ import moment from 'moment';
 import {Meal} from 'entities/meal/model/types/mealTypes.ts';
 import 'moment/locale/ru';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
-import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts'; // Импорт API функции
-import {updateMealDetailsLocally} from 'entities/meal/model/slices/mealSlice.ts'; // Импорт экшена
+import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts';
+import {updateMealDetailsLocally} from 'entities/meal/model/slices/mealSlice.ts';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
-import {Filter} from 'react-native-svg';
-import {FilterIcon} from 'shared/assets/icons'; // Импорт диспатча
+import {FilterIcon} from 'shared/assets/icons';
 
 moment.locale('ru');
 
@@ -37,6 +30,7 @@ const Cart = () => {
         quantity: string;
         checked: boolean;
         date: string;
+        mealCount: number;
       }[];
     }[]
   >([]);
@@ -49,7 +43,6 @@ const Cart = () => {
     to: moment().endOf('month').format('YYYY-MM-DD'),
   });
 
-  // useEffect для группировки ингредиентов и объединения одинаковых ингредиентов
   useEffect(() => {
     const allItems = mealsDetails.flatMap(mealDetail =>
       mealDetail?.mealDetail?.ingredients
@@ -59,18 +52,14 @@ const Cart = () => {
             quantity: `${ingredient.amount} ${ingredient.units}`,
             checked: ingredient.checked || false,
             date: mealDetail.date,
+            mealCount: 1, // Добавляем mealCount, чтобы учитывать количество приемов пищи
           }))
         : [],
     );
 
     const filteredItems = allItems.filter(item => {
       const itemDate = moment(item.date);
-      return itemDate.isBetween(
-        moment(dateRange.from),
-        moment(dateRange.to),
-        undefined,
-        '[]',
-      );
+      return itemDate.isAfter(moment());
     });
 
     const groupedItems = filteredItems.reduce<{
@@ -80,6 +69,7 @@ const Cart = () => {
         quantity: string;
         checked: boolean;
         date: string;
+        mealCount: number;
       }[];
     }>((acc, item) => {
       const key = groupByDate ? item.date : 'all';
@@ -96,6 +86,7 @@ const Cart = () => {
           existingItem.quantity = `${
             parseFloat(existingAmount) + parseFloat(newAmount)
           } ${existingUnits}`;
+          existingItem.mealCount += 1; // Увеличиваем количество приемов пищи
         } else {
           acc[key].push(item);
         }
@@ -109,13 +100,37 @@ const Cart = () => {
       return acc;
     }, {});
 
-    setShoppingData(
-      Object.entries(groupedItems).map(([key, items]) => ({
+    const sortedShoppingData = Object.entries(groupedItems).map(
+      ([key, items]) => ({
         date: key,
-        items,
-      })),
+        items: items.sort((a, b) => a.name.localeCompare(b.name)), // Сортировка по алфавиту
+      }),
     );
+
+    setShoppingData(sortedShoppingData);
   }, [mealsDetails, groupByDate, dateRange]);
+
+  // Функция форматирования даты с проверкой на валидность
+  const formatDate = (date: string) => {
+    const momentDate = moment(date);
+    if (!momentDate.isValid()) {
+      return '';
+    }
+    const isPast = momentDate.isBefore(moment(), 'day');
+    const formattedDate = momentDate.format('D MMMM, dddd');
+    return isPast ? (
+      <CustomText style={styles.checkedText}>{formattedDate}</CustomText>
+    ) : (
+      formattedDate
+    );
+  };
+
+  // Функция форматирования диапазона дат
+  const formatRange = (from: string, to: string) => {
+    const fromDate = moment(from).format('D MMMM');
+    const toDate = moment(to).format('D MMMM');
+    return `${fromDate} - ${toDate}`;
+  };
 
   // Функция для переключения состояния чекбокса
   const toggleCheckBox = async (
@@ -194,32 +209,9 @@ const Cart = () => {
           }
         }
       }
-      // Закомментируем следующую часть кода для быстрой работы чтобы постоянно не дергалась API:
-      // for (const mealDetail of mealsDetails) {
-      //   dispatch(fetchMealDetails({ mealId: mealDetail.id }));
-      // }
     } catch (error) {
       console.error('Ошибка при обновлении статуса ингредиента:', error);
     }
-  };
-
-  // Функция форматирования даты
-  const formatDate = (date: string) => {
-    const momentDate = moment(date);
-    const isPast = momentDate.isBefore(moment(), 'day');
-    const formattedDate = momentDate.format('D MMMM, dddd');
-    return isPast ? (
-      <CustomText style={styles.checkedText}>{formattedDate}</CustomText>
-    ) : (
-      formattedDate
-    );
-  };
-
-  // Функция для форматирования диапазона дат
-  const formatRange = (from: string, to: string) => {
-    const fromDate = moment(from).format('D MMMM');
-    const toDate = moment(to).format('D MMMM');
-    return `${fromDate} - ${toDate}`;
   };
 
   // Функция рендеринга элемента списка
@@ -232,6 +224,7 @@ const Cart = () => {
       quantity: string;
       checked: boolean;
       date: string;
+      mealCount: number;
     };
   }) => (
     <TouchableOpacity
@@ -242,7 +235,7 @@ const Cart = () => {
         onPress={() => toggleCheckBox(item.name, !item.checked, item.date)}
       />
       <CustomText style={[styles.itemText, item.checked && styles.checkedText]}>
-        {item.name}
+        {item.name} {item.mealCount > 1 && `(${item.mealCount})`}
       </CustomText>
       <CustomText style={styles.quantityText}>{item.quantity}</CustomText>
     </TouchableOpacity>
