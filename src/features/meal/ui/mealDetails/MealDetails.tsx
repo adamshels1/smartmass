@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
@@ -49,7 +49,7 @@ const MealDetails = () => {
 
   return (
     <>
-      <AppHeader title={mealDetail?.dish} />
+      <AppHeader title={mealDetail?.name} />
       <ScrollView style={styles.container}>
         {/* Image */}
         <View style={{alignItems: 'center', marginTop: 10}}>

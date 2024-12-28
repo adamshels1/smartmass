@@ -149,3 +149,24 @@ export const updateMealRequests = async (
     throw error;
   }
 };
+
+export const updateIngredientChecked = async (
+  mealId: number,
+  ingredientName: string,
+  checked: boolean,
+): Promise<{message: string; data: any}> => {
+  try {
+    const response = await apiInstance.put<{message: string; data: any}>(
+      '/meal/updateIngredient',
+      {
+        mealId,
+        ingredientName,
+        checked,
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating ingredient checked status:', error);
+    throw error;
+  }
+};

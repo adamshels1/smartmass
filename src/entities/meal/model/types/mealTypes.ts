@@ -23,6 +23,7 @@ export interface Ingredient {
   nameEn: string;
   amount: string;
   units: string;
+  checked?: boolean;
 }
 
 // Recipe type
