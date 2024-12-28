@@ -14,7 +14,10 @@ import {Meal} from 'entities/meal/model/types/mealTypes.ts';
 import 'moment/locale/ru';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts'; // Импорт API функции
-import {fetchMealDetails} from 'entities/meal/model/slices/mealSlice.ts'; // Импорт экшена
+import {
+  fetchMealDetails,
+  updateMealDetailsLocally,
+} from 'entities/meal/model/slices/mealSlice.ts'; // Импорт экшена
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts'; // Импорт диспатча
 
 moment.locale('ru');
@@ -131,6 +134,41 @@ const Cart = () => {
 
     // Обновление состояния для всех одинаковых ингредиентов
     try {
+      const updatedMealsDetails = mealsDetails.map(mealDetail => {
+        if (groupByDate && date) {
+          if (mealDetail.date === date) {
+            const updatedIngredients = mealDetail.mealDetail.ingredients.map(
+              ingredient =>
+                ingredient.name === name
+                  ? {...ingredient, checked}
+                  : ingredient,
+            );
+            return {
+              ...mealDetail,
+              mealDetail: {
+                ...mealDetail.mealDetail,
+                ingredients: updatedIngredients,
+              },
+            };
+          }
+        } else {
+          const updatedIngredients = mealDetail.mealDetail.ingredients.map(
+            ingredient =>
+              ingredient.name === name ? {...ingredient, checked} : ingredient,
+          );
+          return {
+            ...mealDetail,
+            mealDetail: {
+              ...mealDetail.mealDetail,
+              ingredients: updatedIngredients,
+            },
+          };
+        }
+        return mealDetail;
+      });
+
+      dispatch(updateMealDetailsLocally(updatedMealsDetails));
+
       for (const mealDetail of mealsDetails) {
         if (groupByDate && date) {
           if (mealDetail.date === date) {
@@ -150,9 +188,10 @@ const Cart = () => {
           }
         }
       }
-      for (const mealDetail of mealsDetails) {
-        dispatch(fetchMealDetails({mealId: mealDetail.id}));
-      }
+      // Закомментируем следующую часть кода:
+      // for (const mealDetail of mealsDetails) {
+      //   dispatch(fetchMealDetails({ mealId: mealDetail.id }));
+      // }
     } catch (error) {
       console.error('Ошибка при обновлении статуса ингредиента:', error);
     }

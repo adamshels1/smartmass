@@ -85,7 +85,12 @@ export const initiateUpdateMeal = createAsyncThunk(
 const mealsSlice = createSlice({
   name: 'meals',
   initialState,
-  reducers: {resetMealState: () => initialState},
+  reducers: {
+    resetMealState: () => initialState,
+    updateMealDetailsLocally: (state, action: PayloadAction<Meal[]>) => {
+      state.mealsDetails = action.payload;
+    },
+  },
   extraReducers: builder => {
     // @ts-ignore
     builder
@@ -173,5 +178,5 @@ const mealsSlice = createSlice({
   },
 });
 
-export const {resetMealState} = mealsSlice.actions;
+export const {resetMealState, updateMealDetailsLocally} = mealsSlice.actions;
 export default mealsSlice.reducer;
