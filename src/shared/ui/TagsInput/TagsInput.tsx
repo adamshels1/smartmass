@@ -19,6 +19,8 @@ interface TagsInputProps {
   placeholder?: string;
   value?: string[];
   onChange?: (tags: string[]) => void;
+  onAddTag?: (tag: string) => void;
+  isVisibleTags?: boolean;
 }
 
 const TagsInput: FC<TagsInputProps> = ({
@@ -26,6 +28,8 @@ const TagsInput: FC<TagsInputProps> = ({
   placeholder = 'Добавить тег',
   value = [],
   onChange,
+  onAddTag,
+  isVisibleTags = true,
 }) => {
   const [tags, setTags] = useState<string[]>(value);
   const [input, setInput] = useState('');
@@ -53,7 +57,13 @@ const TagsInput: FC<TagsInputProps> = ({
   };
 
   const addTag = (tag: string) => {
+    if (tags.includes(tag)) {
+      setInput('');
+      setSuggestions([]);
+      return;
+    }
     if (tag && !tags.includes(tag)) {
+      onAddTag && onAddTag(tag);
       const newTags = [...tags, tag];
       setTags(newTags);
       setInput('');
@@ -94,26 +104,28 @@ const TagsInput: FC<TagsInputProps> = ({
         style={styles.input}
         autoCapitalize={'none'}
       />
-      <ScrollView
-        contentContainerStyle={styles.tagsContainer}
-        keyboardShouldPersistTaps="handled"
-        horizontal={false}>
-        <View style={styles.tagsWrapper}>
-          {tags.map((tag, index) => (
-            <TouchableOpacity
-              onPress={() => removeTag(index)}
-              key={index}
-              style={styles.tag}>
-              <Text style={{fontSize: 16}}>{tag}</Text>
+      {isVisibleTags && (
+        <ScrollView
+          contentContainerStyle={styles.tagsContainer}
+          keyboardShouldPersistTaps="handled"
+          horizontal={false}>
+          <View style={styles.tagsWrapper}>
+            {tags.map((tag, index) => (
               <TouchableOpacity
                 onPress={() => removeTag(index)}
-                style={{marginLeft: 5}}>
-                <CloseIcon width={13} height={13} />
+                key={index}
+                style={styles.tag}>
+                <Text style={{fontSize: 16}}>{tag}</Text>
+                <TouchableOpacity
+                  onPress={() => removeTag(index)}
+                  style={{marginLeft: 5}}>
+                  <CloseIcon width={13} height={13} />
+                </TouchableOpacity>
               </TouchableOpacity>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+            ))}
+          </View>
+        </ScrollView>
+      )}
 
       <FlatList
         style={{maxHeight: 300}}

@@ -1,86 +1,135 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useMemo, useCallback} from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
-import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
-import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
-import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
+import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
+import CustomButton from 'shared/ui/CustomButton/CustomButton';
+import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
 import {
   fetchDailyMeals,
   initiateUpdateMeal,
-} from 'entities/meal/model/slices/mealSlice.ts';
+} from 'entities/meal/model/slices/mealSlice';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
-import CustomText from 'shared/ui/CustomText/CustomText.tsx';
-import TagsInput from 'shared/ui/TagsInput/TagsInput.tsx';
+import CustomText from 'shared/ui/CustomText/CustomText';
+import TagsInput from 'shared/ui/TagsInput/TagsInput';
 import {EditIcon} from 'shared/assets/icons';
-import {Meal} from 'entities/meal/model/types/mealTypes.ts';
-import {updateMealRequests} from 'entities/meal/model/api/mealApi.ts';
+import {Meal} from 'entities/meal/model/types/mealTypes';
+import {updateMealRequests} from 'entities/meal/model/api/mealApi';
+import CheckBox from 'features/cart/ui/Checkbox';
+import {RootState} from 'app/providers/StoreProvider/config/store';
+import {useSelector} from 'react-redux';
+
 interface UpdateMealModalProps {
   item: Meal;
 }
 
 export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
   const [description, setDescription] = useState(item?.requestDescription);
-  const [ingredients, setIngredients] = useState<string[]>(
-    item?.requestIngredients,
-  );
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const dispatch = useAppDispatch();
+  const {preferredFoods} = useSelector(
+    (state: RootState) => state.userDetails.userDetails,
+  );
 
-  const handleUpdateMealRequests = async () => {
+  const selectedFoods = useMemo(() => {
+    const allFoods = Array.from(
+      new Set([...item?.requestIngredients, ...preferredFoods]),
+    );
+    return allFoods.map(food => ({
+      name: food,
+      checked: item?.requestIngredients.includes(food),
+    }));
+  }, [item, preferredFoods]);
+
+  const [foods, setFoods] = useState(selectedFoods);
+
+  const resetState = useCallback(() => setDescription(''), []);
+
+  const handleUpdateMealRequests = useCallback(async () => {
     try {
       setIsButtonLoading(true);
-      await updateMealRequests(item.id, description, ingredients);
+      const selected = foods
+        .filter(food => food.checked)
+        .map(food => food.name);
+      await updateMealRequests(item.id, description, selected);
       await dispatch(initiateUpdateMeal(item.id));
       await dispatch(fetchDailyMeals({date: item.date}));
       resetState();
-      actionSheetRef.current?.hide(); // Закрыть ActionSheet после добавления
+      actionSheetRef.current?.hide();
     } catch (error: any) {
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        title: '',
-        textBody: error.response.message,
+        textBody: error.response?.message || 'Произошла ошибка',
       });
-      console.error('Failed to add unplanned meal:', error);
     } finally {
       setIsButtonLoading(false);
     }
-  };
+  }, [foods, description, item, dispatch, resetState]);
 
-  const resetState = () => {
-    setDescription('');
-  };
+  const toggleCheckBox = useCallback((name: string) => {
+    setFoods(prevState =>
+      prevState.map(food =>
+        food.name === name ? {...food, checked: !food.checked} : food,
+      ),
+    );
+  }, []);
 
-  const handleShowSheet = () => {
-    if (actionSheetRef.current) {
-      actionSheetRef.current.show();
-    } else {
-      console.warn('ActionSheet ref is not set');
-    }
-  };
+  const handleAddTag = useCallback((tag: string) => {
+    setFoods(prevState => {
+      const exists = prevState.some(food => food.name === tag);
+      if (exists) {
+        return prevState.map(food =>
+          food.name === tag ? {...food, checked: true} : food,
+        );
+      }
+      return [{name: tag, checked: true}, ...prevState];
+    });
+  }, []);
 
-  const disabledAddButton = isButtonLoading || !description;
+  const disabledAddButton =
+    isButtonLoading || !(description || foods.some(food => food.checked));
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleShowSheet}>
+      <TouchableOpacity onPress={() => actionSheetRef.current?.show()}>
         <EditIcon width={25} height={25} fill={'#fff'} />
       </TouchableOpacity>
       <ActionSheet
         ref={actionSheetRef}
-        gestureEnabled={true}
+        gestureEnabled
         containerStyle={styles.sheetContainer}>
         <ScrollView style={styles.sheetContent}>
           <CustomText style={styles.title}>Заменить прием пищи</CustomText>
           <TagsInput
             label="Предпочитаемые продукты"
-            placeholder="Добавить предпочитаемый продукт"
-            value={ingredients}
-            onChange={setIngredients}
+            placeholder="Добавить продукт"
+            isVisibleTags={false}
+            onAddTag={handleAddTag}
           />
+          <View style={styles.foodList}>
+            {foods.map(food => (
+              <TouchableOpacity
+                key={food.name}
+                onPress={() => toggleCheckBox(food.name)}>
+                <View style={styles.itemContainer}>
+                  <CheckBox
+                    value={food.checked}
+                    onPress={() => toggleCheckBox(food.name)}
+                  />
+                  <CustomText
+                    style={[
+                      styles.itemText,
+                      food.checked && styles.checkedText,
+                    ]}>
+                    {food.name}
+                  </CustomText>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
           <CustomTextInput
             label="Описание пищи"
-            placeholder="Введите описание пищи"
+            placeholder="Введите описание"
             onChangeText={setDescription}
             value={description}
           />
@@ -101,41 +150,18 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  container: {alignItems: 'center'},
   sheetContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#fff', // Белый фон для контейнера
+    backgroundColor: '#fff',
   },
-  sheetContent: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-  },
-  loader: {
-    position: 'absolute',
-    top: 110,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
+  sheetContent: {padding: 20},
+  title: {fontSize: 20, fontWeight: '600', marginBottom: 20},
+  foodList: {marginVertical: 10},
+  itemContainer: {flexDirection: 'row', alignItems: 'center', marginBottom: 8},
+  itemText: {flex: 1, fontSize: 16},
+  checkedText: {},
 });
+
+export default UpdateMealModal;
