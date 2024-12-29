@@ -12,6 +12,7 @@ import LightningIcon from './lightning.svg';
 import EditIcon from './edit.svg';
 import TimeIcon from './time.svg';
 import FilterIcon from './filter.svg';
+import CloseIcon from './close.svg';
 
 export {
   BackIcon,
@@ -28,4 +29,5 @@ export {
   EditIcon,
   TimeIcon,
   FilterIcon,
+  CloseIcon,
 };

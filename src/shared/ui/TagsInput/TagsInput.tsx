@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import POPULAR_PRODUCTS from './popularProducts';
+import {CloseIcon} from 'shared/assets/icons';
 
 const API_KEY = '5caad6e3cb8a4ca79839cad59c1fa946';
 
@@ -91,6 +92,7 @@ const TagsInput: FC<TagsInputProps> = ({
         onSubmitEditing={() => addTag(input)}
         placeholder={placeholder}
         style={styles.input}
+        autoCapitalize={'none'}
       />
       <ScrollView
         contentContainerStyle={styles.tagsContainer}
@@ -103,8 +105,10 @@ const TagsInput: FC<TagsInputProps> = ({
               key={index}
               style={styles.tag}>
               <Text style={{fontSize: 16}}>{tag}</Text>
-              <TouchableOpacity onPress={() => removeTag(index)}>
-                <Text style={styles.removeTag}> x </Text>
+              <TouchableOpacity
+                onPress={() => removeTag(index)}
+                style={{marginLeft: 5}}>
+                <CloseIcon width={13} height={13} />
               </TouchableOpacity>
             </TouchableOpacity>
           ))}
@@ -143,6 +147,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#D7E7F6',
     padding: 5,
+    paddingHorizontal: 10,
     margin: 3,
     borderRadius: 33,
     alignItems: 'center',
