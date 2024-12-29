@@ -20,7 +20,7 @@ export const SettingsMenu: React.FC = () => {
       {/* User Info Section */}
       <View style={styles.userInfoContainer}>
         <Image
-          source={require('shared/assets/images/avatar.png')} // Replace with actual avatar URL
+          source={require('shared/assets/images/avatar.jpg')} // Replace with actual avatar URL
           style={styles.avatar}
         />
         <View style={styles.userInfoTextContainer}>

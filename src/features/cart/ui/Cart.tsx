@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
 import CheckBox from './Checkbox';
 import {useAppSelector} from 'shared/lib/state/selector/useAppSelector';
@@ -9,6 +9,7 @@ import 'moment/locale/ru';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {updateIngredientChecked} from 'entities/meal/model/api/mealApi.ts';
 import {
+  fetchDaysWithMeals,
   fetchUnloadedMealsDetails,
   updateMealDetailsLocally,
 } from 'entities/meal/model/slices/mealSlice.ts';
@@ -51,9 +52,15 @@ const Cart = () => {
   });
 
   useFocusEffect(
-    React.useCallback(() => {
-      //Здесь мы получаем продукты
-      dispatch(fetchUnloadedMealsDetails());
+    useCallback(() => {
+      const fetchData = async () => {
+        const startDate = moment().startOf('month').format('YYYY-MM-DD');
+        const endDate = moment().endOf('month').format('YYYY-MM-DD');
+        await dispatch(fetchDaysWithMeals({startDate, endDate}));
+        await dispatch(fetchUnloadedMealsDetails());
+      };
+
+      fetchData();
     }, [dispatch]),
   );
 
