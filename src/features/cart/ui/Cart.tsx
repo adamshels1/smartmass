@@ -72,7 +72,7 @@ const Cart = () => {
             name: ingredient.name,
             quantity: `${ingredient.amount} ${ingredient.units}`,
             checked: ingredient.checked || false,
-            date: mealDetail.date,
+            date: mealDetail.date + ' ' + mealDetail.time,
             mealCount: 1, // Добавляем mealCount, чтобы учитывать количество приемов пищи
           }))
         : [],
