@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -82,6 +81,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
           <TouchableOpacity
             style={styles.refreshButton}
             onPress={handleUpdateMeal}
+            hitSlop={{top: 0, bottom: 20, left: 20, right: 20}}
             disabled={loading}>
             {loading ? (
               <ActivityIndicator size="small" color="gray" />
@@ -214,6 +214,7 @@ const styles = StyleSheet.create({
   },
   refreshButton: {
     padding: 10,
+    marginTop: 5,
   },
   rightButtonWrap: {
     width: 60,

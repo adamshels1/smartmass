@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "64664657407",
     "project_id": "smart-mass-a2ed7",
-    "storage_bucket": "smart-mass-a2ed7.appspot.com"
+    "storage_bucket": "smart-mass-a2ed7.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,20 @@
           "package_name": "com.adamshels.smartmass"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "64664657407-1sqodhuct5v5796f7mlrt3eg7n8b89jc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adamshels.smartmass",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "64664657407-4f2d873i7tcd4p4n1oj4mvlpc1n9jlug.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAWaiNjJQFe0RoXIvSWskKJPhGtGSznOOw"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64664657407-4f2d873i7tcd4p4n1oj4mvlpc1n9jlug.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "64664657407-i6pmfod2mmlfbhj6u2g1busns03fbru9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.adamshels.smartmass"
+              }
+            }
+          ]
         }
       }
     }

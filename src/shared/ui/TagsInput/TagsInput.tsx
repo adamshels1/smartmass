@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import POPULAR_PRODUCTS from './popularProducts';
 import {CloseIcon} from 'shared/assets/icons';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const API_KEY = '5caad6e3cb8a4ca79839cad59c1fa946';
 
@@ -132,7 +133,7 @@ const TagsInput: FC<TagsInputProps> = ({
         data={suggestions}
         renderItem={({item}) => (
           <TouchableOpacity onPress={() => addTag(item)}>
-            <Text style={styles.suggestion}>{item}</Text>
+            <CustomText style={styles.suggestion}>{item}</CustomText>
           </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index.toString()}

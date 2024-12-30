@@ -1,5 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useRef, useCallback} from 'react';
+import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
@@ -8,6 +8,9 @@ import {initiateGenerateDailyMeals} from 'entities/meal/model/slices/mealSlice.t
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import TagsInput from 'shared/ui/TagsInput/TagsInput.tsx';
+import {useSelector} from 'react-redux';
+import {RootState} from 'app/providers/StoreProvider';
+import CheckBox from 'features/cart/ui/Checkbox.tsx';
 interface GetDailyMealsModalProps {
   date: string;
 }
@@ -16,10 +19,40 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
   date,
 }) => {
   const [description, setDescription] = useState('');
-  const [products, setProducts] = useState<string[]>([]);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const dispatch = useAppDispatch();
+
+  const {preferredFoods} = useSelector(
+    (state: RootState) => state.userDetails.userDetails,
+  );
+
+  const [foods, setFoods] = useState<{name: string; checked: boolean}[]>(
+    preferredFoods.map(food => ({name: food, checked: false})),
+  );
+
+  const toggleCheckBox = useCallback((name: string) => {
+    setFoods(prevState =>
+      prevState.map(food =>
+        food.name === name ? {...food, checked: !food.checked} : food,
+      ),
+    );
+  }, []);
+
+  const handleAddTag = useCallback((tag: string) => {
+    setFoods(prevState => {
+      const exists = prevState.some(food => food.name === tag);
+      if (exists) {
+        return prevState.map(food =>
+          food.name === tag ? {...food, checked: true} : food,
+        );
+      }
+      return [{name: tag, checked: true}, ...prevState];
+    });
+  }, []);
+
+  const disabledAddButton =
+    isButtonLoading || !(description || foods.some(food => food.checked));
 
   const handleGenerateMeals = async () => {
     try {
@@ -28,7 +61,12 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
         initiateGenerateDailyMeals({
           date: date,
           description:
-            description + ', используй эти продукты: ' + products?.join(', '),
+            description +
+            ', используй эти продукты: ' +
+            foods
+              .filter(food => food.checked)
+              ?.map(food => food.name)
+              ?.join(', '),
         }),
       );
       // dispatch(fetchDailyMeals({date}));
@@ -58,8 +96,6 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
     }
   };
 
-  const disabledAddButton = isButtonLoading || !description;
-
   return (
     <View style={styles.container}>
       <CustomButton
@@ -77,10 +113,31 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
           </CustomText>
           <TagsInput
             label="Предпочитаемые продукты"
-            placeholder="Добавить предпочитаемый продукт"
-            value={products}
-            onChange={setProducts}
+            placeholder="Добавить продукт"
+            isVisibleTags={false}
+            onAddTag={handleAddTag}
           />
+          <View style={styles.foodList}>
+            {foods.map(food => (
+              <TouchableOpacity
+                key={food.name}
+                onPress={() => toggleCheckBox(food.name)}>
+                <View style={styles.itemContainer}>
+                  <CheckBox
+                    value={food.checked}
+                    onPress={() => toggleCheckBox(food.name)}
+                  />
+                  <CustomText
+                    style={[
+                      styles.itemText,
+                      food.checked && styles.checkedText,
+                    ]}>
+                    {food.name}
+                  </CustomText>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
           <CustomTextInput
             label="Описание пищи"
             placeholder="Введите описание пищи"
@@ -141,4 +198,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  foodList: {marginVertical: 10},
+  itemContainer: {flexDirection: 'row', alignItems: 'center', marginBottom: 8},
+  itemText: {flex: 1, fontSize: 16},
+  checkedText: {},
 });

@@ -1,53 +1,55 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, Alert} from 'react-native';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
-import {loginWithGoogle} from 'entities/auth/model/authSlice'; // Импортируем функцию
+import {loginWithGoogle} from 'entities/auth/model/authSlice';
 
 GoogleSignin.configure({
   webClientId:
-    '159826741921-tovc2e47hpc40u438hr0iramltmq5n91.apps.googleusercontent.com',
+    '64664657407-4f2d873i7tcd4p4n1oj4mvlpc1n9jlug.apps.googleusercontent.com',
   iosClientId:
-    '159826741921-a2bu9lao58e8cc93nffoqvdt2j2pcfqb.apps.googleusercontent.com',
+    '64664657407-i6pmfod2mmlfbhj6u2g1busns03fbru9.apps.googleusercontent.com',
   scopes: ['profile', 'email'],
 });
 
 const GoogleSigninButton2 = () => {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    GoogleSignin.signInSilently()
-      .then(user => {
-        console.log(user);
-      })
-      .catch(error => {
-        if (error.code !== statusCodes.SIGN_IN_REQUIRED) {
-          console.error(error);
-        }
-      });
-  }, []);
-
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log('userInfo', userInfo);
-      // @ts-ignore
-      const {idToken} = userInfo.data;
-      dispatch(loginWithGoogle(idToken));
-    } catch (error) {
-      console.error(error);
+
+      const idToken = userInfo?.data?.idToken;
+      if (idToken) {
+        dispatch(loginWithGoogle(idToken));
+      } else {
+        console.error('No idToken returned from Google Sign-In');
+      }
+    } catch (error: any) {
+      Alert.alert('Google Sign-In error', JSON.stringify(error));
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('User cancelled the login flow');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('Sign in is in progress');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('Play services not available or outdated');
+      } else {
+        console.error('Google Sign-In error', error);
+      }
     }
   };
 
   return (
     <View>
       <GoogleSigninButton
-        size={1}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
         style={styles.googleButton}
         onPress={signIn}
       />
@@ -61,14 +63,5 @@ const styles = StyleSheet.create({
   googleButton: {
     width: '100%',
     height: 48,
-    borderRadius: 3,
-    backgroundColor: '#4285F4',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  googleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });

@@ -91,7 +91,9 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => actionSheetRef.current?.show()}>
+      <TouchableOpacity
+        onPress={() => actionSheetRef.current?.show()}
+        hitSlop={{top: 20, bottom: 40, left: 20, right: 20}}>
         <EditIcon width={25} height={25} fill={'#fff'} />
       </TouchableOpacity>
       <ActionSheet
