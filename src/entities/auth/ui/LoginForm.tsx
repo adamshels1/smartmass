@@ -4,7 +4,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
 } from 'react-native';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
@@ -12,11 +11,12 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
 import GoogleSigninButton2 from 'features/googleSignin/ui/GoogleSigninButton.tsx';
 import {AppNavigation} from 'shared/config/navigation';
-import {loginWithEmail} from 'entities/auth/model/authSlice.ts';
+import {fetchAuth, loginWithEmail} from 'entities/auth/model/authSlice.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -24,6 +24,7 @@ const SignInScreen = () => {
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -36,8 +37,11 @@ const SignInScreen = () => {
     }
 
     try {
+      setLoading(true);
       const result = await dispatch(loginWithEmail({email, password})).unwrap();
       await AsyncStorage.setItem('userToken', result.token);
+      await dispatch(fetchUserDetails());
+      await dispatch(fetchAuth());
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: 'Вход',
@@ -59,6 +63,8 @@ const SignInScreen = () => {
         });
       }
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,6 +109,7 @@ const SignInScreen = () => {
           title="Войти"
           onPress={handleLogin}
           style={styles.loginButton}
+          loading={loading}
         />
         <CustomButton
           title="Создать аккаунт"

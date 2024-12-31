@@ -154,7 +154,7 @@ const authSlice = createSlice({
           console.log('User:', action.payload.user); // Логирование пользователя
           state.loading = false;
           state.user = action.payload.user;
-          state.isAuth = true;
+          // state.isAuth = true;
           state.error = null; // Обнуление ошибки
         },
       )

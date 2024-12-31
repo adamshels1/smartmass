@@ -8,7 +8,7 @@ import {
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
 import {fetchAuth, loginWithGoogle} from 'entities/auth/model/authSlice';
 import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
-import {sleep} from 'shared/lib/utils/sleep.js';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 GoogleSignin.configure({
   webClientId:
@@ -34,11 +34,20 @@ const GoogleSigninButton2 = () => {
         await dispatch(loginWithGoogle(idToken));
         await dispatch(fetchUserDetails());
         await dispatch(fetchAuth());
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Вход',
+          textBody: `Вошли как: ${userInfo?.data?.user?.email}`,
+        });
       } else {
         console.error('No idToken returned from Google Sign-In');
       }
     } catch (error: any) {
-      Alert.alert('Google Sign-In error', JSON.stringify(error));
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Ошибка',
+        textBody: error?.message.message || error?.message,
+      });
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('User cancelled the login flow');
       } else if (error.code === statusCodes.IN_PROGRESS) {
