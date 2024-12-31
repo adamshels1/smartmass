@@ -72,14 +72,16 @@ const Cart = () => {
             name: ingredient.name,
             quantity: `${ingredient.amount} ${ingredient.units}`,
             checked: ingredient.checked || false,
-            date: mealDetail.date + ' ' + mealDetail.time,
+            date: moment(mealDetail.date + ' ' + mealDetail.time).format(
+              'YYYY-MM-DD HH:mm',
+            ), // Ensure consistent date format
             mealCount: 1, // Добавляем mealCount, чтобы учитывать количество приемов пищи
           }))
         : [],
     );
 
     const filteredItems = allItems.filter(item => {
-      const itemDate = moment(item.date);
+      const itemDate = moment(item.date, 'YYYY-MM-DD HH:mm');
       return itemDate.isAfter(moment());
     });
 
@@ -93,8 +95,11 @@ const Cart = () => {
         mealCount: number;
       }[];
     }>((acc, item) => {
-      const key = groupByDate ? item.date : 'all';
-      const existingItem = acc[key]?.find(
+      const key = groupByDate ? item.date.split(' ')[0] : 'all'; // Group by date only
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      const existingItem = acc[key].find(
         i => i.name === item.name && i.checked === item.checked,
       );
 
@@ -112,9 +117,6 @@ const Cart = () => {
           acc[key].push(item);
         }
       } else {
-        if (!acc[key]) {
-          acc[key] = [];
-        }
         acc[key].push(item);
       }
 
@@ -160,26 +162,36 @@ const Cart = () => {
     date?: string,
   ) => {
     setShoppingData(prevData =>
-      prevData.map(section => ({
-        ...section,
-        items: section.items.map(item =>
-          groupByDate && date
-            ? item.name === name && item.date === date
-              ? {...item, checked}
-              : item
-            : item.name === name
-            ? {...item, checked}
-            : item,
-        ),
-      })),
+      prevData.map(section => {
+        if (groupByDate && date) {
+          // Если groupByDate true и передана дата, то обновляем состояние только одинаковых ингредиентов
+          return {
+            ...section,
+            items: section.items.map(item =>
+              item.name === name &&
+              item.date.split(' ')[0] === date.split(' ')[0]
+                ? {...item, checked}
+                : item,
+            ),
+          };
+        } else {
+          // В ином случае, обновляем состояние только одного элемента
+          return {
+            ...section,
+            items: section.items.map(item =>
+              item.name === name ? {...item, checked} : item,
+            ),
+          };
+        }
+      }),
     );
 
-    // Обновление состояния для всех одинаковых ингредиентов
+    // Обновление состояния для всех одинаковых ингредиентов в mealsDetails
     try {
       const updatedMealsDetails = mealsDetails.map(mealDetail => {
         if (groupByDate && date) {
           if (
-            mealDetail.date + ' ' + mealDetail.time === date &&
+            mealDetail.date.split(' ')[0] === date.split(' ')[0] &&
             mealDetail.mealDetail
           ) {
             const updatedIngredients = mealDetail.mealDetail.ingredients.map(
@@ -217,14 +229,17 @@ const Cart = () => {
       for (const mealDetail of mealsDetails) {
         if (groupByDate && date) {
           if (
-            mealDetail.date + ' ' + mealDetail.time === date &&
+            mealDetail.date.split(' ')[0] === date.split(' ')[0] &&
             mealDetail.mealDetail
           ) {
-            const ingredient = mealDetail.mealDetail.ingredients.find(
-              ingredient => ingredient.name === name,
-            );
-            if (ingredient) {
-              await updateIngredientChecked(mealDetail.id, name, checked);
+            for (const ingredient of mealDetail.mealDetail.ingredients) {
+              if (ingredient.name === name) {
+                await updateIngredientChecked(
+                  mealDetail.id,
+                  ingredient.name,
+                  checked,
+                );
+              }
             }
           }
         } else if (mealDetail.mealDetail) {
