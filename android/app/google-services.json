@@ -14,15 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "64664657407-1sqodhuct5v5796f7mlrt3eg7n8b89jc.apps.googleusercontent.com",
+          "client_id": "64664657407-g4p9lod3a6vsipo9h997f7g2r1h80rj7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.adamshels.smartmass",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "c95c0b14baa0e026a4dc42d0456bac8c97ef7af9"
           }
         },
         {
-          "client_id": "64664657407-4f2d873i7tcd4p4n1oj4mvlpc1n9jlug.apps.googleusercontent.com",
+          "client_id": "64664657407-dmp54n6k1cu108iks4uf58vopu9cpgka.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

@@ -10,7 +10,7 @@ import {loginWithGoogle} from 'entities/auth/model/authSlice';
 
 GoogleSignin.configure({
   webClientId:
-    '64664657407-4f2d873i7tcd4p4n1oj4mvlpc1n9jlug.apps.googleusercontent.com',
+    '64664657407-dmp54n6k1cu108iks4uf58vopu9cpgka.apps.googleusercontent.com',
   iosClientId:
     '64664657407-i6pmfod2mmlfbhj6u2g1busns03fbru9.apps.googleusercontent.com',
   scopes: ['profile', 'email'],
@@ -23,6 +23,7 @@ const GoogleSigninButton2 = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
+      // Alert.alert('User Info', JSON.stringify(userInfo));
       console.log('userInfo', userInfo);
 
       const idToken = userInfo?.data?.idToken;
