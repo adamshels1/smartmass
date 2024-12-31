@@ -54,8 +54,8 @@ const Cart = () => {
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
-        const startDate = moment().startOf('month').format('YYYY-MM-DD');
-        const endDate = moment().endOf('month').format('YYYY-MM-DD');
+        const startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+        const endDate = moment().add(7, 'days').format('YYYY-MM-DD');
         await dispatch(fetchDaysWithMeals({startDate, endDate}));
         await dispatch(fetchUnloadedMealsDetails());
       };

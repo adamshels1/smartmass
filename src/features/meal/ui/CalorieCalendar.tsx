@@ -19,8 +19,8 @@ const CalorieCalendar = () => {
   console.log('daysWithMeals', daysWithMeals);
 
   useEffect(() => {
-    const startDate = moment().startOf('month').format('YYYY-MM-DD');
-    const endDate = moment().endOf('month').format('YYYY-MM-DD');
+    const startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+    const endDate = moment().add(7, 'days').format('YYYY-MM-DD');
     dispatch(fetchDaysWithMeals({startDate, endDate}));
   }, [dispatch]);
 
