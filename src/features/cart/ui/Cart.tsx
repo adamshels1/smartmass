@@ -178,7 +178,10 @@ const Cart = () => {
     try {
       const updatedMealsDetails = mealsDetails.map(mealDetail => {
         if (groupByDate && date) {
-          if (mealDetail.date === date && mealDetail.mealDetail) {
+          if (
+            mealDetail.date + ' ' + mealDetail.time === date &&
+            mealDetail.mealDetail
+          ) {
             const updatedIngredients = mealDetail.mealDetail.ingredients.map(
               ingredient =>
                 ingredient.name === name
@@ -213,7 +216,10 @@ const Cart = () => {
 
       for (const mealDetail of mealsDetails) {
         if (groupByDate && date) {
-          if (mealDetail.date === date && mealDetail.mealDetail) {
+          if (
+            mealDetail.date + ' ' + mealDetail.time === date &&
+            mealDetail.mealDetail
+          ) {
             const ingredient = mealDetail.mealDetail.ingredients.find(
               ingredient => ingredient.name === name,
             );
