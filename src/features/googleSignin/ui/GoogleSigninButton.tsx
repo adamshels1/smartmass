@@ -1,12 +1,14 @@
-import React from 'react';
-import {View, StyleSheet, Alert} from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
-import {loginWithGoogle} from 'entities/auth/model/authSlice';
+import {fetchAuth, loginWithGoogle} from 'entities/auth/model/authSlice';
+import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
+import {sleep} from 'shared/lib/utils/sleep.js';
 
 GoogleSignin.configure({
   webClientId:
@@ -18,17 +20,20 @@ GoogleSignin.configure({
 
 const GoogleSigninButton2 = () => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const signIn = async () => {
     try {
+      setLoading(true);
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      // Alert.alert('User Info', JSON.stringify(userInfo));
       console.log('userInfo', userInfo);
 
       const idToken = userInfo?.data?.idToken;
       if (idToken) {
-        dispatch(loginWithGoogle(idToken));
+        await dispatch(loginWithGoogle(idToken));
+        await dispatch(fetchUserDetails());
+        await dispatch(fetchAuth());
       } else {
         console.error('No idToken returned from Google Sign-In');
       }
@@ -43,17 +48,23 @@ const GoogleSigninButton2 = () => {
       } else {
         console.error('Google Sign-In error', error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <View>
-      <GoogleSigninButton
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        style={styles.googleButton}
-        onPress={signIn}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="gray" />
+      ) : (
+        <GoogleSigninButton
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          style={styles.googleButton}
+          onPress={signIn}
+        />
+      )}
     </View>
   );
 };

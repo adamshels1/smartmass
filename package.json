@@ -6,7 +6,7 @@
     "extract-translations": "i18next -c i18next-parser.config.js",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "ios-15": "react-native run-ios --simulator='iPhone 15'",
+    "ios-15": "npx react-native run-ios --simulator='iPhone 15'",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",

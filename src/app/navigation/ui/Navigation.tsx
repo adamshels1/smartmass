@@ -75,8 +75,10 @@ const AppNavigator = () => {
     (state: RootState) => state.userDetails.userDetails,
   );
   const state = useSelector((state: RootState) => state);
+  console.log({maxMealPerDay, dailyCalories, goal});
   console.log('state1', state);
-  const isFilledUserDetails = maxMealPerDay && dailyCalories && goal;
+  const isFilledUserDetails = Boolean(maxMealPerDay && dailyCalories && goal);
+  console.log('isFilledUserDetails', isFilledUserDetails);
   return (
     <AppStack.Navigator
       initialRouteName={
