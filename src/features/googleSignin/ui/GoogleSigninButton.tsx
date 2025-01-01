@@ -9,6 +9,7 @@ import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
 import {fetchAuth, loginWithGoogle} from 'entities/auth/model/authSlice';
 import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {notificationInitialized} from 'entities/notification';
 
 GoogleSignin.configure({
   webClientId:
@@ -34,6 +35,7 @@ const GoogleSigninButton2 = () => {
         await dispatch(loginWithGoogle(idToken));
         await dispatch(fetchUserDetails());
         await dispatch(fetchAuth());
+        await notificationInitialized();
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: 'Вход',

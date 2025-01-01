@@ -1,29 +1,20 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
+import apiInstance from 'shared/api/apiInstance.ts';
 export const setToken = async (fcmToken: string) => {
   try {
-    const token = await AsyncStorage.getItem('token');
     let deviceId = await DeviceInfo.getUniqueId();
 
-    const response = await axios.post(
-      'https://app.dev.rad.codesmith.space/api/model-objects/objects/firebase/token',
+    const response = await apiInstance.post<any>(
+      '/firebaseToken/saveFirebaseToken',
       {
         deviceId: deviceId, // Ваш deviceId
-        token: fcmToken, // Ваш token
-      },
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `${token}`,
-          'Content-Type': 'application/json',
-        },
+        firebaseToken: fcmToken, // Ваш token
       },
     );
-    console.log('response set token', response);
-
-    // Обработка ответа, если необходимо
+    console.log('response', response);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching Firebase token:', error);
+    console.error('Error generating daily meals:', error);
+    throw error;
   }
 };

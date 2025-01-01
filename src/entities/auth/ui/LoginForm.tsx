@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
+import {notificationInitialized} from 'entities/notification';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -42,6 +43,7 @@ const SignInScreen = () => {
       await AsyncStorage.setItem('userToken', result.token);
       await dispatch(fetchUserDetails());
       await dispatch(fetchAuth());
+      await notificationInitialized();
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: 'Вход',
