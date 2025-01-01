@@ -101,7 +101,8 @@ const SignInScreen = () => {
           <CustomText style={styles.errorText}>{error}</CustomText>
         ) : null}
 
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(AppNavigation.FORGOT)}>
           <CustomText style={styles.forgotPassword}>Я забыл пароль</CustomText>
         </TouchableOpacity>
 

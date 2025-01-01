@@ -41,7 +41,7 @@ export type NavigationStackLists = {
   [AppNavigation.REGISTRATION]: NavigationSplashType | undefined;
   [AppNavigation.VERIFY]: {email: string; password: string};
   [AppNavigation.SUCCESS_VERIFY]: undefined;
-  [AppNavigation.FORGOT]: NavigationSplashType | undefined;
+  [AppNavigation.FORGOT]: undefined;
   [AppNavigation.COURSE]: {courseId: number};
   [AppNavigation.MEAL_CALENDAR]: undefined;
 

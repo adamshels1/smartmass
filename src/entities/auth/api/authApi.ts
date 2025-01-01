@@ -85,3 +85,17 @@ export const verifyEmail = async (
     throw error.response?.data || {message: 'An unknown error occurred'};
   }
 };
+
+export const forgotPassword = async (email: string): Promise<void> => {
+  try {
+    const response = await apiInstance.post('/auth/forgotPassword', {
+      email,
+    });
+    console.log('Password reset email sent:', response.data);
+  } catch (error: any) {
+    console.error('Error sending password reset email:', error);
+    throw error.response?.data || {message: 'An unknown error occurred'};
+  }
+};
+
+// Пример вызова функции

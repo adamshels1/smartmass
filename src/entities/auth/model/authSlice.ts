@@ -3,7 +3,8 @@ import {
   signInWithEmail,
   signInWithGoogle,
   registerWithEmail,
-  verifyEmail, // Импортируем функцию для верификации email
+  verifyEmail,
+  forgotPassword, // Импортируем функцию для сброса пароля
 } from '../api/authApi.ts';
 import {
   AuthState,
@@ -127,6 +128,22 @@ export const verifyEmailCode = createAsyncThunk(
   },
 );
 
+// Действие для сброса пароля
+export const forgotPasswordThunk = createAsyncThunk(
+  'auth/forgotPassword',
+  async ({email}: {email: string}, {rejectWithValue}) => {
+    try {
+      const data = await forgotPassword(email);
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -230,6 +247,21 @@ const authSlice = createSlice({
           (action.payload as string) ||
           action.error.message ||
           'Failed to verify email';
+      })
+      .addCase(forgotPasswordThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(forgotPasswordThunk.fulfilled, state => {
+        state.loading = false;
+        state.message = 'Password reset email sent successfully';
+      })
+      .addCase(forgotPasswordThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as string) ||
+          action.error.message ||
+          'Failed to send password reset email';
       });
   },
 });
