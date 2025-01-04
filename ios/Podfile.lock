@@ -1234,6 +1234,8 @@ PODS:
   - RNGoogleSignin (13.1.0):
     - GoogleSignIn (~> 7.1)
     - React-Core
+  - RNIap (12.16.0):
+    - React-Core
   - RNLocalize (3.1.0):
     - React-Core
   - RNNotifee (7.8.2):
@@ -1336,6 +1338,7 @@ DEPENDENCIES:
   - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1496,6 +1499,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNNotifee:
@@ -1597,6 +1602,7 @@ SPEC CHECKSUMS:
   RNFBRemoteConfig: dc5418251c49d2f40edfd76cc935d2c36b8331b0
   RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
   RNGoogleSignin: 9e68b9bcc3888219357924e32ee563624745647d
+  RNIap: 4a40df8443e6bc4f02ea936beda006743c487f6a
   RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNReanimated: 3c15d836bc232658f355d404b17e2a3f9046fe6c

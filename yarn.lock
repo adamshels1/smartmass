@@ -7571,6 +7571,11 @@ react-native-gifted-chat@^2.4.0:
     use-memo-one "1.1.3"
     uuid "3.4.0"
 
+react-native-iap@^12.16.0:
+  version "12.16.0"
+  resolved "https://registry.npmjs.org/react-native-iap/-/react-native-iap-12.16.0.tgz"
+  integrity sha512-jOcZRIdXlmqXBx4dkcGqfSMGz8yxa99wt+0N7EDzX1aLCKUzMmeMPVBV2DjwcT1gDzOVfXSXIw1liJkHSNb0Aw==
+
 react-native-iphone-x-helper@1.3.1:
   version "1.3.1"
   resolved "https://registry.npmjs.org/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz"
