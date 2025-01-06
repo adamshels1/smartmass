@@ -1,9 +1,5 @@
 import BackIcon from './back.svg';
-import HomeIcon from './home.svg';
-import CalendarIcon from './calendar.svg';
-import SettingsIcon from './setting.svg';
 import ActivitiesIcon from './activities.svg';
-import ShoppingCar from './shopping-cart.svg';
 import BurgerIcon from './burger.svg';
 import PlusIcon from './plus.svg';
 import RefreshIcon from './refresh3.svg';
@@ -14,13 +10,14 @@ import TimeIcon from './time.svg';
 import FilterIcon from './filter.svg';
 import CloseIcon from './close.svg';
 
+import {CalendarIcon} from './CalendarIcon.tsx';
+import {HomeIcon} from './HomeIcon.tsx';
+import {CartIcon} from './CartIcon.tsx';
+import {SettingsIcon} from './SettingsIcon.tsx';
+
 export {
   BackIcon,
-  HomeIcon,
-  CalendarIcon,
-  SettingsIcon,
   ActivitiesIcon,
-  ShoppingCar,
   BurgerIcon,
   PlusIcon,
   RefreshIcon,
@@ -30,4 +27,8 @@ export {
   TimeIcon,
   FilterIcon,
   CloseIcon,
+  CalendarIcon,
+  HomeIcon,
+  CartIcon,
+  SettingsIcon,
 };

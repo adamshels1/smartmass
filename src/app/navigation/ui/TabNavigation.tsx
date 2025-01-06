@@ -1,14 +1,15 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Text, StyleSheet} from 'react-native';
 import {AppTabNavigation, NavigationTabLists} from 'shared/config/navigation';
 import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 import CalorieCalendarScreen from 'screens/CalorieCalendarScreen.tsx';
 import Cart from 'screens/CartScreen.tsx';
 import {
-  CalendarIcon,
   HomeIcon,
   SettingsIcon,
-  ShoppingCar,
+  CalendarIcon,
+  CartIcon,
 } from 'shared/assets/icons';
 import SettingsScreen from 'screens/Settings/SettingsScreen.tsx';
 
@@ -16,13 +17,28 @@ const Tab = createBottomTabNavigator<NavigationTabLists>();
 
 const TabNavigation: React.FC = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: '#31D6D6', // Цвет активной вкладки
+        tabBarInactiveTintColor: '#667085', // Цвет неактивной вкладки
+        tabBarStyle: {
+          paddingTop: 6,
+          paddingBottom: 29,
+          backgroundColor: '#fff', // Цвет фона таб бара
+          height: 95, // Увеличиваем высоту таб бара
+        },
+      }}>
       <Tab.Screen
         name={AppTabNavigation.HOME}
         component={DailyMealsScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size}) => <HomeIcon color={color} size={size} />,
+          tabBarIcon: ({color, size}) => (
+            <HomeIcon color={color} width={size} />
+          ),
+          tabBarLabel: ({color}) => (
+            <Text style={[styles.label, {color: color}]}>Home</Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -30,8 +46,9 @@ const TabNavigation: React.FC = () => {
         component={CalorieCalendarScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size}) => (
-            <CalendarIcon color={color} size={size} />
+          tabBarIcon: ({color, size}) => <CalendarIcon color={color} />,
+          tabBarLabel: ({color}) => (
+            <Text style={[styles.label, {color: color}]}>Calendar</Text>
           ),
         }}
       />
@@ -41,7 +58,10 @@ const TabNavigation: React.FC = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
-            <ShoppingCar width={size} height={size} />
+            <CartIcon width={size} height={size} color={color} />
+          ),
+          tabBarLabel: ({color}) => (
+            <Text style={[styles.label, {color: color}]}>Cart</Text>
           ),
         }}
       />
@@ -51,12 +71,23 @@ const TabNavigation: React.FC = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
-            <SettingsIcon color={color} size={size} />
+            <SettingsIcon color={color} width={size} />
+          ),
+          tabBarLabel: ({color}) => (
+            <Text style={[styles.label, {color: color}]}>Settings</Text>
           ),
         }}
       />
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 11,
+    fontWeight: '500',
+    marginBottom: 9,
+  },
+});
 
 export default TabNavigation;
