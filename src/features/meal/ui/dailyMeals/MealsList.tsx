@@ -19,7 +19,9 @@ type MealsListProps = {
 const MealsList: React.FC<MealsListProps> = ({date}) => {
   const dispatch = useAppDispatch();
   const days = useSelector((state: RootState) => state.meal.days);
-  const status = useSelector((state: RootState) => state.meal.status);
+  const generateMealsStatus = useSelector(
+    (state: RootState) => state.meal.generateMealsStatus,
+  );
   const navigation = useAppNavigation();
   // const error = useSelector((state: RootState) => state.meal.error);
 
@@ -27,7 +29,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
     dispatch(fetchDailyMeals({date: date}));
   }, [dispatch, date]);
 
-  if (status === 'loading') {
+  if (generateMealsStatus === 'loading') {
     return <SkeletonLoader />;
   }
 

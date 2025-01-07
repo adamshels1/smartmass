@@ -16,6 +16,8 @@ const initialState: MealsState = {
   status: 'idle',
   error: null,
   loadingPercentage: 0, // Добавлено новое свойство
+  generateMealsStatus: 'idle', // Новый статус
+  generateMealsError: null, // Новая ошибка
 };
 
 export const fetchMealDetails = createAsyncThunk(
@@ -159,14 +161,15 @@ const mealsSlice = createSlice({
         state.error = action.error.message ?? 'Failed to fetch meals';
       })
       .addCase(initiateGenerateDailyMeals.pending, state => {
-        state.status = 'loading';
+        state.generateMealsStatus = 'loading';
       })
       .addCase(initiateGenerateDailyMeals.fulfilled, state => {
-        state.status = 'succeeded';
+        state.generateMealsStatus = 'succeeded';
       })
       .addCase(initiateGenerateDailyMeals.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message ?? 'Failed to generate meals';
+        state.generateMealsStatus = 'failed';
+        state.generateMealsError =
+          action.error.message ?? 'Failed to generate meals';
       })
       .addCase(initiateUpdateMeal.pending, state => {
         state.status = 'loading';
