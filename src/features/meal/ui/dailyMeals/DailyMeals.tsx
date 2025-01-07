@@ -4,9 +4,10 @@ import DateProgress from './DateProgress.tsx';
 import MealsList from './MealsList.tsx';
 import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts'; // Импортируем useAppRoute
 import moment from 'moment';
+import {AppNavigation} from 'shared/config/navigation';
 
 const DailyMeals: React.FC = () => {
-  const route = useAppRoute(); // Используем useAppRoute
+  const route = useAppRoute<AppNavigation.DAILY_MEALS>();
   const date = route.params?.date || moment().format('YYYY-MM-DD'); // Устанавливаем текущую дату по умолчанию с использованием moment
 
   return (

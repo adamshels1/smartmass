@@ -15,9 +15,8 @@ import {
 } from 'entities/meal/model/slices/mealSlice.ts';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {FilterIcon} from 'shared/assets/icons';
-import LottieView from 'lottie-react-native';
-import i18n from 'shared/config/i18n';
 import {useFocusEffect} from '@react-navigation/native';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 moment.locale('ru');
 
@@ -27,6 +26,9 @@ const Cart = () => {
     (state: RootState) => state.meal.mealsDetails as Meal[],
   );
   const status = useAppSelector((state: RootState) => state.meal.status);
+  const loadingPercentage = useAppSelector(
+    (state: RootState) => state.meal.loadingPercentage,
+  );
 
   // Локальное состояние для хранения данных покупок
   const [shoppingData, setShoppingData] = useState<
@@ -293,42 +295,40 @@ const Cart = () => {
           <FilterIcon width={30} height={30} />
         </TouchableOpacity>
       </View>
-      {status === 'loading' ? (
-        <View>
-          <Text style={styles.loadingText}>
-            Фомирование корзины, это может занять некоторое время
-          </Text>
-          <LottieView
-            style={{
-              width: 300,
-              height: 300,
-              alignSelf: 'center',
-            }}
-            source={require('shared/assets/animations/1715423113634.json')} // Путь к файлу анимации
-            autoPlay
-            loop
-          />
+      {loadingPercentage !== 100 && (
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={styles.loadingText}>Фомирование корзины</Text>
+          <AnimatedCircularProgress
+            size={50}
+            width={2}
+            fill={loadingPercentage} // Подстройте процент на основе значения калорий
+            tintColor="#31D6D6"
+            backgroundColor="#E0E0E0">
+            {() => (
+              <Text style={styles.loadingProgress}>{loadingPercentage}%</Text>
+            )}
+          </AnimatedCircularProgress>
         </View>
-      ) : (
-        <FlatList
-          data={shoppingData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => (
-            <View style={styles.sectionContainer}>
-              <CustomText style={styles.sectionTitle}>
-                {groupByDate
-                  ? formatDate(item.date)
-                  : `Даты: ${formatRange(dateRange.from, dateRange.to)}`}
-              </CustomText>
-              <FlatList
-                data={item.items}
-                keyExtractor={subItem => subItem.id}
-                renderItem={renderItem}
-              />
-            </View>
-          )}
-        />
       )}
+
+      <FlatList
+        data={shoppingData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item}) => (
+          <View style={styles.sectionContainer}>
+            <CustomText style={styles.sectionTitle}>
+              {groupByDate
+                ? formatDate(item.date)
+                : `Даты: ${formatRange(dateRange.from, dateRange.to)}`}
+            </CustomText>
+            <FlatList
+              data={item.items}
+              keyExtractor={subItem => subItem.id}
+              renderItem={renderItem}
+            />
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -389,10 +389,15 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   loadingText: {
-    textAlign: 'center',
-    marginTop: 40,
     color: '#67CFCF',
     fontSize: 20,
+    marginRight: 10,
+  },
+  loadingProgress: {
+    textAlign: 'center',
+    color: '#67CFCF',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });
 

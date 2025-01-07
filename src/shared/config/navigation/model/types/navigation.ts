@@ -38,8 +38,8 @@ export type NavigationStackLists = {
   [AppNavigation.WELCOME]: undefined;
   [AppNavigation.WELCOME_INFO]: undefined;
   [AppNavigation.MAIN]: undefined;
-  [AppNavigation.AUTH]: NavigationSplashType | undefined;
-  [AppNavigation.REGISTRATION]: NavigationSplashType | undefined;
+  [AppNavigation.AUTH]: undefined;
+  [AppNavigation.REGISTRATION]: undefined;
   [AppNavigation.VERIFY]: {email: string; password: string};
   [AppNavigation.SUCCESS_VERIFY]: undefined;
   [AppNavigation.FORGOT]: undefined;

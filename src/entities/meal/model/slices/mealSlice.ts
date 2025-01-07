@@ -15,6 +15,7 @@ const initialState: MealsState = {
   mealsDetails: [],
   status: 'idle',
   error: null,
+  loadingPercentage: 0, // Добавлено новое свойство
 };
 
 export const fetchMealDetails = createAsyncThunk(
@@ -88,6 +89,12 @@ export const fetchUnloadedMealsDetails = createAsyncThunk(
     const now = new Date();
     const futureMeals: Meal[] = [];
 
+    const totalMeals = state.meal.days.reduce(
+      (acc, day) => acc + day.meals.length,
+      0,
+    );
+    let loadedMeals = 0;
+
     state.meal.days.forEach(day => {
       day.meals.forEach(meal => {
         const mealTime = new Date(`${day.date}T${meal.time}`);
@@ -100,8 +107,12 @@ export const fetchUnloadedMealsDetails = createAsyncThunk(
       });
     });
 
-    // Выполнение запросов последовательно
     for (const meal of futureMeals) {
+      loadedMeals += 1;
+      const loadingPercentage = Math.round(
+        (loadedMeals / futureMeals.length) * 100,
+      );
+      dispatch(setLoadingPercentage(loadingPercentage));
       await dispatch(fetchMealDetails({mealId: meal.id})).unwrap();
     }
   },
@@ -114,6 +125,9 @@ const mealsSlice = createSlice({
     resetMealState: () => initialState,
     updateMealDetailsLocally: (state, action: PayloadAction<Meal[]>) => {
       state.mealsDetails = action.payload;
+    },
+    setLoadingPercentage: (state, action: PayloadAction<number>) => {
+      state.loadingPercentage = action.payload;
     },
   },
   extraReducers: builder => {
@@ -213,5 +227,6 @@ const mealsSlice = createSlice({
   },
 });
 
-export const {resetMealState, updateMealDetailsLocally} = mealsSlice.actions;
+export const {resetMealState, updateMealDetailsLocally, setLoadingPercentage} =
+  mealsSlice.actions;
 export default mealsSlice.reducer;

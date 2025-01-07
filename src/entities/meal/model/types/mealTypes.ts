@@ -62,6 +62,7 @@ export interface MealsState {
   mealsDetails: Meal[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  loadingPercentage: number;
 }
 
 //TODO
