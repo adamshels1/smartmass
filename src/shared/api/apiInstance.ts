@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Создаем instance axios
 const apiInstance = axios.create({
-  baseURL: 'http://13.61.4.143:3000/api', // Базовый URL для API
+  baseURL: 'https://smartmass.app:3000/api', // Базовый URL для API
   timeout: 20000, // Таймаут запроса
   headers: {
     'Content-Type': 'application/json',

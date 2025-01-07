@@ -49,6 +49,10 @@ export const SettingsMenu: React.FC = () => {
           title="Количество калорий в день"
           navigationTarget={AppNavigation.DAILY_CALORIES}
         />
+        <MenuItem
+          title="Подписка"
+          navigationTarget={AppNavigation.SUBSCRIPTION}
+        />
         {/*<MenuItem*/}
         {/*  title="Настройки аккаунта"*/}
         {/*  navigationTarget={AppNavigation.ACCOUNT_SETTINGS}*/}

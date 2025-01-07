@@ -16,6 +16,7 @@ import MealDataScreen from 'screens/Settings/MealDataScreen.tsx';
 import DailyCaloriesScreen from 'screens/Settings/DailyCaloriesScreen.tsx';
 import FoodPreferencesScreen from 'screens/Settings/FoodPreferencesScreen.tsx';
 import SettingsStepsScreen from 'screens/Settings/SettingsStepsScreen.tsx';
+import SubscriptionScreen from 'screens/Settings/SubscriptionScreen.tsx';
 import MealDetailsScreen from 'screens/MealDetailsScreen.tsx';
 import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 import EmailVerificationScreen from 'screens/EmailVerificationScreen.tsx';
@@ -183,6 +184,14 @@ const AppNavigator = () => {
           headerTransparent: true,
         }}
         component={MealDetailsScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.SUBSCRIPTION}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={SubscriptionScreen}
       />
     </AppStack.Navigator>
   );
