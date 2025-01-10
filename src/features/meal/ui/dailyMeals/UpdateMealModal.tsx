@@ -1,4 +1,4 @@
-import React, {useState, useRef, useMemo, useCallback} from 'react';
+import React, {useState, useRef, useMemo, useCallback, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
 import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
@@ -42,6 +42,11 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
   }, [item, preferredFoods]);
 
   const [foods, setFoods] = useState(selectedFoods);
+
+  useEffect(() => {
+    setDescription(item?.requestDescription);
+    setFoods(selectedFoods);
+  }, [item, selectedFoods]);
 
   const resetState = useCallback(() => setDescription(''), []);
 
