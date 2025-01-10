@@ -85,5 +85,10 @@
   "Your shopping cart is empty. Please press the back button to get a meal plan for adding items to your cart.": "Ваша корзина пуста. Пожалуйста, нажмите кнопку \"Назад\", чтобы получить план питания для добавления товаров в корзину.",
   "Выберите из перечисленных вариантов": "",
   "Дай другие примеры до 20 разных блюд для замены {{name}}, в формате в JSON: ": "",
-  "Изменить {{name}} в {{time}}": ""
+  "Изменить {{name}} в {{time}}": "",
+
+
+  "gain weight": "Набрать вес",
+  "lose weight": "Сбросить вес",
+  "maintain weight": "Поддержание веса"
 }

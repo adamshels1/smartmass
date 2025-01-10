@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {View, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, SectionList} from 'react-native';
 import {RootState} from 'app/providers/StoreProvider';
 import {fetchDailyMeals} from 'entities/meal/model/slices/mealSlice';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
@@ -58,14 +58,20 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={meals || []}
-        renderItem={({item}) => <MealItem item={item} />}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={styles.mealList}
-        ListEmptyComponent={<GetDailyMealsModal date={date} />}
-        ListFooterComponent={renderNextButton()}
-      />
+      {meals?.length ? (
+        <SectionList
+          sections={[{title: '', data: meals}]}
+          renderItem={({item}) => (
+            <MealItem key={item.id.toString()} item={item} />
+          )}
+          keyExtractor={item => item.id.toString()}
+          contentContainerStyle={styles.mealList}
+          ListEmptyComponent={<GetDailyMealsModal date={date} />}
+          ListFooterComponent={renderNextButton()}
+        />
+      ) : (
+        <GetDailyMealsModal date={date} />
+      )}
     </View>
   );
 };

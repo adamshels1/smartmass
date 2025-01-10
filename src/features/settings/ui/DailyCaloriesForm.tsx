@@ -13,6 +13,7 @@ import {sendMessageToAI} from 'entities/chat/model/api/chataiApi';
 import {jsonParse} from 'utils/format.js';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'shared/config/i18n';
 
 interface DailyCaloriesFormProps {
   onNext?: () => void;
@@ -84,8 +85,8 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
       {recommendedCalories && (
         <CustomText style={styles.caloriesText}>
           Вам необходимо употреблять {recommendedCalories} ккал в день, чтобы
-          достичь цели: {goal}. Примерное время для достижения цели:{' '}
-          {timeToReachGoal} месяцев.
+          достичь цели: {i18n.t(`${goal}`)}. Примерное время для достижения
+          цели: {timeToReachGoal} месяцев.
         </CustomText>
       )}
       <CustomTextInput

@@ -116,7 +116,7 @@ const TagsInput: FC<TagsInputProps> = ({
                 onPress={() => removeTag(index)}
                 key={index}
                 style={styles.tag}>
-                <Text style={{fontSize: 16}}>{tag}</Text>
+                <Text style={{fontSize: 16, color: '#000'}}>{tag}</Text>
                 <TouchableOpacity
                   onPress={() => removeTag(index)}
                   style={{marginLeft: 5}}>

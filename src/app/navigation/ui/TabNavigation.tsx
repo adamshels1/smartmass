@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet, Platform} from 'react-native';
 import {AppTabNavigation, NavigationTabLists} from 'shared/config/navigation';
 import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 import CalorieCalendarScreen from 'screens/CalorieCalendarScreen.tsx';
@@ -14,6 +14,7 @@ import {
 import SettingsScreen from 'screens/Settings/SettingsScreen.tsx';
 
 const Tab = createBottomTabNavigator<NavigationTabLists>();
+const isIos = Platform.OS === 'ios';
 
 const TabNavigation: React.FC = () => {
   return (
@@ -23,9 +24,9 @@ const TabNavigation: React.FC = () => {
         tabBarInactiveTintColor: '#667085', // Цвет неактивной вкладки
         tabBarStyle: {
           paddingTop: 6,
-          paddingBottom: 29,
+          paddingBottom: isIos ? 20 : 10,
           backgroundColor: '#fff', // Цвет фона таб бара
-          height: 95, // Увеличиваем высоту таб бара
+          height: isIos ? 85 : 75, // Увеличиваем высоту таб бара
         },
       }}>
       <Tab.Screen
