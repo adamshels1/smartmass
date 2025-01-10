@@ -148,7 +148,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
           <CustomText style={styles.mealTime}>
             {item.time} - {item.name}
           </CustomText>
-          <CustomText style={styles.mealTime}>{item.dish}</CustomText>
+          <CustomText style={styles.mealTitle}>{item.dish}</CustomText>
           <CustomText style={styles.mealKcal}>
             {item.dishCalories} ккал
           </CustomText>
@@ -194,12 +194,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   mealTime: {
-    fontSize: 14,
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 5,
+  },
+  mealTitle: {
+    fontSize: 16,
     color: '#555',
     marginBottom: 5,
   },
   mealKcal: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#888',
   },
   mealActions: {

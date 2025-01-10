@@ -12,6 +12,7 @@ import axios from 'axios';
 import POPULAR_PRODUCTS from './popularProducts';
 import {CloseIcon} from 'shared/assets/icons';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 
 const API_KEY = '5caad6e3cb8a4ca79839cad59c1fa946';
 
@@ -96,15 +97,23 @@ const TagsInput: FC<TagsInputProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput
-        ref={inputRef}
-        value={input}
-        onChangeText={handleInputChange}
-        onSubmitEditing={() => addTag(input)}
-        placeholder={placeholder}
-        style={styles.input}
-        autoCapitalize={'none'}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          ref={inputRef}
+          value={input}
+          onChangeText={handleInputChange}
+          onSubmitEditing={() => addTag(input)}
+          placeholder={placeholder}
+          style={styles.input}
+          autoCapitalize={'none'}
+        />
+        <CustomButton
+          onPress={() => addTag(input)}
+          disabled={!input}
+          title="Add"
+          style={styles.button}
+        />
+      </View>
       {isVisibleTags && (
         <ScrollView
           contentContainerStyle={styles.tagsContainer}
@@ -146,6 +155,10 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -179,6 +192,10 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 33,
     backgroundColor: '#fff',
+  },
+  button: {
+    marginLeft: 10,
+    width: 100,
   },
   suggestion: {
     padding: 10,

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionItemText: {
-    fontSize: 15,
+    fontSize: 16,
   },
   inputIcon: {
     width: 24,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider/config/store.ts';
 import {fetchLogout} from 'entities/auth/model/authSlice.ts';
@@ -14,13 +14,13 @@ export const SettingsMenu: React.FC = () => {
   const {user} = useSelector((state: RootState) => state.auth);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <CustomText style={styles.title}>Настройки</CustomText>
 
       {/* User Info Section */}
       <View style={styles.userInfoContainer}>
         <Image
-          source={require('shared/assets/images/avatar.jpg')} // Replace with actual avatar URL
+          source={require('shared/assets/images/avatar.png')} // Replace with actual avatar URL
           style={styles.avatar}
         />
         <View style={styles.userInfoTextContainer}>
@@ -31,7 +31,7 @@ export const SettingsMenu: React.FC = () => {
 
       {/* Profile Section */}
       <View style={styles.sectionContainer}>
-        <CustomText style={styles.sectionTitle}>Меню</CustomText>
+        {/*<CustomText style={styles.sectionTitle}>Меню</CustomText>*/}
         <MenuItem title="Цель" navigationTarget={AppNavigation.GOAL} />
         <MenuItem
           title="Персональные данные"
@@ -60,7 +60,7 @@ export const SettingsMenu: React.FC = () => {
       </View>
 
       <CustomButton title={'Выход'} onPress={() => dispatch(fetchLogout())} />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   userEmail: {
+    marginTop: 4,
     fontSize: 14,
     color: '#777777',
   },
