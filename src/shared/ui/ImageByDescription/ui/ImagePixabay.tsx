@@ -52,7 +52,7 @@ const ImagePexels: React.FC<ImagePexelsProps> = ({
         try {
           const response = await axios.get(PEXELS_API_URL, {
             params: {
-              query: `${description}`,
+              query: `${description}-food`,
               per_page: 1,
             },
             headers: {Authorization: apiKey},

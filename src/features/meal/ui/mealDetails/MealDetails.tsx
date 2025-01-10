@@ -29,7 +29,12 @@ const MealDetails = () => {
   }, [dispatch, mealId]);
 
   if (status === 'loading') {
-    return <SkeletonLoader />;
+    return (
+      <>
+        <AppHeader title={''} />
+        <SkeletonLoader />
+      </>
+    );
   }
 
   if (status === 'failed') {
@@ -37,7 +42,12 @@ const MealDetails = () => {
   }
 
   if (!mealDetail) {
-    return <SkeletonLoader />;
+    return (
+      <>
+        <AppHeader title={''} />
+        <SkeletonLoader />
+      </>
+    );
   }
 
   return (
