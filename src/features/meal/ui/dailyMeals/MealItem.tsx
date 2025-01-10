@@ -72,7 +72,13 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
 
   const renderRightButton = () => {
     if (item.isMealTaken) {
-      return <CheckIcon width={25} height={25} fill={'green'} />;
+      return (
+        <CheckIcon
+          width={25}
+          height={25}
+          color={item.isPlanned ? '#70DACE' : '#f56000'}
+        />
+      );
     }
     if (!isPastTime && item.isPlanned) {
       return (
