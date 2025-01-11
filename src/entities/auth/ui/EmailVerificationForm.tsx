@@ -1,7 +1,6 @@
 import React, {useState, useRef, RefObject} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -14,6 +13,7 @@ import {RootState} from 'app/providers/StoreProvider/config/store.ts';
 import {
   verifyEmailCode,
   loginWithEmail,
+  fetchAuth,
 } from 'entities/auth/model/authSlice.ts'; // Импортируем действие
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
@@ -22,7 +22,6 @@ import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
 import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
-import {sleep} from 'shared/lib/utils/sleep.js';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 const EmailVerificationForm: React.FC = () => {
@@ -81,10 +80,11 @@ const EmailVerificationForm: React.FC = () => {
         });
         // await sleep(2000);
         // Автоматическая авторизация после успешной верификации
-        dispatch(loginWithEmail({email, password}))
+        await dispatch(loginWithEmail({email, password}))
           .unwrap()
           .then(async () => {
-            navigation.navigate(AppNavigation.SETTINGS_MENU); // Замените 'Home' на название экрана после авторизации
+            await dispatch(fetchAuth());
+            navigation.navigate(AppNavigation.SETTINGS_STEPS); // Замените 'Home' на название экрана после авторизации
           })
           .catch((error: any) => {
             Toast.show({
