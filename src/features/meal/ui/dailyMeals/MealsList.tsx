@@ -11,6 +11,7 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import moment from 'moment/moment';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 type MealsListProps = {
   date: string;
@@ -30,7 +31,14 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
   }, [dispatch, date]);
 
   if (generateMealsStatus === 'loading') {
-    return <SkeletonLoader />;
+    return (
+      <>
+        <CustomText style={{marginLeft: 10, fontSize: 16, color: 'gray'}}>
+          Форимирование питания...
+        </CustomText>
+        <SkeletonLoader />
+      </>
+    );
   }
 
   // if (status === 'failed') {

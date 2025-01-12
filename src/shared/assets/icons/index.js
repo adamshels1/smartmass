@@ -8,6 +8,7 @@ import EditIcon from './edit.svg';
 import TimeIcon from './time.svg';
 import FilterIcon from './filter.svg';
 import CloseIcon from './close.svg';
+import AddIcon from './add.svg';
 
 import {CalendarIcon} from './CalendarIcon.tsx';
 import {HomeIcon} from './HomeIcon.tsx';
@@ -31,4 +32,5 @@ export {
   HomeIcon,
   CartIcon,
   SettingsIcon,
+  AddIcon,
 };

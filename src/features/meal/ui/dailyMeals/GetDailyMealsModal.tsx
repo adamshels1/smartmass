@@ -11,6 +11,7 @@ import TagsInput from 'shared/ui/TagsInput/TagsInput.tsx';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
 import CheckBox from 'features/cart/ui/Checkbox.tsx';
+import LottieView from 'lottie-react-native';
 interface GetDailyMealsModalProps {
   date: string;
 }
@@ -98,11 +99,58 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
 
   return (
     <View style={styles.container}>
-      <CustomButton
-        style={{marginBottom: 10, width: '100%'}}
-        title={'Получить диету на весь день'}
+      {/*<CustomButton*/}
+      {/*  style={{marginBottom: 10, width: '100%'}}*/}
+      {/*  title={'Получить диету на весь день'}*/}
+      {/*  onPress={handleShowSheet}*/}
+      {/*/>*/}
+
+      {/*<LottieView*/}
+      {/*  style={{*/}
+      {/*    width: 200, // Adjust width for different animations*/}
+      {/*    height: 200, // Adjust height for different animations*/}
+      {/*    marginTop: 60, // Adjust margin for different animations*/}
+      {/*    marginBottom: 0, // Adjust margin for different animations*/}
+      {/*  }}*/}
+      {/*  source={require('shared/assets/animations/add.json')}*/}
+      {/*  autoPlay*/}
+      {/*  loop={true}*/}
+      {/*/>*/}
+
+      <TouchableOpacity
         onPress={handleShowSheet}
-      />
+        style={{
+          backgroundColor: '#e1e1e1',
+          borderRadius: 100,
+          alignItems: 'center',
+          marginVertical: 10,
+          flexDirection: 'row',
+          width: '100%',
+          paddingHorizontal: 20,
+          paddingVertical: 20,
+        }}>
+        <View style={{width: '90%'}}>
+          <CustomText style={{color: '#000', fontWeight: '600', fontSize: 16}}>
+            Получить диету на весь день
+          </CustomText>
+          <CustomText style={{color: '#000', fontSize: 14, marginTop: 3}}>
+            Рацион будет сформирован с помощью Искусственного Интеллекта.
+          </CustomText>
+        </View>
+        {/*<AddIcon />*/}
+        <LottieView
+          style={{
+            width: 60, // Adjust width for different animations
+            height: 60, // Adjust height for different animations
+            marginTop: 0, // Adjust margin for different animations
+            marginBottom: 0, // Adjust margin for different animations
+            right: 10,
+          }}
+          source={require('shared/assets/animations/add.json')}
+          autoPlay
+          loop={true}
+        />
+      </TouchableOpacity>
       <ActionSheet
         ref={actionSheetRef}
         gestureEnabled={true}
