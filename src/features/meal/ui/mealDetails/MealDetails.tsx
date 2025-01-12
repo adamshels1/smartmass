@@ -17,22 +17,58 @@ import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 const MealDetails = () => {
   const dispatch = useAppDispatch();
   const route = useAppRoute<AppNavigation.MEAL_DETAILS>();
-  const {mealId} = route.params; // Получение параметров маршрута
+  const {meal} = route.params; // Получение параметров маршрута
   const status = useSelector((state: RootState) => state.meal.status);
   const error = useSelector((state: RootState) => state.meal.error);
   const mealDetail = useAppSelector((state: RootState) =>
-    state.meal.mealsDetails.find(meal => meal.id === mealId),
+    state.meal.mealsDetails.find(item => item.id === meal.id),
   );
 
   useEffect(() => {
-    dispatch(fetchMealDetails({mealId}));
-  }, [dispatch, mealId]);
+    dispatch(fetchMealDetails({mealId: meal.id}));
+  }, [dispatch, meal.id]);
 
   if (status === 'loading') {
     return (
       <>
-        <AppHeader title={''} />
-        <SkeletonLoader />
+        <AppHeader title={`${meal.time} - ${meal.name}`} />
+        <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+          <View style={{alignItems: 'center', marginTop: 10}}>
+            <ImagePexels
+              description={meal.dishEn}
+              style={styles.image}
+              width={500}
+              height={300}
+              size={'large'}
+            />
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 10,
+                left: 40,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: 5,
+                borderRadius: 2,
+                width: '87%',
+              }}>
+              <CustomText style={{color: '#fff', fontSize: 18}}>
+                {meal.dish}
+              </CustomText>
+              <View style={{flexDirection: 'row', marginTop: 3}} />
+            </View>
+          </View>
+
+          <CustomText
+            style={{
+              marginLeft: 10,
+              fontSize: 16,
+              color: 'gray',
+              marginTop: 50,
+            }}>
+            Ждите, идет форимирование рецепта...
+          </CustomText>
+          <SkeletonLoader />
+        </ScrollView>
       </>
     );
   }
@@ -44,7 +80,7 @@ const MealDetails = () => {
   if (!mealDetail) {
     return (
       <>
-        <AppHeader title={''} />
+        <AppHeader title={`${meal.time} - ${meal.name}`} />
         <SkeletonLoader />
       </>
     );
@@ -52,7 +88,7 @@ const MealDetails = () => {
 
   return (
     <>
-      <AppHeader title={`${mealDetail.time} - ${mealDetail.name}`} />
+      <AppHeader title={`${meal.time} - ${meal.name}`} />
       <ScrollView style={styles.container}>
         {/* Image */}
         <View style={{alignItems: 'center', marginTop: 10}}>

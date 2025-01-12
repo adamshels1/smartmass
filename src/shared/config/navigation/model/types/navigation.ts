@@ -1,4 +1,5 @@
 import {NavigationTabLists} from './tab-navigation.ts';
+import {Meal} from 'entities/meal/model/types/mealTypes.ts';
 
 export enum AppNavigation {
   HOME = 'Home',
@@ -55,7 +56,7 @@ export type NavigationStackLists = {
   [AppNavigation.DAILY_CALORIES]: undefined;
   [AppNavigation.SUBSCRIPTION]: undefined;
 
-  [AppNavigation.MEAL_DETAILS]: {mealId: number};
+  [AppNavigation.MEAL_DETAILS]: {meal: Meal};
   [AppNavigation.DAILY_MEALS]: {date?: string};
 };
 

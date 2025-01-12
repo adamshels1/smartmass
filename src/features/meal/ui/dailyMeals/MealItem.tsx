@@ -141,7 +141,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
       )}
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(AppNavigation.MEAL_DETAILS, {mealId: item.id})
+          navigation.navigate(AppNavigation.MEAL_DETAILS, {meal: item})
         }
         style={[styles.mealCard, mealStyle]}>
         <ImagePexels

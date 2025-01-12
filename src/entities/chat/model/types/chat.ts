@@ -1,5 +1,3 @@
-import {Meal} from 'features/chat/model/types/diet.ts';
-
 export interface MessageItem {
   role: 'user' | 'other';
   parts?: {text: string}[];
