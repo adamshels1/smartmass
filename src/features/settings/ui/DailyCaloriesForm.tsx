@@ -29,6 +29,7 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
   const {height, weight, age, gender, targetWeight, goal} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
   );
+  const status = useSelector((state: RootState) => state.userDetails.status);
 
   const [recommendedCalories, setRecommendedCalories] = useState('');
   const [dailyCalories, setDailyCalories] = useState('');
@@ -111,6 +112,7 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
             onPress={handleNext}
             style={styles.wideButton}
             disabled={!dailyCalories || isLoading}
+            loading={status === 'loading'}
           />
         </View>
       ) : (
@@ -120,6 +122,7 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
             onPress={handleNext}
             style={{width: '100%'}}
             disabled={!dailyCalories || isLoading}
+            loading={status === 'loading'}
           />
         </View>
       )}

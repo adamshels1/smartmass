@@ -22,6 +22,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
   const selectedGoal = useSelector(
     (state: RootState) => state.userDetails.userDetails.goal,
   );
+  const status = useSelector((state: RootState) => state.userDetails.status);
   const dispatch: AppDispatch = useDispatch();
 
   const goals: {label: string; value: Goal}[] = [
@@ -68,6 +69,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
         onPress={handleNext}
         style={styles.wideButton}
         disabled={!selectedGoal}
+        loading={status === 'loading'}
       />
     </View>
   );

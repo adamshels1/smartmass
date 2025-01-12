@@ -26,6 +26,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
   const {height, weight, targetWeight, age, gender} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
   );
+  const status = useSelector((state: RootState) => state.userDetails.status);
 
   const validateNumber = (text: string) => text.replace(/[^0-9]/g, '');
 
@@ -105,6 +106,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
             onPress={handleNext}
             style={styles.wideButton}
             disabled={!height || !weight || !targetWeight || !age || !gender}
+            loading={status === 'loading'}
           />
         </View>
       ) : (
@@ -114,6 +116,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
             onPress={handleNext}
             style={{width: '100%'}}
             disabled={!height || !weight || !targetWeight || !age || !gender}
+            loading={status === 'loading'}
           />
         </View>
       )}

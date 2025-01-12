@@ -105,7 +105,9 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
         ref={actionSheetRef}
         gestureEnabled
         containerStyle={styles.sheetContainer}>
-        <ScrollView style={styles.sheetContent}>
+        <ScrollView
+          style={styles.sheetContent}
+          keyboardShouldPersistTaps="handled">
           <CustomText style={styles.title}>Заменить прием пищи</CustomText>
           <TagsInput
             label="Предпочитаемые продукты"

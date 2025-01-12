@@ -131,6 +131,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
   const {preferredFoods, avoidFoods, allergens} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
   );
+  const status = useSelector((state: RootState) => state.userDetails.status);
 
   useEffect(() => {
     if (categories[selectedCategory]) {
@@ -231,6 +232,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
                 title="Далее"
                 onPress={handleNext}
                 style={styles.wideButton}
+                loading={status === 'loading'}
               />
             </View>
           ) : (
@@ -239,6 +241,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
                 title="Сохранить"
                 onPress={handleNext}
                 style={{width: '100%'}}
+                loading={status === 'loading'}
               />
             </View>
           )}

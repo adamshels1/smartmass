@@ -103,7 +103,7 @@ const ImagePexels: React.FC<ImagePexelsProps> = ({
       {loading ? (
         <ActivityIndicator size="small" color="#505050" />
       ) : imageUrl ? (
-        <Animatable.View animation="bounceIn">
+        <Animatable.View animation="fadeIn">
           <Image
             source={{uri: imageUrl}}
             style={[{width, height}, imageStyle]} // Применяем свойство imageStyle к изображению

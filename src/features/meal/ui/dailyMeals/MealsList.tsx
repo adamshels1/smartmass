@@ -76,6 +76,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
           contentContainerStyle={styles.mealList}
           ListEmptyComponent={<GetDailyMealsModal date={date} />}
           ListFooterComponent={renderNextButton()}
+          keyboardShouldPersistTaps="handled"
         />
       ) : (
         <GetDailyMealsModal date={date} />

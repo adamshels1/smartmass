@@ -22,6 +22,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
   const {maxMealPerDay, dailyMealStartTime, dailyMealEndTime} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
   );
+  const status = useSelector((state: RootState) => state.userDetails.status);
 
   const handleChange = (
     field: keyof RootState['userDetails']['userDetails'],
@@ -102,6 +103,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
             disabled={
               !dailyMealStartTime || !dailyMealEndTime || !maxMealPerDay
             }
+            loading={status === 'loading'}
           />
         </View>
       ) : (
@@ -113,6 +115,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
             disabled={
               !dailyMealStartTime || !dailyMealEndTime || !maxMealPerDay
             }
+            loading={status === 'loading'}
           />
         </View>
       )}

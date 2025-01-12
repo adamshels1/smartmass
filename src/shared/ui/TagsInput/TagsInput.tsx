@@ -146,6 +146,7 @@ const TagsInput: FC<TagsInputProps> = ({
           </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index.toString()}
+        keyboardShouldPersistTaps="handled"
       />
     </View>
   );
