@@ -85,8 +85,8 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
       {recommendedCalories && (
         <CustomText style={styles.caloriesText}>
           {i18n.t(
-            'Вам необходимо употреблять {recommendedCalories} ккал в день, чтобы достичь цели: {goal}. Примерное время для достижения цели: {timeToReachGoal} месяцев.',
-            {recommendedCalories, goal: i18n.t(`${goal}`)},
+            'Вам необходимо употреблять {{recommendedCalories}} ккал в день, чтобы достичь цели: {{goal}}. Примерное время для достижения цели: {{timeToReachGoal}} месяцев.',
+            {recommendedCalories, goal: i18n.t(`${goal}`), timeToReachGoal},
           )}
         </CustomText>
       )}

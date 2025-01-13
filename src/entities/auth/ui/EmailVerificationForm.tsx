@@ -173,7 +173,7 @@ const EmailVerificationForm: React.FC = () => {
             {i18n.t('Не пришла почта? Проверьте папку спам или')}{' '}
             {timer > 0 ? (
               <CustomText style={styles.timerText}>
-                {i18n.t('Отправить повторно через {timer} сек', {timer})}
+                {i18n.t('Отправить повторно через {{timer}} сек', {timer})}
               </CustomText>
             ) : (
               <TouchableOpacity onPress={handleResendCode}>

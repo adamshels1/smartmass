@@ -3,11 +3,12 @@ import {StyleSheet, ScrollView} from 'react-native';
 import DailyCaloriesForm from 'features/settings/ui/DailyCaloriesForm.tsx';
 import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
+import i18n from 'i18next';
 
 const DailyCaroliesScreen: React.FC = () => {
   return (
     <AppLayout>
-      <AppHeader title="Калории" />
+      <AppHeader title={i18n.t('Калории')} />
       <ScrollView contentContainerStyle={styles.container}>
         <DailyCaloriesForm />
       </ScrollView>

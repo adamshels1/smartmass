@@ -19,8 +19,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import i18n from 'shared/config/i18n/i18n.ts';
 
-moment.locale('ru');
-
 const Cart = () => {
   const dispatch = useAppDispatch();
   const mealsDetails = useAppSelector(

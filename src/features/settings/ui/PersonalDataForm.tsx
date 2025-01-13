@@ -87,7 +87,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
         maxLength={2}
       />
       <SelectInput
-        label="Пол"
+        label={i18n.t('Пол')}
         value={gender}
         onValueChange={value => handleChange('gender', value)}
         items={[

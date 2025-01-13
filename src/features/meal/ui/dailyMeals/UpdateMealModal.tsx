@@ -109,7 +109,9 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
         <ScrollView
           style={styles.sheetContent}
           keyboardShouldPersistTaps="handled">
-          <CustomText style={styles.title}>Заменить прием пищи</CustomText>
+          <CustomText style={styles.title}>
+            {i18n.t('Заменить прием пищи')}
+          </CustomText>
           <TagsInput
             label={i18n.t('Предпочитаемые продукты')}
             placeholder={i18n.t('Добавить продукт')}

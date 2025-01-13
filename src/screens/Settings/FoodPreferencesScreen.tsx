@@ -8,11 +8,12 @@ import {
 import FoodPreferencesForm from 'features/settings/ui/FoodPreferencesForm.tsx';
 import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
 import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
+import i18n from 'i18next';
 
 const FoodPreferencesScreen: React.FC = () => {
   return (
     <AppLayout>
-      <AppHeader title={'Пищевые предпочтения'} />
+      <AppHeader title={i18n.t('Пищевые предпочтения')} />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

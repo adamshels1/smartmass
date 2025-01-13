@@ -9,11 +9,12 @@ import {
 import MealDataForm from 'features/settings/ui/MealDataForm.tsx';
 import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
 import {AppLayout} from 'shared/ui/AppLayout/AppLayout.tsx';
+import i18n from 'i18next';
 
 const MealDataScreen: React.FC = () => {
   return (
     <AppLayout>
-      <AppHeader title="Прием пищи" />
+      <AppHeader title={i18n.t('Прием пищи')} />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
