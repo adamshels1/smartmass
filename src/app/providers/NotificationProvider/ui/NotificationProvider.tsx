@@ -79,14 +79,27 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     );
   }, [checkLastLoginAndNotify]);
 
+  const resetBadgeCount = useCallback(async () => {
+    try {
+      await notifee.setBadgeCount(0);
+    } catch (error) {
+      console.log('Error resetting badge count:', error);
+    }
+  }, []);
+
   useEffect(() => {
     const initNotifications = async () => {
-      await requestNotificationPermission();
-      configureBackgroundFetch();
+      // await requestNotificationPermission();
+      // configureBackgroundFetch();
+      await resetBadgeCount(); // Reset badge count when the app opens
     };
 
     initNotifications();
-  }, [requestNotificationPermission, configureBackgroundFetch]);
+  }, [
+    // requestNotificationPermission,
+    // configureBackgroundFetch,
+    resetBadgeCount,
+  ]);
 
   return (
     <NotificationContext.Provider value={{}}>
