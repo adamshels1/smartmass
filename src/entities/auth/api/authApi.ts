@@ -4,6 +4,8 @@ import {
   VerifyEmailResponse,
 } from 'entities/auth/types/authTypes.ts';
 import {getTimeZone} from 'react-native-localize';
+import {getLocalize} from 'shared/lib/intl/getLocalize';
+import {LanguageType} from 'shared/config/i18n';
 
 export const signInWithEmail = async (
   email: string,
@@ -26,9 +28,11 @@ export const signInWithGoogle = async (
 ): Promise<AuthResponse> => {
   try {
     const timezone = getTimeZone(); // Получаем временную зону
+    const language = getLocalize<LanguageType>();
     const response = await apiInstance.post<AuthResponse>('/auth/googleAuth', {
       idToken,
       timezone,
+      language,
     });
     return response.data;
   } catch (error) {
@@ -44,11 +48,13 @@ export const registerWithEmail = async (
 ): Promise<AuthResponse> => {
   try {
     const timezone = getTimeZone(); // Получаем временную зону
+    const language = getLocalize<LanguageType>();
     const response = await apiInstance.post<AuthResponse>('/auth/register', {
       email,
       password,
       name,
       timezone,
+      language,
     });
     console.log('response', response);
     return response.data;
