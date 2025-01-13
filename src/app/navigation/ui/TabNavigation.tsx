@@ -12,6 +12,7 @@ import {
   CartIcon,
 } from 'shared/assets/icons';
 import SettingsScreen from 'screens/Settings/SettingsScreen.tsx';
+import i18n from 'i18next';
 
 const Tab = createBottomTabNavigator<NavigationTabLists>();
 const isIos = Platform.OS === 'ios';
@@ -38,7 +39,9 @@ const TabNavigation: React.FC = () => {
             <HomeIcon color={color} width={size} />
           ),
           tabBarLabel: ({color}) => (
-            <Text style={[styles.label, {color: color}]}>Home</Text>
+            <Text style={[styles.label, {color: color}]}>
+              {i18n.t('Главная')}
+            </Text>
           ),
         }}
       />
@@ -49,7 +52,7 @@ const TabNavigation: React.FC = () => {
           headerShown: false,
           tabBarIcon: ({color, size}) => <CalendarIcon color={color} />,
           tabBarLabel: ({color}) => (
-            <Text style={[styles.label, {color: color}]}>Calendar</Text>
+            <Text style={[styles.label, {color: color}]}>{i18n.t('План')}</Text>
           ),
         }}
       />
@@ -62,7 +65,9 @@ const TabNavigation: React.FC = () => {
             <CartIcon width={size} height={size} color={color} />
           ),
           tabBarLabel: ({color}) => (
-            <Text style={[styles.label, {color: color}]}>Cart</Text>
+            <Text style={[styles.label, {color: color}]}>
+              {i18n.t('Корзина')}
+            </Text>
           ),
         }}
       />
@@ -75,7 +80,9 @@ const TabNavigation: React.FC = () => {
             <SettingsIcon color={color} width={size} />
           ),
           tabBarLabel: ({color}) => (
-            <Text style={[styles.label, {color: color}]}>Settings</Text>
+            <Text style={[styles.label, {color: color}]}>
+              {i18n.t('Настройки')}
+            </Text>
           ),
         }}
       />

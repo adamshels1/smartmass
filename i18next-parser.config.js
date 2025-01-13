@@ -11,7 +11,7 @@ module.exports = {
     jsx: ['JsxLexer'],
     tsx: ['JsxLexer'],
   },
-  locales: ['en', 'ru'],
+  locales: ['en', 'ru', 'tr', 'ar', 'es', 'zh', 'fr'],
   output: './src/shared/config/locales/$LOCALE/$NAMESPACE.json',
   input: ['./src/**/*.js', './src/**/*.jsx', './src/**/*.ts', './src/**/*.tsx'],
   sort: true,

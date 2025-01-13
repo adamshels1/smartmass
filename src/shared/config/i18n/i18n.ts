@@ -6,6 +6,11 @@ import moment from 'moment';
 
 import en from '../locales/en/translation.json';
 import ru from '../locales/ru/translation.json';
+import tr from '../locales/tr/translation.json';
+import ar from '../locales/ar/translation.json';
+import es from '../locales/es/translation.json';
+import zh from '../locales/zh/translation.json';
+import fr from '../locales/fr/translation.json';
 
 const languageDetector: LanguageDetectorAsyncModule = {
   type: 'languageDetector',
@@ -13,8 +18,8 @@ const languageDetector: LanguageDetectorAsyncModule = {
   detect: callback => {
     try {
       const languageCode = getLocalize<LanguageType>();
-      callback('ru');
-      moment.locale(languageCode);
+      callback(languageCode);
+      // moment.locale(languageCode);
     } catch (error) {
       console.error('Error detecting language:', error);
     }
@@ -35,6 +40,21 @@ i18n
       },
       ru: {
         translation: ru,
+      },
+      tr: {
+        translation: tr,
+      },
+      ar: {
+        translation: ar,
+      },
+      es: {
+        translation: es,
+      },
+      zh: {
+        translation: zh,
+      },
+      fr: {
+        translation: fr,
       },
     },
     interpolation: {
