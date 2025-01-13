@@ -18,7 +18,7 @@ const MenuItem: React.FC<MenuItemProps> = ({title, navigationTarget}) => {
       <CustomText style={styles.sectionItemText}>{title}</CustomText>
       <Image
         style={styles.inputIcon}
-        source={require('assets/icons/chevron-right.png')}
+        source={require('shared/assets/icons/chevron-right.png')}
       />
     </TouchableOpacity>
   );

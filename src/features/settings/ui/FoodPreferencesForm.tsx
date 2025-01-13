@@ -187,7 +187,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
               <CustomText style={styles.sectionItemText}>{category}</CustomText>
               <Image
                 style={styles.inputIcon}
-                source={require('assets/icons/chevron-right.png')}
+                source={require('shared/assets/icons/chevron-right.png')}
               />
             </TouchableOpacity>
           ))}

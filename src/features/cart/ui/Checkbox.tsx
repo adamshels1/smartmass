@@ -14,8 +14,8 @@ const Checkbox: React.FC<CheckboxProps> = ({value, onPress, style}) => {
         style={styles.image}
         source={
           value
-            ? require('assets/icons/checklist.png')
-            : require('assets/icons/eclipse.png')
+            ? require('shared/assets/icons/checklist.png')
+            : require('shared/assets/icons/eclipse.png')
         }
       />
     </TouchableOpacity>

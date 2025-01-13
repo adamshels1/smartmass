@@ -1,7 +1,6 @@
 import apiInstance from 'shared/api/apiInstance.ts';
 import {
   MealResponse,
-  Meal,
   MealDetailsResponse,
 } from 'entities/meal/model/types/mealTypes.ts';
 import moment from 'moment';

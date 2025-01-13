@@ -34,7 +34,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         />
         <Image
           style={styles.inputIcon}
-          source={require('assets/icons/chevron-right.png')}
+          source={require('shared/assets/icons/chevron-right.png')}
         />
       </View>
     </View>
