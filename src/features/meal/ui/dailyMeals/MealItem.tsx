@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -28,6 +28,8 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
   const [loading, setLoading] = useState(false);
+  const [timeUntilNextMeal, setTimeUntilNextMeal] = useState('');
+
   const isPastTime = moment(
     `${item.date} ${item.time}`,
     'YYYY-MM-DD HH:mm',
@@ -37,7 +39,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     moment(`${item.date} ${item.time}`, 'YYYY-MM-DD HH:mm').add(0.5, 'hours'),
   );
 
-  const getTimeUntilNextMeal = () => {
+  const getTimeUntilNextMeal = useCallback(() => {
     const nextMealTime = moment(
       `${item.date} ${item.time}`,
       'YYYY-MM-DD HH:mm',
@@ -50,7 +52,16 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     const hours = diff.hours();
     const minutes = diff.minutes();
     return `${hours}ч ${minutes}м`;
-  };
+  }, [item.date, item.time]);
+
+  useEffect(() => {
+    setTimeUntilNextMeal(getTimeUntilNextMeal());
+    const interval = setInterval(() => {
+      setTimeUntilNextMeal(getTimeUntilNextMeal());
+    }, 60000); // обновлять каждую минуту
+
+    return () => clearInterval(interval); // очистка при размонтировании компонента
+  }, [getTimeUntilNextMeal]);
 
   let mealStyle: any = '';
   if (isPastTime) {
@@ -136,7 +147,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     <>
       {isCurrentMeal && (
         <CustomText style={styles.timer}>
-          До следующего приема пищи: {getTimeUntilNextMeal()}
+          До следующего приема пищи: {timeUntilNextMeal}
         </CustomText>
       )}
       <TouchableOpacity

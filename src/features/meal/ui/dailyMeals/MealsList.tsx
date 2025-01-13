@@ -25,6 +25,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
   );
   const navigation = useAppNavigation();
   // const error = useSelector((state: RootState) => state.meal.error);
+  const status = useSelector((state: RootState) => state.meal.status);
 
   useEffect(() => {
     dispatch(fetchDailyMeals({date: date}));
@@ -77,6 +78,8 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
           ListEmptyComponent={<GetDailyMealsModal date={date} />}
           ListFooterComponent={renderNextButton()}
           keyboardShouldPersistTaps="handled"
+          onRefresh={() => dispatch(fetchDailyMeals({date: date}))}
+          refreshing={status === 'loading'}
         />
       ) : (
         <GetDailyMealsModal date={date} />
