@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import {View, StyleSheet, Image, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider/config/store.ts';
 import {fetchLogout} from 'entities/auth/model/authSlice.ts';
@@ -7,7 +7,8 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import MenuItem from './MenuItem.tsx';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
-import CustomText from 'shared/ui/CustomText/CustomText.tsx'; // Adjust the import path
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next'; // Adjust the import path
 
 export const SettingsMenu: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +16,7 @@ export const SettingsMenu: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <CustomText style={styles.title}>Настройки</CustomText>
+      <CustomText style={styles.title}>{i18n.t('Настройки')}</CustomText>
 
       {/* User Info Section */}
       <View style={styles.userInfoContainer}>
@@ -31,35 +32,40 @@ export const SettingsMenu: React.FC = () => {
 
       {/* Profile Section */}
       <View style={styles.sectionContainer}>
-        {/*<CustomText style={styles.sectionTitle}>Меню</CustomText>*/}
-        <MenuItem title="Цель" navigationTarget={AppNavigation.GOAL} />
         <MenuItem
-          title="Персональные данные"
+          title={i18n.t('Цель')}
+          navigationTarget={AppNavigation.GOAL}
+        />
+        <MenuItem
+          title={i18n.t('Персональные данные')}
           navigationTarget={AppNavigation.PERSONAL_DATA}
         />
         <MenuItem
-          title="Прием пищи"
+          title={i18n.t('Прием пищи')}
           navigationTarget={AppNavigation.MEAL_DATA}
         />
         <MenuItem
-          title="Пищевые предпочтения"
+          title={i18n.t('Пищевые предпочтения')}
           navigationTarget={AppNavigation.FOOD_PREFERENCES}
         />
         <MenuItem
-          title="Количество калорий в день"
+          title={i18n.t('Количество калорий в день')}
           navigationTarget={AppNavigation.DAILY_CALORIES}
         />
         {/*<MenuItem*/}
-        {/*  title="Подписка"*/}
+        {/*  title={i18n.t('Подписка')}
         {/*  navigationTarget={AppNavigation.SUBSCRIPTION}*/}
         {/*/>*/}
         {/*<MenuItem*/}
-        {/*  title="Настройки аккаунта"*/}
+        {/*  title={i18n.t('Настройки аккаунта')}
         {/*  navigationTarget={AppNavigation.ACCOUNT_SETTINGS}*/}
         {/*/>*/}
       </View>
 
-      <CustomButton title={'Выход'} onPress={() => dispatch(fetchLogout())} />
+      <CustomButton
+        title={i18n.t('Выход')}
+        onPress={() => dispatch(fetchLogout())}
+      />
     </ScrollView>
   );
 };

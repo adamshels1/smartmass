@@ -20,6 +20,7 @@ import {timeItems} from 'features/meal/constants/timeItems.ts';
 import {getCurrentTime} from 'shared/lib/utils/timeUtils.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 interface UnplannedMealFormProps {
   date: string;
 }
@@ -100,24 +101,24 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
         containerStyle={styles.sheetContainer}>
         <ScrollView style={styles.sheetContent}>
           <CustomText style={styles.title}>
-            Незапланированный прием пищи
+            {i18n.t('Незапланированный прием пищи')}
           </CustomText>
           <CustomTextInput
-            label="Пища"
-            placeholder="Введите пищу"
+            label={i18n.t('Пища')}
+            placeholder={i18n.t('Введите пищу')}
             onChangeText={setFood}
             value={food}
           />
           <SelectInput
-            label="Время"
+            label={i18n.t('Время')}
             value={time}
             onValueChange={setTime}
             items={timeItems}
-            placeholder={{label: 'Выберите время', value: null}}
+            placeholder={{label: i18n.t('Выберите время'), value: null}}
           />
           <CustomTextInput
-            label="Калорийность"
-            placeholder="Введите калорийность"
+            label={i18n.t('Калорийность')}
+            placeholder={i18n.t('Введите калорийность')}
             onChangeText={setCalories}
             value={calories}
             keyboardType="numeric"
@@ -131,13 +132,13 @@ const UnplannedMealForm: React.FC<UnplannedMealFormProps> = ({date}) => {
             />
           )}
           <CustomButton
-            title="Добавить"
+            title={i18n.t('Добавить')}
             onPress={handleAdd}
             loading={isButtonLoading}
             disabled={disabledAddButton}
           />
           <CustomButton
-            title="Закрыть"
+            title={i18n.t('Закрыть')}
             onPress={() => actionSheetRef.current?.hide()}
           />
         </ScrollView>

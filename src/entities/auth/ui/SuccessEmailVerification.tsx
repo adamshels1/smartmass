@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import LottieView from 'lottie-react-native';
 import i18n from 'shared/config/i18n';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation';
 import {AppNavigation} from 'shared/config/navigation';
-import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
@@ -15,7 +14,7 @@ export const SuccessEmailVerification = () => {
     <View style={styles.container}>
       <View style={styles.slide}>
         <CustomText style={styles.text}>
-          Поздравляем с успешной регистрацией
+          {i18n.t('Поздравляем с успешной регистрацией!')}
         </CustomText>
         <LottieView
           style={{

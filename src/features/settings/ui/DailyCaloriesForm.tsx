@@ -1,6 +1,5 @@
-// DailyCaloriesForm.tsx
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
 import {
@@ -85,14 +84,15 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
       {isLoading && <ActivityIndicator size="large" color="#31D6D6" />}
       {recommendedCalories && (
         <CustomText style={styles.caloriesText}>
-          Вам необходимо употреблять {recommendedCalories} ккал в день, чтобы
-          достичь цели: {i18n.t(`${goal}`)}. Примерное время для достижения
-          цели: {timeToReachGoal} месяцев.
+          {i18n.t(
+            'Вам необходимо употреблять {recommendedCalories} ккал в день, чтобы достичь цели: {goal}. Примерное время для достижения цели: {timeToReachGoal} месяцев.',
+            {recommendedCalories, goal: i18n.t(`${goal}`)},
+          )}
         </CustomText>
       )}
       <CustomTextInput
-        label="Введите количество калорий"
-        placeholder="Введите количество калорий"
+        label={i18n.t('Введите количество калорий')}
+        placeholder={i18n.t('Введите количество калорий')}
         value={dailyCalories}
         onChangeText={handleChange}
         keyboardType="numeric"
@@ -102,13 +102,13 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
       {onNext && onBack ? (
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Назад"
+            title={i18n.t('Назад')}
             onPress={onBack}
             style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
             textStyle={styles.backButtonText}
           />
           <CustomButton
-            title="Далее"
+            title={i18n.t('Далее')}
             onPress={handleNext}
             style={styles.wideButton}
             disabled={!dailyCalories || isLoading}
@@ -118,7 +118,7 @@ const DailyCaloriesForm: React.FC<DailyCaloriesFormProps> = ({
       ) : (
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Сохранить"
+            title={i18n.t('Сохранить')}
             onPress={handleNext}
             style={{width: '100%'}}
             disabled={!dailyCalories || isLoading}

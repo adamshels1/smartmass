@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
 import {
@@ -10,6 +10,7 @@ import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 interface MealDataFormProps {
   onNext?: () => void;
@@ -42,9 +43,11 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
 
   return (
     <View style={styles.stepContainer}>
-      <CustomText style={styles.sectionTitle}>Прием пищи</CustomText>
+      <CustomText style={styles.sectionTitle}>
+        {i18n.t('Прием пищи')}
+      </CustomText>
       <SelectInput
-        label="Первый прием"
+        label={i18n.t('Первый прием')}
         value={dailyMealStartTime}
         onValueChange={value => handleChange('dailyMealStartTime', value)}
         items={[
@@ -55,10 +58,10 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
           {label: '10:00', value: '10:00'},
           // Добавьте другие временные метки по необходимости
         ]}
-        placeholder={{label: 'Выберите время', value: null}}
+        placeholder={{label: i18n.t('Выберите время'), value: null}}
       />
       <SelectInput
-        label="Последний прием"
+        label={i18n.t('Последний прием')}
         value={dailyMealEndTime}
         onValueChange={value => handleChange('dailyMealEndTime', value)}
         items={[
@@ -69,10 +72,10 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
           {label: '21:00', value: '21:00'},
           // Добавьте другие временные метки по необходимости
         ]}
-        placeholder={{label: 'Выберите время', value: null}}
+        placeholder={{label: i18n.t('Выберите время'), value: null}}
       />
       <SelectInput
-        label="Количество приемов"
+        label={i18n.t('Количество приемов')}
         value={maxMealPerDay?.toString()}
         onValueChange={value => handleChange('maxMealPerDay', value)}
         items={[
@@ -85,19 +88,19 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
           {label: '7', value: '7'},
           // Добавьте другие варианты по необходимости
         ]}
-        placeholder={{label: 'Выберите количество', value: null}}
+        placeholder={{label: i18n.t('Выберите количество'), value: null}}
       />
 
       {onNext && onBack ? (
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Назад"
+            title={i18n.t('Назад')}
             onPress={onBack}
             style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
             textStyle={styles.backButtonText}
           />
           <CustomButton
-            title="Далее"
+            title={i18n.t('Далее')}
             onPress={handleNext}
             style={styles.wideButton}
             disabled={
@@ -109,7 +112,7 @@ const MealDataForm: React.FC<MealDataFormProps> = ({onNext, onBack}) => {
       ) : (
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Сохранить"
+            title={i18n.t('Сохранить')}
             onPress={handleNext}
             style={{width: '100%'}}
             disabled={

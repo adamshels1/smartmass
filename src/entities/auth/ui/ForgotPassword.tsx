@@ -13,6 +13,7 @@ import {forgotPasswordThunk} from 'entities/auth/model/authSlice.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
@@ -25,8 +26,8 @@ const ForgotPasswordScreen = () => {
     if (!email) {
       Toast.show({
         type: ALERT_TYPE.DANGER,
-        title: 'Ошибка',
-        textBody: 'Введите ваш email!',
+        title: i18n.t('Ошибка'),
+        textBody: i18n.t('Введите ваш email!'),
       });
       return;
     }
@@ -36,15 +37,17 @@ const ForgotPasswordScreen = () => {
       await dispatch(forgotPasswordThunk({email})).unwrap();
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
-        title: 'Сброс пароля',
-        textBody: `Инструкции по сбросу отправлены на: ${email}`,
+        title: i18n.t('Сброс пароля'),
+        textBody: i18n.t(`Инструкции по сбросу отправлены на: ${email}`, {
+          email,
+        }),
       });
       navigation.navigate(AppNavigation.AUTH); // Перенаправление на экран входа
     } catch (err: any) {
       Toast.show({
         type: ALERT_TYPE.DANGER,
-        title: 'Ошибка',
-        textBody: err || 'Что-то пошло не так',
+        title: i18n.t('Ошибка'),
+        textBody: err || i18n.t('Что-то пошло не так'),
       });
       setError(err.message);
     } finally {
@@ -59,13 +62,13 @@ const ForgotPasswordScreen = () => {
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled">
-        <CustomText style={styles.title}>Сброс пароля</CustomText>
+        <CustomText style={styles.title}>{i18n.t('Сброс пароля')}</CustomText>
         <CustomText style={styles.subtitle}>
-          Введите ваш email для сброса пароля
+          {i18n.t('Введите ваш email для сброса пароля')}
         </CustomText>
 
         <CustomTextInput
-          placeholder="Адрес электронной почты"
+          placeholder={i18n.t('Адрес электронной почты')}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -76,13 +79,13 @@ const ForgotPasswordScreen = () => {
         ) : null}
 
         <CustomButton
-          title="Отправить"
+          title={i18n.t('Отправить')}
           onPress={handleForgotPassword}
           style={styles.forgotPasswordButton}
           loading={loading}
         />
         <CustomButton
-          title="Вернуться к входу"
+          title={i18n.t('Вернуться к входу')}
           onPress={() => navigation.navigate(AppNavigation.AUTH)}
           style={styles.backToSignInButton}
           textStyle={styles.backToSignInButtonText}

@@ -17,6 +17,7 @@ import {updateMealRequests} from 'entities/meal/model/api/mealApi';
 import CheckBox from 'features/cart/ui/Checkbox';
 import {RootState} from 'app/providers/StoreProvider/config/store';
 import {useSelector} from 'react-redux';
+import i18n from 'i18next';
 
 interface UpdateMealModalProps {
   item: Meal;
@@ -64,7 +65,7 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
     } catch (error: any) {
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        textBody: error.response?.message || 'Произошла ошибка',
+        textBody: error.response?.message || i18n.t('Произошла ошибка'),
       });
     } finally {
       setIsButtonLoading(false);
@@ -110,8 +111,8 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
           keyboardShouldPersistTaps="handled">
           <CustomText style={styles.title}>Заменить прием пищи</CustomText>
           <TagsInput
-            label="Предпочитаемые продукты"
-            placeholder="Добавить продукт"
+            label={i18n.t('Предпочитаемые продукты')}
+            placeholder={i18n.t('Добавить продукт')}
             isVisibleTags={false}
             onAddTag={handleAddTag}
           />
@@ -137,19 +138,19 @@ export const UpdateMealModal: React.FC<UpdateMealModalProps> = ({item}) => {
             ))}
           </View>
           <CustomTextInput
-            label="Описание пищи"
-            placeholder="Введите описание"
+            label={i18n.t('Описание пищи')}
+            placeholder={i18n.t('Введите описание')}
             onChangeText={setDescription}
             value={description}
           />
           <CustomButton
-            title="Отправить"
+            title={i18n.t('Отправить')}
             onPress={handleUpdateMealRequests}
             loading={isButtonLoading}
             disabled={disabledAddButton}
           />
           <CustomButton
-            title="Закрыть"
+            title={i18n.t('Закрыть')}
             onPress={() => actionSheetRef.current?.hide()}
           />
         </ScrollView>

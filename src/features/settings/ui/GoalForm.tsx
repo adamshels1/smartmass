@@ -1,6 +1,5 @@
-// src/components/GoalForm.tsx
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from 'app/providers/StoreProvider/config/store';
 import {
@@ -9,9 +8,9 @@ import {
 } from 'entities/userDetails/model/slices/userDetailsSlice';
 import CustomButton from 'shared/ui/CustomButton/CustomButton';
 import {Goal} from 'entities/userDetails/model/types/userDetailsTypes.ts';
-import {goBack} from '@react-navigation/routers/src/CommonActions.tsx';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 interface GoalFormProps {
   onNext?: () => void;
@@ -26,9 +25,9 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
   const dispatch: AppDispatch = useDispatch();
 
   const goals: {label: string; value: Goal}[] = [
-    {label: 'Набор веса', value: Goal.GainWeight},
-    {label: 'Потеря веса', value: Goal.LoseWeight},
-    {label: 'Поддержание формы', value: Goal.MaintainWeight},
+    {label: i18n.t('Набор веса'), value: Goal.GainWeight},
+    {label: i18n.t('Потеря веса'), value: Goal.LoseWeight},
+    {label: i18n.t('Поддержание формы'), value: Goal.MaintainWeight},
   ];
 
   const handleSelectGoal = (goal: Goal) => {
@@ -46,7 +45,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
 
   return (
     <View style={styles.stepContainer}>
-      <CustomText style={styles.sectionTitle}>Цель</CustomText>
+      <CustomText style={styles.sectionTitle}>{i18n.t('Цель')}</CustomText>
       {goals.map(goal => (
         <TouchableOpacity
           key={goal.value}
@@ -65,7 +64,7 @@ const GoalForm: React.FC<GoalFormProps> = ({onNext}) => {
         </TouchableOpacity>
       ))}
       <CustomButton
-        title={onNext ? 'Далее' : 'Сохранить'}
+        title={onNext ? i18n.t('Далее') : i18n.t('Сохранить')}
         onPress={handleNext}
         style={styles.wideButton}
         disabled={!selectedGoal}

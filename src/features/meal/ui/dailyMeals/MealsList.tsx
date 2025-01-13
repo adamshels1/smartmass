@@ -12,6 +12,7 @@ import moment from 'moment/moment';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 type MealsListProps = {
   date: string;
@@ -35,7 +36,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
     return (
       <>
         <CustomText style={{marginLeft: 10, fontSize: 16, color: 'gray'}}>
-          Форимирование питания...
+          {i18n.t('Форимирование питания...')}
         </CustomText>
         <SkeletonLoader />
       </>
@@ -53,7 +54,7 @@ const MealsList: React.FC<MealsListProps> = ({date}) => {
     if (meals && meals?.length) {
       return (
         <CustomButton
-          title={'Следующий день'}
+          title={i18n.t('Следующий день')}
           onPress={() => {
             const nextDate = moment(date).add(1, 'days').format('YYYY-MM-DD');
             navigation.navigate(AppNavigation.DAILY_MEALS, {

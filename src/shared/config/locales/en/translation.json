@@ -54,6 +54,7 @@
   "Our app sources data from reliable sources such as:": "",
   "Plan notifications to always eat on time and hassle-free.": "",
   "Preferred products, dishes": "",
+  "Product Info": "",
   "Products purchased, let's set up notifications for cooking time": "",
   "Products purchased. Let's set up notifications for cooking time.": "",
   "Products to Buy:": "",
@@ -72,6 +73,7 @@
   "Thu": "",
   "Total calories: ": "",
   "Tue": "",
+  "Type a message...": "",
   "Websites of authoritative medical organizations:": "",
   "Wed": "",
   "Weight (kg)": "",
@@ -85,5 +87,6 @@
   "Your shopping cart is empty. Please press the back button to get a meal plan for adding items to your cart.": "",
   "Выберите из перечисленных вариантов": "",
   "Дай другие примеры до 20 разных блюд для замены {{name}}, в формате в JSON: ": "",
+  "До следующего приема пищи": "",
   "Изменить {{name}} в {{time}}": ""
 }

@@ -13,6 +13,7 @@ import POPULAR_PRODUCTS from './popularProducts';
 import {CloseIcon} from 'shared/assets/icons';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
+import i18n from 'i18next';
 
 const API_KEY = '5caad6e3cb8a4ca79839cad59c1fa946';
 
@@ -110,7 +111,7 @@ const TagsInput: FC<TagsInputProps> = ({
         <CustomButton
           onPress={() => addTag(input)}
           disabled={!input}
-          title="Add"
+          title={i18n.t('Add')}
           style={styles.button}
         />
       </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from 'app/providers/StoreProvider/config/store';
 import {
@@ -11,6 +11,7 @@ import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput';
 import SelectInput from 'shared/ui/SelectInput/SelectInput';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 interface PersonalDataFormProps {
   onNext?: () => void;
@@ -48,26 +49,28 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
 
   return (
     <View style={styles.stepContainer}>
-      <CustomText style={styles.sectionTitle}>Персональные данные</CustomText>
+      <CustomText style={styles.sectionTitle}>
+        {i18n.t('Персональные данные')}
+      </CustomText>
       <CustomTextInput
-        label="Рост (см)"
-        placeholder="Введите рост"
+        label={i18n.t('Рост (см)')}
+        placeholder={i18n.t('Введите рост')}
         value={height?.toString()}
         onChangeText={text => handleChange('height', validateNumber(text))}
         keyboardType="numeric"
         maxLength={3}
       />
       <CustomTextInput
-        label="Вес (кг)"
-        placeholder="Введите вес"
+        label={i18n.t('Вес (кг)')}
+        placeholder={i18n.t('Введите вес')}
         value={weight?.toString()}
         onChangeText={text => handleChange('weight', validateNumber(text))}
         keyboardType="numeric"
         maxLength={3}
       />
       <CustomTextInput
-        label="Целевой вес (кг)"
-        placeholder="Введите целевой вес"
+        label={i18n.t('Целевой вес (кг)')}
+        placeholder={i18n.t('Введите целевой вес')}
         value={targetWeight?.toString()}
         onChangeText={text =>
           handleChange('targetWeight', validateNumber(text))
@@ -76,8 +79,8 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
         maxLength={3}
       />
       <CustomTextInput
-        label="Возраст (лет)"
-        placeholder="Введите возраст"
+        label={i18n.t('Возраст (лет)')}
+        placeholder={i18n.t('Введите возраст')}
         value={age?.toString()}
         onChangeText={text => handleChange('age', validateNumber(text))}
         keyboardType="numeric"
@@ -88,21 +91,21 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
         value={gender}
         onValueChange={value => handleChange('gender', value)}
         items={[
-          {label: 'Мужской', value: 'male'},
-          {label: 'Женский', value: 'female'},
+          {label: i18n.t('Мужской'), value: 'male'},
+          {label: i18n.t('Женский'), value: 'female'},
         ]}
-        placeholder={{label: 'Выберите пол', value: null}}
+        placeholder={{label: i18n.t('Выберите пол'), value: null}}
       />
       {onNext && onBack ? (
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Назад"
+            title={i18n.t('Назад')}
             onPress={onBack}
             style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
             textStyle={styles.backButtonText}
           />
           <CustomButton
-            title="Далее"
+            title={i18n.t('Далее')}
             onPress={handleNext}
             style={styles.wideButton}
             disabled={!height || !weight || !targetWeight || !age || !gender}
@@ -112,7 +115,7 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
       ) : (
         <View style={styles.buttonContainer}>
           <CustomButton
-            title="Сохранить"
+            title={i18n.t('Сохранить')}
             onPress={handleNext}
             style={{width: '100%'}}
             disabled={!height || !weight || !targetWeight || !age || !gender}

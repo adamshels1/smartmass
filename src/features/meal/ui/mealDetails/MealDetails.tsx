@@ -13,6 +13,7 @@ import {SkeletonLoader} from 'shared/ui';
 import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 const MealDetails = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +66,7 @@ const MealDetails = () => {
               color: 'gray',
               marginTop: 50,
             }}>
-            Ждите, идет форимирование рецепта...
+            {i18n.t('Ждите, идет форимирование рецепта...')}
           </CustomText>
           <SkeletonLoader />
         </ScrollView>
@@ -140,7 +141,8 @@ const MealDetails = () => {
                 {() => <LightningIcon />}
               </AnimatedCircularProgress>
               <CustomText style={styles.nutritionText}>
-                Калории{'\n'}
+                {i18n.t('Каллории')}
+                {'\n'}
                 {mealDetail.dishCalories || 0} Kcal
               </CustomText>
             </View>
@@ -155,7 +157,8 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0"
               />
               <CustomText style={styles.nutritionText}>
-                Белки{'\n'}
+                {i18n.t('Белки')}
+                {'\n'}
                 {mealDetail?.mealDetail?.proteins || 0}g
               </CustomText>
             </View>
@@ -168,7 +171,8 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0"
               />
               <CustomText style={styles.nutritionText}>
-                Жиры{'\n'}
+                {i18n.t('Жиры')}
+                {'\n'}
                 {mealDetail?.mealDetail?.fats || 0}g
               </CustomText>
             </View>
@@ -185,7 +189,8 @@ const MealDetails = () => {
                 backgroundColor="#E0E0E0"
               />
               <CustomText style={styles.nutritionText}>
-                Углеводы{'\n'}
+                {i18n.t('Углеводы')}
+                {'\n'}
                 {mealDetail?.mealDetail?.carbohydrates || 0}g
               </CustomText>
             </View>
@@ -194,7 +199,7 @@ const MealDetails = () => {
           {/* Ingredients */}
           <View style={styles.ingredientsContainer}>
             <CustomText style={styles.ingredientsTitle}>
-              Ингридиенты:
+              {i18n.t('Ингридиенты')}:
             </CustomText>
             {mealDetail?.mealDetail?.ingredients.map((ingredient, index) => (
               <CustomText
@@ -211,7 +216,9 @@ const MealDetails = () => {
 
           {/* Nutrition Facts */}
           <View style={styles.nutritionFacts}>
-            <CustomText style={styles.ingredientsTitle}>Рецепт:</CustomText>
+            <CustomText style={styles.ingredientsTitle}>
+              {i18n.t('Рецепт')}:
+            </CustomText>
             <CustomText style={styles.nutritionFactsText}>
               {mealDetail?.mealDetail?.fullRecipe}
             </CustomText>

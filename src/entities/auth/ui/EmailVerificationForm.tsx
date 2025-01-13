@@ -23,6 +23,7 @@ import {useAppRoute} from 'shared/lib/navigation/useAppRoute.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 const EmailVerificationForm: React.FC = () => {
   const [code, setCode] = useState(['', '', '', '']);
@@ -65,8 +66,8 @@ const EmailVerificationForm: React.FC = () => {
     if (newCode.join('').length < 4) {
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        title: 'Сообщение',
-        textBody: 'Введите все поля!',
+        title: i18n.t('Сообщение'),
+        textBody: i18n.t('Введите все поля!'),
       });
       return;
     }
@@ -75,8 +76,8 @@ const EmailVerificationForm: React.FC = () => {
       .then(async () => {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
-          title: 'Подтверждение Email',
-          textBody: 'Ваш email успешно подтвержден!',
+          title: i18n.t('Подтверждение Email'),
+          textBody: i18n.t('Ваш email успешно подтвержден!'),
         });
         // await sleep(2000);
         // Автоматическая авторизация после успешной верификации
@@ -89,8 +90,8 @@ const EmailVerificationForm: React.FC = () => {
           .catch((error: any) => {
             Toast.show({
               type: ALERT_TYPE.DANGER,
-              title: 'Ошибка авторизации',
-              textBody: error || 'Неизвестная ошибка',
+              title: i18n.t('Ошибка авторизации'),
+              textBody: error || i18n.t('Неизвестная ошибка'),
             });
           });
       })
@@ -98,8 +99,8 @@ const EmailVerificationForm: React.FC = () => {
         console.log('error', error);
         Toast.show({
           type: ALERT_TYPE.DANGER,
-          title: 'Ошибка',
-          textBody: error || 'Неизвестная ошибка',
+          title: i18n.t('Ошибка'),
+          textBody: error || i18n.t('Неизвестная ошибка'),
         });
       });
   };
@@ -107,8 +108,8 @@ const EmailVerificationForm: React.FC = () => {
   const handleResendCode = () => {
     Toast.show({
       type: ALERT_TYPE.INFO,
-      title: 'Сообщение',
-      textBody: 'Код отправлен повторно',
+      title: i18n.t('Сообщение'),
+      textBody: i18n.t('Код отправлен повторно'),
     });
     setTimer(49);
   };
@@ -133,17 +134,20 @@ const EmailVerificationForm: React.FC = () => {
 
   return (
     <>
-      <AppHeader title={'E-mail подтверждение'} />
+      <AppHeader title={i18n.t('E-mail подтверждение')} />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled">
-          <CustomText style={styles.title}>Подтвердите Email</CustomText>
+          <CustomText style={styles.title}>
+            {i18n.t('Подтвердите Email')}
+          </CustomText>
           <CustomText style={styles.subtitle}>
-            Мы отправили код вам на почту. Введите его в поле ниже чтобы
-            подтвердить ваш аккаунт
+            {i18n.t(
+              'Мы отправили код вам на почту. Введите его в поле ниже чтобы подтвердить ваш аккаунт',
+            )}
           </CustomText>
           <View style={styles.codeContainer}>
             {code.map((digit, index) => (
@@ -160,21 +164,21 @@ const EmailVerificationForm: React.FC = () => {
             ))}
           </View>
           <CustomButton
-            title="Подтвердить"
+            title={i18n.t('Подтвердить')}
             onPress={() => handleVerify(code)}
             style={styles.verifyButton}
             disabled={loading}
           />
           <CustomText style={styles.infoText}>
-            Не пришла почта? Проверьте папку спам или{' '}
+            {i18n.t('Не пришла почта? Проверьте папку спам или')}{' '}
             {timer > 0 ? (
               <CustomText style={styles.timerText}>
-                Отправить повторно через {timer} сек
+                {i18n.t('Отправить повторно через {timer} сек', {timer})}
               </CustomText>
             ) : (
               <TouchableOpacity onPress={handleResendCode}>
                 <CustomText style={styles.resendText}>
-                  Отправить повторно
+                  {i18n.t('Отправить повторно')}
                 </CustomText>
               </TouchableOpacity>
             )}

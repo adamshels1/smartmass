@@ -1,7 +1,6 @@
 import React from 'react';
-import {Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
-import {AppNavigation} from 'shared/config/navigation';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
 interface MenuItemProps {

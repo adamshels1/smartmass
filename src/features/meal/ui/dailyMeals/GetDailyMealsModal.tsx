@@ -12,6 +12,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
 import CheckBox from 'features/cart/ui/Checkbox.tsx';
 import LottieView from 'lottie-react-native';
+import i18n from 'i18next';
 interface GetDailyMealsModalProps {
   date: string;
 }
@@ -131,10 +132,12 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
         }}>
         <View style={{width: '90%'}}>
           <CustomText style={{color: '#000', fontWeight: '600', fontSize: 16}}>
-            Получить диету на весь день
+            {i18n.t('Получить диету на весь день')}
           </CustomText>
           <CustomText style={{color: '#000', fontSize: 14, marginTop: 3}}>
-            Рацион будет сформирован с помощью Искусственного Интеллекта.
+            {i18n.t(
+              'Рацион будет сформирован с помощью Искусственного Интеллекта.',
+            )}
           </CustomText>
         </View>
         {/*<AddIcon />*/}
@@ -157,11 +160,11 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
         containerStyle={styles.sheetContainer}>
         <ScrollView style={styles.sheetContent}>
           <CustomText style={styles.title}>
-            Получить диету на этот день
+            {i18n.t('Получить диету на этот день')}
           </CustomText>
           <TagsInput
-            label="Предпочитаемые продукты"
-            placeholder="Добавить продукт"
+            label={i18n.t('Предпочитаемые продукты')}
+            placeholder={i18n.t('Добавить продукт')}
             isVisibleTags={false}
             onAddTag={handleAddTag}
           />
@@ -187,19 +190,19 @@ export const GetDailyMealsModal: React.FC<GetDailyMealsModalProps> = ({
             ))}
           </View>
           <CustomTextInput
-            label="Описание пищи"
-            placeholder="Введите описание пищи"
+            label={i18n.t('Описание пищи')}
+            placeholder={i18n.t('Введите описание пищи')}
             onChangeText={setDescription}
             value={description}
           />
           <CustomButton
-            title="Отправить"
+            title={i18n.t('Отправить')}
             onPress={handleGenerateMeals}
             loading={isButtonLoading}
             disabled={disabledAddButton}
           />
           <CustomButton
-            title="Закрыть"
+            title={i18n.t('Закрыть')}
             onPress={() => actionSheetRef.current?.hide()}
           />
         </ScrollView>

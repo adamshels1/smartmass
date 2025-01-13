@@ -19,6 +19,7 @@ import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {UpdateMealModal} from 'features/meal/ui/dailyMeals/UpdateMealModal.tsx';
+import i18n from 'i18next';
 
 interface MealItemProps {
   item: Meal;
@@ -125,17 +126,17 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     if (item.isMealTaken === null && isPastTime) {
       return (
         <View style={styles.mealActions}>
-          <CustomText>Был ли принят прием пищи?</CustomText>
+          <CustomText>{i18n.t('Был ли принят прием пищи?')}</CustomText>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => handleUpdateIsMealTaken(true)}
               style={styles.button}>
-              <CustomText>Да</CustomText>
+              <CustomText>{i18n.t('Да')}</CustomText>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleUpdateIsMealTaken(false)}
               style={styles.button}>
-              <CustomText>Нет</CustomText>
+              <CustomText>{i18n.t('Нет')}</CustomText>
             </TouchableOpacity>
           </View>
         </View>
@@ -147,7 +148,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
     <>
       {isCurrentMeal && (
         <CustomText style={styles.timer}>
-          До следующего приема пищи: {timeUntilNextMeal}
+          {i18n.t('До следующего приема пищи')}: {timeUntilNextMeal}
         </CustomText>
       )}
       <TouchableOpacity
@@ -167,7 +168,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
           </CustomText>
           <CustomText style={styles.mealTitle}>{item.dish}</CustomText>
           <CustomText style={styles.mealKcal}>
-            {item.dishCalories} ккал
+            {item.dishCalories} {i18n.t('ккал')}
           </CustomText>
           {renderMealTakenButtons()}
         </View>

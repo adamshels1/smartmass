@@ -18,6 +18,7 @@ import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
 import {notificationInitialized} from 'entities/notification';
+import i18n from 'i18next';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -31,8 +32,8 @@ const SignInScreen = () => {
     if (!email || !password) {
       Toast.show({
         type: ALERT_TYPE.DANGER,
-        title: 'Ошибка',
-        textBody: 'Введите все поля!',
+        title: i18n.t('Ошибка'),
+        textBody: i18n.t('Введите все поля!'),
       });
       return;
     }
@@ -46,21 +47,21 @@ const SignInScreen = () => {
       await notificationInitialized();
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
-        title: 'Вход',
-        textBody: `Вошли как: ${email}`,
+        title: i18n.t('Вход'),
+        textBody: i18n.t(`Вошли как: ${email}`, {email}),
       });
     } catch (err: any) {
       // Приведение err к типу any
       if (err.response && err.response.data && err.response.data.message) {
         Toast.show({
           type: ALERT_TYPE.DANGER,
-          title: 'Ошибка',
+          title: i18n.t('Ошибка'),
           textBody: err.response.data.message,
         });
       } else {
         Toast.show({
           type: ALERT_TYPE.DANGER,
-          title: 'Ошибка',
+          title: i18n.t('Ошибка'),
           textBody: err.message,
         });
       }
@@ -77,23 +78,25 @@ const SignInScreen = () => {
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled">
-        <CustomText style={styles.title}>С возвращением</CustomText>
-        <CustomText style={styles.subtitle}>Войдите в ваш аккаунт</CustomText>
+        <CustomText style={styles.title}>{i18n.t('С возвращением')}</CustomText>
+        <CustomText style={styles.subtitle}>
+          {i18n.t('Войдите в ваш аккаунт')}
+        </CustomText>
 
         <GoogleSigninButton2 />
 
         <CustomText style={styles.dividerText}>
-          Или войдите при помощи email аккаунта
+          {i18n.t('Или войдите при помощи email аккаунта')}
         </CustomText>
 
         <CustomTextInput
-          placeholder="Адрес электронной почты"
+          placeholder={i18n.t('Адрес электронной почты')}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
         />
         <CustomTextInput
-          placeholder="Пароль"
+          placeholder={i18n.t('Пароль')}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -105,17 +108,19 @@ const SignInScreen = () => {
 
         <TouchableOpacity
           onPress={() => navigation.navigate(AppNavigation.FORGOT)}>
-          <CustomText style={styles.forgotPassword}>Я забыл пароль</CustomText>
+          <CustomText style={styles.forgotPassword}>
+            {i18n.t('Я забыл пароль')}
+          </CustomText>
         </TouchableOpacity>
 
         <CustomButton
-          title="Войти"
+          title={i18n.t('Войти')}
           onPress={handleLogin}
           style={styles.loginButton}
           loading={loading}
         />
         <CustomButton
-          title="Создать аккаунт"
+          title={i18n.t('Создать аккаунт')}
           onPress={() => navigation.navigate(AppNavigation.REGISTRATION)}
           style={styles.registerButton}
           textStyle={styles.registerButtonText}

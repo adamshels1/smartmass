@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {ProgressBar} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {fetchDaysWithMeals} from 'entities/meal/model/slices/mealSlice';
@@ -11,12 +11,12 @@ import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {isDateToday} from 'shared/lib/utils/date.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 const CalorieCalendar = () => {
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
   const daysWithMeals = useSelector((state: RootState) => state.meal.days);
-  console.log('daysWithMeals', daysWithMeals);
 
   useEffect(() => {
     const startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
@@ -53,7 +53,9 @@ const CalorieCalendar = () => {
             color={'#31D6D6'}
             style={styles.progressBar}
           />
-          <CustomText style={styles.kcal}>{item?.takenCalories}kcal</CustomText>
+          <CustomText style={styles.kcal}>
+            {item?.takenCalories} {i18n.t('ккал')}
+          </CustomText>
         </View>
         <View style={styles.actionContainer}>
           <View style={styles.square} />
@@ -83,7 +85,9 @@ const CalorieCalendar = () => {
           <CustomText style={styles.day}>
             {moment(nextDate).format('dddd')}
           </CustomText>
-          <CustomText style={styles.day}>Запланировать рацион</CustomText>
+          <CustomText style={styles.day}>
+            {i18n.t('Запланировать рацион')}
+          </CustomText>
         </View>
       </TouchableOpacity>
     );
@@ -91,8 +95,10 @@ const CalorieCalendar = () => {
 
   return (
     <View style={styles.container}>
-      <CustomText style={styles.month}>Ноябрь, 2024</CustomText>
-      <CustomText style={styles.week}>Четвертая неделя</CustomText>
+      <CustomText style={styles.month}>
+        {moment().format('MMMM, YYYY')}
+      </CustomText>
+      {/*<CustomText style={styles.week}>Четвертая неделя</CustomText>*/}
       <FlatList
         data={daysWithMeals}
         renderItem={renderItem}

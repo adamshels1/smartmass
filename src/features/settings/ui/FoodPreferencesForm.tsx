@@ -11,6 +11,7 @@ import TagsInput from 'shared/ui/TagsInput/TagsInput';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {sleep} from 'shared/lib/utils/sleep.js';
+import i18n from 'i18next';
 
 interface FoodPreferencesFormProps {
   onNext?: () => void;
@@ -173,7 +174,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
       {showCategories ? (
         <>
           <CustomText style={styles.sectionTitle}>
-            Выбор категории питания
+            {i18n.t('Выбор категории питания')}
           </CustomText>
           {Object.keys(categories).map(category => (
             <TouchableOpacity
@@ -194,33 +195,33 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
       ) : (
         <>
           <CustomButton
-            title="Назад к категориям"
+            title={i18n.t('Назад к категориям')}
             onPress={handleBackToCategories}
             style={StyleSheet.flatten([styles.wideButton, styles.backButton])}
             textStyle={styles.backButtonText}
           />
           <TagsInput
-            label="Предпочитаемые продукты"
-            placeholder="Добавить предпочитаемый продукт"
+            label={i18n.t('Предпочитаемые продукты')}
+            placeholder={i18n.t('Добавить предпочитаемый продукт')}
             value={preferredFoods}
             onChange={tags => handleTagsChange('preferredFoods', tags)}
           />
           <TagsInput
-            label="Не предлагать продукты"
-            placeholder="Добавить продукт для избежания"
+            label={i18n.t('Не предлагать продукты')}
+            placeholder={i18n.t('Добавить продукт для избежания')}
             value={avoidFoods}
             onChange={tags => handleTagsChange('avoidFoods', tags)}
           />
           <TagsInput
-            label="Аллергены"
-            placeholder="Добавить аллерген"
+            label={i18n.t('Аллергены')}
+            placeholder={i18n.t('Добавить аллерген')}
             value={allergens}
             onChange={tags => handleTagsChange('allergens', tags)}
           />
           {onNext && onBack ? (
             <View style={styles.buttonContainer}>
               <CustomButton
-                title="Назад"
+                title={i18n.t('Назад')}
                 onPress={onBack}
                 style={StyleSheet.flatten([
                   styles.wideButton,
@@ -229,7 +230,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
                 textStyle={styles.backButtonText}
               />
               <CustomButton
-                title="Далее"
+                title={i18n.t('Далее')}
                 onPress={handleNext}
                 style={styles.wideButton}
                 loading={status === 'loading'}
@@ -238,7 +239,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
           ) : (
             <View style={styles.buttonContainer}>
               <CustomButton
-                title="Сохранить"
+                title={i18n.t('Сохранить')}
                 onPress={handleNext}
                 style={{width: '100%'}}
                 loading={status === 'loading'}

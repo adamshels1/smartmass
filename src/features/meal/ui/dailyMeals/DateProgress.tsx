@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {ProgressBar} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {RootState} from 'app/providers/StoreProvider';
@@ -8,6 +8,7 @@ import UnplannedMealModal from 'features/meal/ui/dailyMeals/UnplannedMealModal.t
 import {BackIcon} from 'shared/assets/icons';
 import {useNavigation} from '@react-navigation/native';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 interface DateProgressComponentProps {
   date: string;
@@ -45,7 +46,7 @@ const DateProgress: React.FC<DateProgressComponentProps> = ({date}) => {
             style={styles.progressBar}
           />
           <CustomText style={styles.kcalProgress}>
-            {day?.takenCalories} ккал
+            {day?.takenCalories} {i18n.t('ккал')}
           </CustomText>
         </View>
       </View>

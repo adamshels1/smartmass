@@ -1,5 +1,7 @@
 {
+  "gain weight": "Набрать вес",
   "Hello! Send the exact required number of calories as a whole number to": "Привет! Отправьте точное количество необходимых калорий целым числом на",
   "in JSON format: [{time: null, name: null }]": "в формате JSON: [{время: null, название: null}]",
-  "Type a message...": "Введите сообщение..."
+  "lose weight": "Сбросить вес",
+  "maintain weight": "Поддержание веса"
 }

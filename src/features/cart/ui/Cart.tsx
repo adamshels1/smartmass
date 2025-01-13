@@ -17,6 +17,7 @@ import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {FilterIcon} from 'shared/assets/icons';
 import {useFocusEffect} from '@react-navigation/native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import i18n from 'shared/config/i18n/i18n.ts';
 
 moment.locale('ru');
 
@@ -288,7 +289,9 @@ const Cart = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <CustomText style={styles.title}>Список продуктов</CustomText>
+        <CustomText style={styles.title}>
+          {i18n.t('Список продуктов')}
+        </CustomText>
         <TouchableOpacity
           onPress={() => setGroupByDate(!groupByDate)}
           style={{marginTop: 5}}>
@@ -297,7 +300,9 @@ const Cart = () => {
       </View>
       {loadingPercentage !== 100 && (
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.loadingText}>Фомирование корзины</Text>
+          <Text style={styles.loadingText}>
+            {i18n.t('Фомирование корзины')}
+          </Text>
           <AnimatedCircularProgress
             size={50}
             width={2}
@@ -319,7 +324,8 @@ const Cart = () => {
             <CustomText style={styles.sectionTitle}>
               {groupByDate
                 ? formatDate(item.date)
-                : `Даты: ${formatRange(dateRange.from, dateRange.to)}`}
+                : i18n.t('Даты') +
+                  `: ${formatRange(dateRange.from, dateRange.to)}`}
             </CustomText>
             <FlatList
               data={item.items}

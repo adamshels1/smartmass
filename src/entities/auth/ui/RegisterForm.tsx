@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Text,
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
@@ -16,6 +15,7 @@ import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
+import i18n from 'i18next';
 
 const RegisterForm = () => {
   const [name, setName] = useState(''); // Добавлен name
@@ -29,20 +29,20 @@ const RegisterForm = () => {
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      dispatch(setMessage('Введите все поля!'));
+      dispatch(setMessage(i18n.t('Введите все поля!')));
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        title: 'Сообщение',
-        textBody: 'Введите все поля!',
+        title: i18n.t('Сообщение'),
+        textBody: i18n.t('Введите все поля!'),
       });
       return;
     }
     if (password !== confirmPassword) {
-      dispatch(setMessage('Пароли не совпадают!'));
+      dispatch(setMessage(i18n.t('Пароли не совпадают!')));
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        title: 'Сообщение',
-        textBody: 'Пароли не совпадают!',
+        title: i18n.t('Сообщение'),
+        textBody: i18n.t('Пароли не совпадают!'),
       });
       return;
     }
@@ -55,7 +55,7 @@ const RegisterForm = () => {
       Toast.show({
         type: ALERT_TYPE.SUCCESS,
         title: 'Успех',
-        textBody: result.message || 'Регистрация прошла успешно',
+        textBody: i18n.t('Регистрация прошла успешно'),
       });
       navigation.navigate(AppNavigation.VERIFY, {email, password});
     } catch (err: any) {
@@ -63,13 +63,13 @@ const RegisterForm = () => {
       if (err.response && err.response.data && err.response.data.message) {
         Toast.show({
           type: ALERT_TYPE.DANGER,
-          title: 'Ошибка',
+          title: i18n.t('Ошибка'),
           textBody: err.response.data.message,
         });
       } else {
         Toast.show({
           type: ALERT_TYPE.DANGER,
-          title: 'Ошибка',
+          title: i18n.t('Ошибка'),
           textBody: err.message,
         });
       }
@@ -87,48 +87,50 @@ const RegisterForm = () => {
         <CustomText style={styles.subtitle}>Создайте аккаунт чтобы</CustomText>
 
         <CustomTextInput
-          placeholder="Ваше имя"
+          placeholder={i18n.t('Ваше имя')}
           value={name}
           onChangeText={setName}
           autoCapitalize="words"
         />
         <CustomTextInput
-          placeholder="Адрес электронной почты"
+          placeholder={i18n.t('Адрес электронной почты')}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
         />
         <CustomTextInput
-          placeholder="Пароль"
+          placeholder={i18n.t('Пароль')}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
         <CustomTextInput
-          placeholder="Пароль повторно"
+          placeholder={i18n.t('Пароль повторно')}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
 
         {loading ? (
-          <CustomText style={styles.loadingText}>Загрузка...</CustomText>
+          <CustomText style={styles.loadingText}>
+            {i18n.t('Загрузка...')}
+          </CustomText>
         ) : null}
 
         <CustomText style={styles.acceptText}>
-          Нажимая кнопку зарегистрироваться вы принимаете{' '}
+          {i18n.t('Нажимая кнопку зарегистрироваться вы принимаете')}{' '}
           <CustomText style={styles.termsText}>
-            Условия использования
+            {i18n.t('Условия использования')}
           </CustomText>
         </CustomText>
 
         <CustomButton
-          title="Зарегистрироваться"
+          title={i18n.t('Зарегистрироваться')}
           onPress={handleRegister}
           style={styles.registerButton}
         />
         <CustomButton
-          title="У меня уже есть аккаунт"
+          title={i18n.t('У меня уже есть аккаунт')}
           onPress={() => navigation.navigate(AppNavigation.AUTH)}
           style={styles.existingAccountButton}
           textStyle={styles.existingAccountButtonText}
