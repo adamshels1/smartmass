@@ -2,6 +2,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  language?: string;
+  timezone?: string;
 }
 
 export interface AuthResponse {
@@ -23,10 +25,6 @@ export interface VerifyEmailResponse {
 }
 
 export interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
+  user: User;
   token: string;
 }

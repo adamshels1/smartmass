@@ -24,6 +24,7 @@ const MealDetails = () => {
   const mealDetail = useAppSelector((state: RootState) =>
     state.meal.mealsDetails.find(item => item.id === meal.id),
   );
+  const {user} = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(fetchMealDetails({mealId: meal.id}));
@@ -53,7 +54,7 @@ const MealDetails = () => {
                 width: '87%',
               }}>
               <CustomText style={{color: '#fff', fontSize: 18}}>
-                {meal.dish}
+                {user?.language === 'en' ? meal.dishEn : meal.dish}
               </CustomText>
               <View style={{flexDirection: 'row', marginTop: 3}} />
             </View>

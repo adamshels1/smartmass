@@ -20,6 +20,8 @@ import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {UpdateMealModal} from 'features/meal/ui/dailyMeals/UpdateMealModal.tsx';
 import i18n from 'i18next';
+import {useSelector} from 'react-redux';
+import {RootState} from 'app/providers/StoreProvider';
 
 interface MealItemProps {
   item: Meal;
@@ -30,6 +32,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
   const navigation = useAppNavigation();
   const [loading, setLoading] = useState(false);
   const [timeUntilNextMeal, setTimeUntilNextMeal] = useState('');
+  const {user} = useSelector((state: RootState) => state.auth);
 
   const isPastTime = moment(
     `${item.date} ${item.time}`,
@@ -166,7 +169,9 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
           <CustomText style={styles.mealTime}>
             {item.time} - {item.name}
           </CustomText>
-          <CustomText style={styles.mealTitle}>{item.dish}</CustomText>
+          <CustomText style={styles.mealTitle}>
+            {user?.language === 'en' ? item.dishEn : item.dish}
+          </CustomText>
           <CustomText style={styles.mealKcal}>
             {item.dishCalories} {i18n.t('ккал')}
           </CustomText>

@@ -54,5 +54,6 @@
   "Your shopping cart is empty. Please press the back button to get a meal plan for adding items to your cart.": "Your shopping cart is empty. Please press the back button to get a meal plan for adding items to your cart.",
   "Выберите из перечисленных вариантов": "",
   "Дай другие примеры до 20 разных блюд для замены {{name}}, в формате в JSON: ": "",
-  "Изменить {{name}} в {{time}}": ""
+  "Изменить {{name}} в {{time}}": "",
+  "Поздравляем с успешной регистрацией": ""
 }

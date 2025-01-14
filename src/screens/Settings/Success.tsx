@@ -12,7 +12,9 @@ export const Success = () => {
   return (
     <View style={styles.container}>
       <View style={styles.slide}>
-        <Text style={styles.text}>Поздравляем с успешной регистрацией</Text>
+        <Text style={styles.text}>
+          {i18n.t('Поздравляем с успешной регистрацией!')}
+        </Text>
         <LottieView
           style={{
             width: 300, // Adjust width for different animations
