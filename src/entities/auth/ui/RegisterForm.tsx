@@ -83,8 +83,12 @@ const RegisterForm = () => {
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled">
-        <CustomText style={styles.title}>Создание аккаунта</CustomText>
-        <CustomText style={styles.subtitle}>Создайте аккаунт чтобы</CustomText>
+        <CustomText style={styles.title}>
+          {i18n.t('Создание аккаунта')}
+        </CustomText>
+        <CustomText style={styles.subtitle}>
+          {i18n.t('Создайте аккаунт чтобы')}
+        </CustomText>
 
         <CustomTextInput
           placeholder={i18n.t('Ваше имя')}

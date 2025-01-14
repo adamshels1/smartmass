@@ -54,7 +54,7 @@ const MealDetails = () => {
                 width: '87%',
               }}>
               <CustomText style={{color: '#fff', fontSize: 18}}>
-                {user?.language === 'en' ? meal.dishEn : meal.dish}
+                {meal.dish}
               </CustomText>
               <View style={{flexDirection: 'row', marginTop: 3}} />
             </View>

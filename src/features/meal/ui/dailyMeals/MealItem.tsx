@@ -169,9 +169,7 @@ const MealItem: React.FC<MealItemProps> = ({item}) => {
           <CustomText style={styles.mealTime}>
             {item.time} - {item.name}
           </CustomText>
-          <CustomText style={styles.mealTitle}>
-            {user?.language === 'en' ? item.dishEn : item.dish}
-          </CustomText>
+          <CustomText style={styles.mealTitle}>{item.dish}</CustomText>
           <CustomText style={styles.mealKcal}>
             {item.dishCalories} {i18n.t('ккал')}
           </CustomText>
