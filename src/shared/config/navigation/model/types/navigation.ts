@@ -24,6 +24,7 @@ export enum AppNavigation {
   DAILY_CALORIES = 'Daily calories',
   ACCOUNT_SETTINGS = 'Account settings',
   SUBSCRIPTION = 'Subscription',
+  SOURCES = 'Sources',
 
   MEAL_DETAILS = 'Meal Details',
 
@@ -55,6 +56,7 @@ export type NavigationStackLists = {
   [AppNavigation.FOOD_PREFERENCES]: undefined;
   [AppNavigation.DAILY_CALORIES]: undefined;
   [AppNavigation.SUBSCRIPTION]: undefined;
+  [AppNavigation.SOURCES]: undefined;
 
   [AppNavigation.MEAL_DETAILS]: {meal: Meal};
   [AppNavigation.DAILY_MEALS]: {date?: string};

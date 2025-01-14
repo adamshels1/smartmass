@@ -22,6 +22,7 @@ import DailyMealsScreen from 'screens/DailyMealsScreen.tsx';
 import EmailVerificationScreen from 'screens/EmailVerificationScreen.tsx';
 import SuccessEmailVerificationScreen from 'screens/SuccessEmailVerificationScreen.tsx';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen.tsx';
+import SourcesScreen from 'screens/SourcesScreen.tsx';
 
 // Create separate stacks for authenticated and unauthenticated routes
 const AuthStack = createNativeStackNavigator();
@@ -192,6 +193,14 @@ const AppNavigator = () => {
           headerTransparent: true,
         }}
         component={SubscriptionScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.SOURCES}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={SourcesScreen}
       />
     </AppStack.Navigator>
   );

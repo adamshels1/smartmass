@@ -6,81 +6,80 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import Header from '../components/Header';
 import i18n from '../shared/config/i18n';
+import {AppHeader} from 'shared/ui/AppHeader/AppHeader.tsx';
+import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 
-const SourcesScreen = ({navigation}) => {
+const SourcesScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        showBack={true}
-        navigation={navigation}
-        title={i18n.t('Information Sources')}
-      />
+      <AppHeader title={i18n.t('Information Sources')} />
       <ScrollView style={{flex: 1, padding: 15}}>
-        {/*<Text style={styles.title}>{i18n.t('Information Sources')}</Text>*/}
-        <Text style={styles.intro}>
+        {/*<CustomText style={styles.title}>{i18n.t('Information Sources')}</CustomText>*/}
+        <CustomText style={styles.intro}>
           {i18n.t('Our app sources data from reliable sources such as:')}
-        </Text>
+        </CustomText>
 
-        <Text style={styles.header}>
+        <CustomText style={styles.header}>
           {i18n.t('Websites of authoritative medical organizations:')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://www.who.int/health-topics/nutrition')
           }>
           {i18n.t('World Health Organization (WHO)')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://www.nih.gov/')}>
           {i18n.t('National Institutes of Health (NIH)')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://www.cdc.gov/')}>
           {i18n.t('Centers for Disease Control and Prevention (CDC)')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://www.eatright.org/')}>
           {i18n.t('Academy of Nutrition and Dietetics (AND)')}
-        </Text>
+        </CustomText>
 
-        <Text style={styles.header}>{i18n.t('Scientific journals:')}</Text>
-        <Text
+        <CustomText style={styles.header}>
+          {i18n.t('Scientific journals:')}
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://www.mdpi.com/journal/nutrients')
           }>
           {i18n.t('Nutrients')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://ajcn.nutrition.org/')}>
           {i18n.t('The American Journal of Clinical Nutrition')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://portal.issn.org/resource/ISSN/1541-6100')
           }>
           {i18n.t('The Journal of Nutrition')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://onlinelibrary.wiley.com/journal/1930739x')
           }>
           {i18n.t('Obesity')}
-        </Text>
+        </CustomText>
 
-        {/*<Text style={styles.header}>*/}
+        {/*<CustomText style={styles.header}>*/}
         {/*  {i18n.t('3. Books written by reputable medical professionals:')}*/}
-        {/*</Text>*/}
-        {/*<Text*/}
+        {/*</CustomText>*/}
+        {/*<CustomText*/}
         {/*  style={styles.link}*/}
         {/*  onPress={() =>*/}
         {/*    Linking.openURL(*/}
@@ -88,8 +87,8 @@ const SourcesScreen = ({navigation}) => {
         {/*    )*/}
         {/*  }>*/}
         {/*  {i18n.t('"Nutrition Pyramid" - Margarita Koroleva')}*/}
-        {/*</Text>*/}
-        <Text
+        {/*</CustomText>*/}
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL(
@@ -97,8 +96,8 @@ const SourcesScreen = ({navigation}) => {
             )
           }>
           {i18n.t('"How Not to Die" - Michael Greger')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL(
@@ -108,39 +107,39 @@ const SourcesScreen = ({navigation}) => {
           {i18n.t(
             '"The China Study" - T. Colin Campbell and Thomas M. Campbell II',
           )}
-        </Text>
+        </CustomText>
 
-        <Text style={styles.header}>
+        <CustomText style={styles.header}>
           {i18n.t('Apps and websites on healthy eating:')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://www.myfitnesspal.com/')}>
           {i18n.t('MyFitnessPal')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() =>
             Linking.openURL('https://www.loseit.com/how-it-works/')
           }>
           {i18n.t('Lose It!')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://www.fatsecret.com/')}>
           {i18n.t('FatSecret')}
-        </Text>
-        <Text
+        </CustomText>
+        <CustomText
           style={styles.link}
           onPress={() => Linking.openURL('https://www.eatthismuch.com/')}>
           {i18n.t('Eat This Much')}
-        </Text>
+        </CustomText>
 
-        <Text style={styles.warning}>
+        <CustomText style={styles.warning}>
           {i18n.t(
             'Important: Before starting a new diet, it is important to consult with a doctor or dietitian to ensure it is suitable for you. Not all diets are suitable for everyone, and what works for one person may not work for another.',
           )}
-        </Text>
+        </CustomText>
       </ScrollView>
     </SafeAreaView>
   );
