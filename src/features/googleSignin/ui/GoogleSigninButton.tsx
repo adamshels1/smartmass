@@ -10,6 +10,7 @@ import {fetchAuth, loginWithGoogle} from 'entities/auth/model/authSlice';
 import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {notificationInitialized} from 'entities/notification';
+import i18n from 'i18next';
 
 GoogleSignin.configure({
   webClientId:
@@ -38,8 +39,10 @@ const GoogleSigninButton2 = () => {
         await notificationInitialized();
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
-          title: 'Вход',
-          textBody: `Вошли как: ${userInfo?.data?.user?.email}`,
+          title: i18n.t('Вход'),
+          textBody: i18n.t('Вошли как: {{email}}', {
+            email: userInfo?.data?.user?.email,
+          }),
         });
       } else {
         console.error('No idToken returned from Google Sign-In');
