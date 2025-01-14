@@ -4,6 +4,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Linking,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {registerUser, setMessage} from '../model/authSlice.ts';
@@ -13,9 +14,9 @@ import CustomTextInput from 'shared/ui/CustomTextInput/CustomTextInput.tsx';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import {AppNavigation} from 'shared/config/navigation';
-import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import i18n from 'i18next';
+import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 
 const RegisterForm = () => {
   const [name, setName] = useState(''); // Добавлен name
@@ -123,8 +124,16 @@ const RegisterForm = () => {
 
         <CustomText style={styles.acceptText}>
           {i18n.t('Нажимая кнопку зарегистрироваться вы принимаете')}{' '}
-          <CustomText style={styles.termsText}>
+          <CustomText
+            style={styles.termsText}
+            onPress={() => Linking.openURL('https://smartmass.app/terms')}>
             {i18n.t('Условия использования')}
+          </CustomText>{' '}
+          {i18n.t('и')}{' '}
+          <CustomText
+            style={styles.termsText}
+            onPress={() => Linking.openURL('https://smartmass.app/privacy')}>
+            {i18n.t('Политику конфиденциальности')}
           </CustomText>
         </CustomText>
 
