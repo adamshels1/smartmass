@@ -12,112 +12,11 @@ import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {sleep} from 'shared/lib/utils/sleep.js';
 import i18n from 'i18next';
-
+import categories from 'features/settings/constants/categories.ts';
 interface FoodPreferencesFormProps {
   onNext?: () => void;
   onBack?: () => void;
 }
-
-const categories: {[key: string]: string[]} = {
-  'Спортивное питание': [
-    'белковые коктейли',
-    'овсянка',
-    'куриная грудка',
-    'бананы',
-    'гречка',
-    'орехи',
-    'рыба (лосось, тунец)',
-  ],
-  'Диетическое питание': [
-    'салаты',
-    'нежирные белки',
-    'овощи',
-    'фрукты',
-    'йогурты',
-    'творог',
-    'гречка',
-  ],
-  'Вегетарианское питание': [
-    'тофу',
-    'авокадо',
-    'киноа',
-    'зелёные смузи',
-    'нут',
-    'соя',
-    'баклажаны',
-    'цуккини',
-  ],
-  'Веганское питание': [
-    'растительное молоко',
-    'ореховые пасты',
-    'тофу',
-    'сейтан',
-    'бобы',
-    'овощные супы',
-    'фрукты',
-    'орехи',
-  ],
-  'Кето питание': [
-    'яйца',
-    'жирное мясо',
-    'сыр',
-    'сливочное масло',
-    'авокадо',
-    'кето-десерты',
-    'оливковое масло',
-    'рыба',
-  ],
-  'Палео питание': [
-    'мясо',
-    'рыба',
-    'овощи',
-    'фрукты',
-    'орехи',
-    'семена',
-    'оливковое масло',
-    'сладкий картофель',
-  ],
-  'Сбалансированное питание': [
-    'цельнозерновые продукты',
-    'курица',
-    'рыба',
-    'овощи',
-    'фрукты',
-    'йогурты',
-    'яйца',
-    'растительные масла',
-  ],
-  'Безглютеновое питание': [
-    'рис',
-    'гречка',
-    'кукурузная мука',
-    'овощи',
-    'фрукты',
-    'мясо',
-    'рыба',
-    'безглютеновая паста',
-  ],
-  'Низкоуглеводное питание': [
-    'яйца',
-    'куриная грудка',
-    'рыба',
-    'овощи с низким содержанием углеводов (брокколи, цветная капуста)',
-    'сыр',
-    'авокадо',
-    'орехи',
-    'оливковое масло',
-  ],
-  'Средиземноморская диета': [
-    'оливковое масло',
-    'рыба',
-    'морепродукты',
-    'овощи',
-    'фрукты',
-    'цельнозерновые продукты',
-    'греческий йогурт',
-    'вино (в умеренных количествах)',
-  ],
-};
 
 const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
   onNext,
@@ -132,15 +31,18 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
   const {preferredFoods, avoidFoods, allergens} = useSelector(
     (state: RootState) => state.userDetails.userDetails,
   );
+  const {user} = useSelector((state: RootState) => state.auth);
   const status = useSelector((state: RootState) => state.userDetails.status);
 
+  const categoryList = categories[user?.language || 'en'];
+
   useEffect(() => {
-    if (categories[selectedCategory]) {
+    if (categoryList[selectedCategory]) {
       dispatch(
-        updateFoodPreferences({preferredFoods: categories[selectedCategory]}),
+        updateFoodPreferences({preferredFoods: categoryList[selectedCategory]}),
       );
     }
-  }, [selectedCategory, dispatch]);
+  }, [selectedCategory, dispatch, categoryList]);
 
   const handleCategorySelect = async (category: string) => {
     setSelectedCategory(category);
@@ -176,7 +78,7 @@ const FoodPreferencesForm: React.FC<FoodPreferencesFormProps> = ({
           <CustomText style={styles.sectionTitle}>
             {i18n.t('Выбор категории питания')}
           </CustomText>
-          {Object.keys(categories).map(category => (
+          {Object.keys(categoryList).map(category => (
             <TouchableOpacity
               key={category}
               onPress={() => handleCategorySelect(category)}
