@@ -68,7 +68,7 @@ const CalorieCalendar = () => {
 
   const renderFooter = () => {
     const lastDate = moment(daysWithMeals[daysWithMeals.length - 1]?.date);
-    const nextDate = lastDate.add(1, 'day').format('YYYY-MM-DD');
+    const nextDate = lastDate.locale('en').add(1, 'day').format('YYYY-MM-DD');
 
     return (
       <TouchableOpacity

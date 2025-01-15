@@ -8,7 +8,7 @@ import {AppNavigation} from 'shared/config/navigation';
 
 const DailyMeals: React.FC = () => {
   const route = useAppRoute<AppNavigation.DAILY_MEALS>();
-  const date = route.params?.date || moment().format('YYYY-MM-DD'); // Устанавливаем текущую дату по умолчанию с использованием moment
+  const date = route.params?.date || moment().locale('en').format('YYYY-MM-DD'); // Устанавливаем текущую дату по умолчанию с использованием moment
 
   return (
     <View style={styles.container}>
