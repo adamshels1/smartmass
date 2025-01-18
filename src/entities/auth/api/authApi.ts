@@ -41,6 +41,26 @@ export const signInWithGoogle = async (
   }
 };
 
+export const signInWithApple = async (
+  idToken: string,
+  name: string,
+): Promise<AuthResponse> => {
+  try {
+    const timezone = getTimeZone(); // Получаем временную зону
+    const language = getLocalize<LanguageType>();
+    const response = await apiInstance.post<AuthResponse>('/auth/appleAuth', {
+      idToken,
+      name,
+      timezone,
+      language,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error logging in with Apple:', error);
+    throw error;
+  }
+};
+
 export const registerWithEmail = async (
   email: string,
   password: string,

@@ -81,8 +81,8 @@ android {
         applicationId "com.adamshels.smartmass"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "0.6"
+        versionCode 9
+        versionName "0.7"
         missingDimensionStrategy "store", "play"
     }
     signingConfigs {

@@ -2,6 +2,7 @@ import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import {
   signInWithEmail,
   signInWithGoogle,
+  signInWithApple,
   registerWithEmail,
   verifyEmail,
   forgotPassword, // Импортируем функцию для сброса пароля
@@ -50,6 +51,26 @@ export const loginWithGoogle = createAsyncThunk(
     try {
       const data = await signInWithGoogle(idToken);
       await AsyncStorage.setItem('userToken', data.token); // Сохранение токена
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const loginWithApple = createAsyncThunk(
+  'auth/loginWithApple',
+  async (
+    {idToken, name}: {idToken: string; name: string},
+    {rejectWithValue},
+  ) => {
+    try {
+      const data = await signInWithApple(idToken, name);
+      await AsyncStorage.setItem('userToken', data.token); // Сохранение токена
+      await AsyncStorage.setItem('userName', name); // Сохранение имени пользователя
       return data;
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -202,6 +223,27 @@ const authSlice = createSlice({
           (action.payload as string) ||
           action.error.message ||
           'Failed to login with Google';
+      })
+      .addCase(loginWithApple.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        loginWithApple.fulfilled,
+        (state, action: PayloadAction<AuthResponse>) => {
+          console.log('User:', action.payload.user); // Логирование пользователя
+          state.loading = false;
+          state.user = action.payload.user;
+          // state.isAuth = true;
+          state.error = null; // Обнуление ошибки
+        },
+      )
+      .addCase(loginWithApple.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          (action.payload as string) ||
+          action.error.message ||
+          'Failed to login with Apple';
       })
       .addCase(registerUser.pending, state => {
         state.loading = true;

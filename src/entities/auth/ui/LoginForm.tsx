@@ -19,6 +19,7 @@ import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import {fetchUserDetails} from 'entities/userDetails/model/slices/userDetailsSlice.ts';
 import {notificationInitialized} from 'entities/notification';
 import i18n from 'i18next';
+import {AppleSigninButton} from 'features/appleSignin/ui/AppleSigninButton.tsx';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -84,6 +85,7 @@ const SignInScreen = () => {
         </CustomText>
 
         <GoogleSigninButton2 />
+        <AppleSigninButton />
 
         <CustomText style={styles.dividerText}>
           {i18n.t('Или войдите при помощи email аккаунта')}
