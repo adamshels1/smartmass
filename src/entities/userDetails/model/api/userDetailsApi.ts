@@ -26,3 +26,14 @@ export const getUserDetails = async (): Promise<UserDetails> => {
     throw error;
   }
 };
+
+// Функция для удаления данных пользователя
+export const deleteUserDetails = async (): Promise<void> => {
+  try {
+    await apiInstance.delete('/userDetails/deleteUserAndDetails');
+    console.log('User details deleted successfully');
+  } catch (error) {
+    console.error('Error deleting user details:', error);
+    throw error;
+  }
+};

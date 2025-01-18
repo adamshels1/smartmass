@@ -53,7 +53,18 @@ const SignInScreen = () => {
       });
     } catch (err: any) {
       // Приведение err к типу any
-      if (err.response && err.response.data && err.response.data.message) {
+      if (err.message === 'Please verify your email before logging in') {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: i18n.t('Ошибка'),
+          textBody: i18n.t(err.message),
+        });
+        navigation.navigate(AppNavigation.VERIFY, {email, password});
+      } else if (
+        err.response &&
+        err.response.data &&
+        err.response.data.message
+      ) {
         Toast.show({
           type: ALERT_TYPE.DANGER,
           title: i18n.t('Ошибка'),

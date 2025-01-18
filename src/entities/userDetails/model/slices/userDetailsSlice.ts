@@ -1,14 +1,13 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
-  Gender,
   UserDetails,
-} from 'entities/userDetails/model/types/userDetailsTypes';
-import {
   Goal,
   UserDetailsState,
 } from 'entities/userDetails/model/types/userDetailsTypes.ts';
 import apiInstance from 'shared/api/apiInstance';
 import {RootState} from 'app/providers/StoreProvider/config/store';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import i18n from 'i18next';
 
 const initialState: UserDetailsState = {
   userDetails: {
@@ -51,6 +50,19 @@ export const updateUserDetails = createAsyncThunk<
   console.log('userDetails', userDetails);
   await apiInstance.post('/userDetails/updateUserDetails', {userDetails});
 });
+
+export const deleteUserDetails = createAsyncThunk<void, void>(
+  'userDetails/deleteUserDetails',
+  async () => {
+    await apiInstance.delete('/userDetails/deleteUserAndDetails');
+    Toast.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: i18n.t('User deleted successfully'),
+      textBody: '',
+    });
+    console.log('User details deleted successfully');
+  },
+);
 
 const userDetailsSlice = createSlice({
   name: 'userDetails',
@@ -99,6 +111,16 @@ const userDetailsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(updateUserDetails.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || null;
+      })
+      .addCase(deleteUserDetails.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(deleteUserDetails.fulfilled, state => {
+        state.status = 'succeeded';
+      })
+      .addCase(deleteUserDetails.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || null;
       });

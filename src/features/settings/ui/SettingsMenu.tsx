@@ -8,7 +8,8 @@ import MenuItem from './MenuItem.tsx';
 import {AppNavigation} from 'shared/config/navigation';
 import {useAppDispatch} from 'shared/lib/state/dispatch/useAppDispatch.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
-import i18n from 'i18next'; // Adjust the import path
+import i18n from 'i18next';
+import {DeleteAccountButton} from 'features/settings/ui/DeleteAccountButton.tsx'; // Adjust the import path
 
 export const SettingsMenu: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -56,6 +57,7 @@ export const SettingsMenu: React.FC = () => {
           title={i18n.t('Information Sources')}
           navigationTarget={AppNavigation.SOURCES}
         />
+        <DeleteAccountButton />
         {/*<MenuItem*/}
         {/*  title={i18n.t('Подписка')}
         {/*  navigationTarget={AppNavigation.SUBSCRIPTION}*/}
