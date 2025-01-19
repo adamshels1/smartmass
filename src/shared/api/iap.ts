@@ -6,12 +6,13 @@ import {
   SubscriptionPurchase,
 } from 'react-native-iap';
 
-const itemSkus = ['monthly'];
+const itemSkus = ['com.adamshels.smartmass.sku'];
 
 export const initIapConnection = async (): Promise<Subscription[]> => {
   try {
     await RNIap.initConnection();
     const subscriptions = await getSubscriptions({skus: itemSkus});
+    console.log('subscriptions', subscriptions);
     return subscriptions;
   } catch (err) {
     console.error(err);
