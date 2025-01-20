@@ -57,11 +57,11 @@ export const SettingsMenu: React.FC = () => {
           title={i18n.t('Information Sources')}
           navigationTarget={AppNavigation.SOURCES}
         />
-        <DeleteAccountButton />
         <MenuItem
           title={i18n.t('Подписка')}
           navigationTarget={AppNavigation.SUBSCRIPTION}
         />
+        <DeleteAccountButton />
         {/*<MenuItem*/}
         {/*  title={i18n.t('Настройки аккаунта')}
         {/*  navigationTarget={AppNavigation.ACCOUNT_SETTINGS}*/}

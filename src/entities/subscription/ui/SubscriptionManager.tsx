@@ -1,12 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import * as RNIap from 'react-native-iap';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {initIapConnection, subscribe} from 'shared/api/iap';
 import {Subscription} from 'react-native-iap';
 import CustomButton from 'shared/ui/CustomButton/CustomButton.tsx';
@@ -76,7 +70,7 @@ const SubscriptionManager: React.FC = () => {
           <View style={styles.subscriptionItem}>
             <View style={styles.subscriptionDetails}>
               <Text style={styles.subscriptionTitle}>{item.title}</Text>
-              <Text style={styles.subscriptionPrice}>$4.99 / month</Text>
+              <Text style={styles.subscriptionPrice}>$2.99 / month</Text>
               <Text style={styles.subscriptionTrial}>
                 7-day free trial period
               </Text>
@@ -98,11 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f8f8f8',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
   },
   subscriptionItem: {
     flexDirection: 'row',
