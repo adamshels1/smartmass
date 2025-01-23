@@ -12,7 +12,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		414D58822C00E06100E81A90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 414D58812C00E06100E81A90 /* GoogleService-Info.plist */; };
-		41BE4C342D280BE6008F05C6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41BE4C332D280BE6008F05C6 /* StoreKit.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BF123895A55A66F8F0956CD3 /* Pods_SmartMass.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F02A466BCF5E164D398E464 /* Pods_SmartMass.framework */; };
 		CE2032668DE5B2F418CA72EA /* Pods_SmartMass_SmartMassTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 349D3B321FFA36C6188F5123 /* Pods_SmartMass_SmartMassTests.framework */; };
@@ -42,7 +41,6 @@
 		3B4392A12AC88292D35C810B /* Pods-SmartMass.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartMass.debug.xcconfig"; path = "Target Support Files/Pods-SmartMass/Pods-SmartMass.debug.xcconfig"; sourceTree = "<group>"; };
 		414D58812C00E06100E81A90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		414D58832C00E1A300E81A90 /* SmartMass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SmartMass.entitlements; path = SmartMass/SmartMass.entitlements; sourceTree = "<group>"; };
-		41BE4C332D280BE6008F05C6 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		5709B34CF0A7D63546082F79 /* Pods-SmartMass.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartMass.release.xcconfig"; path = "Target Support Files/Pods-SmartMass/Pods-SmartMass.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-SmartMass-SmartMassTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartMass-SmartMassTests.debug.xcconfig"; path = "Target Support Files/Pods-SmartMass-SmartMassTests/Pods-SmartMass-SmartMassTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6F02A466BCF5E164D398E464 /* Pods_SmartMass.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartMass.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,7 +63,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF123895A55A66F8F0956CD3 /* Pods_SmartMass.framework in Frameworks */,
-				41BE4C342D280BE6008F05C6 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +104,6 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				41BE4C332D280BE6008F05C6 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				6F02A466BCF5E164D398E464 /* Pods_SmartMass.framework */,
 				349D3B321FFA36C6188F5123 /* Pods_SmartMass_SmartMassTests.framework */,
@@ -490,7 +486,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartMass/SmartMass.entitlements;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = CC29P8CV2V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartMass/Info.plist;
@@ -521,7 +517,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartMass/SmartMass.entitlements;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = CC29P8CV2V;
 				INFOPLIST_FILE = SmartMass/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Smartmass;
