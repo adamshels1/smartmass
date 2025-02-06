@@ -1276,6 +1276,11 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
+"@invertase/react-native-apple-authentication@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/@invertase/react-native-apple-authentication/-/react-native-apple-authentication-2.4.0.tgz"
+  integrity sha512-H29XdL/4JmMMA/b7CCEHpSKvyg3LdCJKMydE7ont01IAnDIW//uPuRMdL2RkxJKJtw449c/PY2K9ijWLxQAMIQ==
+
 "@isaacs/ttlcache@^1.4.1":
   version "1.4.1"
   resolved "https://registry.npmjs.org/@isaacs/ttlcache/-/ttlcache-1.4.1.tgz"
@@ -7622,6 +7627,11 @@ react-native-picker-select@^9.1.3:
   dependencies:
     lodash.isequal "^4.5.0"
     lodash.isobject "^3.0.2"
+
+react-native-play-install-referrer@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.npmjs.org/react-native-play-install-referrer/-/react-native-play-install-referrer-1.1.8.tgz"
+  integrity sha512-g+LLv4Tkt3gWJ68OnhaBy25zYpP43OlLydL6siRjGAcl1fMc/DvfnNFWL4Oe1zrpwW4cmB0QGrKYtcbKnSGK3Q==
 
 react-native-reanimated@^3.11.0:
   version "3.11.0"

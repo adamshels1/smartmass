@@ -1,9 +1,16 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {Alert, Linking} from 'react-native';
+import {Alert, Linking, Platform} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PlayInstallReferrer} from 'react-native-play-install-referrer';
 
 interface ReferralContextType {
   referralId: string | null;
 }
+
+const getRefIdFromURL = (url: string) => {
+  const match = url.match(/[?&]refId=([^&]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+};
 
 const ReferralContext = createContext<ReferralContextType>({referralId: null});
 
@@ -13,30 +20,64 @@ export const ReferralProvider: React.FC<{children: React.ReactNode}> = ({
   const [referralId, setReferralId] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleReferral = (url: string) => {
-      const urlParams = new URLSearchParams(url.split('?')[1]);
-      const ref = urlParams.get('ref');
-      Alert.alert('ref', JSON.stringify(ref));
+    const handleReferral = async (url: string) => {
+      const ref = getRefIdFromURL(url);
+      Alert.alert('Referral', ref || 'No referral found');
       if (ref) {
+        await saveReferralToStorage(ref);
         setReferralId(ref);
-        saveReferralToDatabase(ref);
       }
     };
 
-    // Получаем URL, если приложение было открыто через ссылку
-    Linking.getInitialURL().then(url => {
-      Alert.alert('url', JSON.stringify(url));
+    const checkInitialURL = async () => {
+      const storedRef = await AsyncStorage.getItem('referralId');
+      if (storedRef) {
+        setReferralId(storedRef);
+        return;
+      }
+
+      const url = await Linking.getInitialURL();
+      Alert.alert('Initial URL', url || 'No initial URL found');
       if (url) {
         handleReferral(url);
       }
-    });
+    };
 
-    // Добавляем обработчик для новых ссылок
-    const listener = Linking.addEventListener('url', ({url}) =>
+    const listenForURLChanges = Linking.addEventListener('url', ({url}) =>
       handleReferral(url),
     );
 
-    return () => listener.remove();
+    const fetchAndroidReferrer = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          PlayInstallReferrer.getInstallReferrerInfo((info, error) => {
+            if (error) {
+              Alert.alert(
+                'PlayInstallReferrer Error',
+                JSON.stringify(error.responseCode),
+              );
+              console.log('PlayInstallReferrer Error:', error);
+              return;
+            }
+            if (info?.installReferrer) {
+              Alert.alert(
+                'PlayInstallReferrer Info',
+                JSON.stringify(info.installReferrer),
+              );
+              saveReferralToStorage(info.installReferrer);
+              setReferralId(info.installReferrer);
+            }
+          });
+        } catch (e) {
+          console.log('Failed to get install referrer', e);
+        }
+      }
+    };
+
+    checkInitialURL();
+    fetchAndroidReferrer();
+
+    return () => listenForURLChanges.remove();
   }, []);
 
   return (
@@ -50,7 +91,11 @@ export const useReferral = (): string | null => {
   return useContext(ReferralContext).referralId;
 };
 
-const saveReferralToDatabase = (ref: string) => {
-  // Здесь логика сохранения реферального ID в БД
-  console.log('Saving referral ID:', ref);
+const saveReferralToStorage = async (ref: string) => {
+  try {
+    await AsyncStorage.setItem('referralId', ref);
+    console.log('Referral ID saved:', ref);
+  } catch (e) {
+    console.log('Error saving referral ID', e);
+  }
 };
