@@ -42,6 +42,21 @@
 		</dict>
 		<dict/>
 	</array>
+	<key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.adamshels.smartmass</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>smartmass</string>
+            </array>
+        </dict>
+    </array>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>smartmass</string>
+    </array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>

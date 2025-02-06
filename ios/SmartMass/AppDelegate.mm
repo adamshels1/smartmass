@@ -1,8 +1,8 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
-
 #import <React/RCTBundleURLProvider.h>
 #import <GoogleSignIn/GoogleSignIn.h>
+#import <React/RCTLinkingManager.h>
 
 @implementation AppDelegate
 
@@ -36,6 +36,11 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+// Добавление обработки Universal Links
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+  return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end
