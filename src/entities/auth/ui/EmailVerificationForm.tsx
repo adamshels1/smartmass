@@ -24,6 +24,7 @@ import {AppNavigation} from 'shared/config/navigation';
 import {useAppNavigation} from 'shared/lib/navigation/useAppNavigation.ts';
 import CustomText from 'shared/ui/CustomText/CustomText.tsx';
 import i18n from 'i18next';
+import {notificationInitialized} from 'entities/notification';
 
 const EmailVerificationForm: React.FC = () => {
   const [code, setCode] = useState(['', '', '', '']);
@@ -85,6 +86,7 @@ const EmailVerificationForm: React.FC = () => {
           .unwrap()
           .then(async () => {
             await dispatch(fetchAuth());
+            await notificationInitialized();
             navigation.navigate(AppNavigation.SETTINGS_STEPS); // Замените 'Home' на название экрана после авторизации
           })
           .catch((error: any) => {
