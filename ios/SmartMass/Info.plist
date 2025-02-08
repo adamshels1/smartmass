@@ -40,11 +40,9 @@
                 <string>com.googleusercontent.apps.64664657407-i6pmfod2mmlfbhj6u2g1busns03fbru9</string>
             </array>
         </dict>
-        <dict/>
-    </array>
-    <key>CFBundleURLTypes</key>
-    <array>
         <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
             <key>CFBundleURLName</key>
             <string>com.adamshels.smartmass</string>
             <key>CFBundleURLSchemes</key>
@@ -97,19 +95,6 @@
         <string>smartmass.app.link</string>
         <string>smartmass-alternate.app.link</string>
         <string>smartmass.test.app.link</string>
-    </array>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>com.adamshels.smartmass</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>smartmass</string>
-            </array>
-        </dict>
     </array>
     <key>branch_key</key>
     <dict>

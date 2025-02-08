@@ -1,4 +1,5 @@
 import apiInstance from 'shared/api/apiInstance.ts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   AuthResponse,
   VerifyEmailResponse,
@@ -29,10 +30,12 @@ export const signInWithGoogle = async (
   try {
     const timezone = getTimeZone(); // Получаем временную зону
     const language = getLocalize<LanguageType>();
+    const referralId = await AsyncStorage.getItem('referralId');
     const response = await apiInstance.post<AuthResponse>('/auth/googleAuth', {
       idToken,
       timezone,
       language,
+      referralId,
     });
     return response.data;
   } catch (error) {
@@ -48,11 +51,13 @@ export const signInWithApple = async (
   try {
     const timezone = getTimeZone(); // Получаем временную зону
     const language = getLocalize<LanguageType>();
+    const referralId = await AsyncStorage.getItem('referralId');
     const response = await apiInstance.post<AuthResponse>('/auth/appleAuth', {
       idToken,
       name,
       timezone,
       language,
+      referralId,
     });
     return response.data;
   } catch (error) {
@@ -69,12 +74,14 @@ export const registerWithEmail = async (
   try {
     const timezone = getTimeZone(); // Получаем временную зону
     const language = getLocalize<LanguageType>();
+    const referralId = await AsyncStorage.getItem('referralId');
     const response = await apiInstance.post<AuthResponse>('/auth/register', {
       email,
       password,
       name,
       timezone,
       language,
+      referralId,
     });
     console.log('response', response);
     return response.data;
@@ -88,8 +95,10 @@ export const registerWithGoogle = async (
   idToken: string,
 ): Promise<AuthResponse> => {
   try {
+    const referralId = await AsyncStorage.getItem('referralId');
     const response = await apiInstance.post<AuthResponse>('/auth/googleAuth', {
       idToken,
+      referralId,
     });
     return response.data;
   } catch (error) {
