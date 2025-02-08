@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {Alert, Linking, Platform} from 'react-native';
+import {Linking, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PlayInstallReferrer} from 'react-native-play-install-referrer';
 import branch from 'react-native-branch';
@@ -24,17 +24,17 @@ export const ReferralProvider: React.FC<{children: React.ReactNode}> = ({
     branch.subscribe({
       onOpenComplete: ({params, error}) => {
         if (error) {
-          Alert.alert('Error from Branch', JSON.stringify(error));
+          // Alert.alert('Error from Branch', JSON.stringify(error));
           console.error('Error from Branch: ' + error);
           return;
         }
 
         if (typeof params?.ref === 'string') {
           const ref: string = params.ref;
-          Alert.alert(
-            'Branch Referral',
-            JSON.stringify(ref) || 'No referral found',
-          );
+          // Alert.alert(
+          //   'Branch Referral',
+          //   JSON.stringify(ref) || 'No referral found',
+          // );
           saveReferralToStorage(ref);
           setReferralId(ref);
         }
@@ -43,7 +43,7 @@ export const ReferralProvider: React.FC<{children: React.ReactNode}> = ({
 
     const handleReferral = async (url: string) => {
       const ref = getRefFromURL(url);
-      Alert.alert('Referral', ref || 'No referral found');
+      // Alert.alert('Referral', ref || 'No referral found');
       if (ref) {
         await saveReferralToStorage(ref);
         setReferralId(ref);
@@ -58,7 +58,7 @@ export const ReferralProvider: React.FC<{children: React.ReactNode}> = ({
       }
 
       const url = await Linking.getInitialURL();
-      Alert.alert('Initial URL', url || 'No initial URL found');
+      // Alert.alert('Initial URL', url || 'No initial URL found');
       if (url) {
         handleReferral(url);
       }
@@ -73,18 +73,18 @@ export const ReferralProvider: React.FC<{children: React.ReactNode}> = ({
         try {
           PlayInstallReferrer.getInstallReferrerInfo((info, error) => {
             if (error) {
-              Alert.alert(
-                'PlayInstallReferrer Error',
-                JSON.stringify(error.responseCode),
-              );
+              // Alert.alert(
+              //   'PlayInstallReferrer Error',
+              //   JSON.stringify(error.responseCode),
+              // );
               console.log('PlayInstallReferrer Error:', error);
               return;
             }
             if (info?.installReferrer) {
-              Alert.alert(
-                'PlayInstallReferrer Info',
-                JSON.stringify(info.installReferrer),
-              );
+              // Alert.alert(
+              //   'PlayInstallReferrer Info',
+              //   JSON.stringify(info.installReferrer),
+              // );
               saveReferralToStorage(info.installReferrer);
               setReferralId(info.installReferrer);
             }
