@@ -11,7 +11,8 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:smartmass.app</string>
-		<string>applinks:5492-176-88-23-14.ngrok-free.app</string>
+		<string>applinks:smartmass.app.link</string>
+		<string>applinks:smartmass-alternate.app.link</string>
 	</array>
 </dict>
 </plist>

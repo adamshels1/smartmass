@@ -6,6 +6,7 @@ PODS:
   - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
   - boost (1.83.0)
+  - BranchSDK (3.6.5)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.73.6)
   - FBReactNativeSpec (0.73.6):
@@ -1030,6 +1031,9 @@ PODS:
   - React-Mapbuffer (0.73.6):
     - glog
     - React-debug
+  - react-native-branch (6.4.0):
+    - BranchSDK (= 3.6.5)
+    - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
   - React-nativeconfig (0.73.6)
@@ -1308,6 +1312,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-branch (from `../node_modules/react-native-branch`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1354,6 +1359,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AppAuth
+    - BranchSDK
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -1438,6 +1444,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-branch:
+    :path: "../node_modules/react-native-branch"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -1526,6 +1534,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
+  BranchSDK: ef7d89062afb08b20f65d5b1633b215ee77ab77f
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: f64d1e2ea739b4d8f7e4740cde18089cd97fe864
   FBReactNativeSpec: 9f2b8b243131565335437dba74923a8d3015e780
@@ -1575,6 +1584,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 85583ef014ce53d731a98c66a0e24496f7a83066
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: d81d930c1b7f4db284e1d721fe7fdc99230ca108
+  react-native-branch: 60737f2bb7a30d72245685854bdb5954d06a6731
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: e700ac3ec3d66329076bd2c2787a204411815d43
   React-NativeModulesApple: f7fa541118d195ac850ca2ea460f338152ced167

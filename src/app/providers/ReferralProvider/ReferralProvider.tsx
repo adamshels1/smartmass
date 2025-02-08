@@ -2,13 +2,14 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Alert, Linking, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PlayInstallReferrer} from 'react-native-play-install-referrer';
+import branch from 'react-native-branch';
 
 interface ReferralContextType {
   referralId: string | null;
 }
 
-const getRefIdFromURL = (url: string) => {
-  const match = url.match(/[?&]refId=([^&]+)/);
+const getRefFromURL = (url: string) => {
+  const match = url.match(/[?&]ref=([^&]+)/);
   return match ? decodeURIComponent(match[1]) : null;
 };
 
@@ -20,8 +21,28 @@ export const ReferralProvider: React.FC<{children: React.ReactNode}> = ({
   const [referralId, setReferralId] = useState<string | null>(null);
 
   useEffect(() => {
+    branch.subscribe({
+      onOpenComplete: ({params, error}) => {
+        if (error) {
+          Alert.alert('Error from Branch', JSON.stringify(error));
+          console.error('Error from Branch: ' + error);
+          return;
+        }
+
+        if (typeof params?.ref === 'string') {
+          const ref: string = params.ref;
+          Alert.alert(
+            'Branch Referral',
+            JSON.stringify(ref) || 'No referral found',
+          );
+          saveReferralToStorage(ref);
+          setReferralId(ref);
+        }
+      },
+    });
+
     const handleReferral = async (url: string) => {
-      const ref = getRefIdFromURL(url);
+      const ref = getRefFromURL(url);
       Alert.alert('Referral', ref || 'No referral found');
       if (ref) {
         await saveReferralToStorage(ref);

@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
+import io.branch.rnbranch.RNBranchModule
 
 class MainApplication : Application(), ReactApplication {
 
@@ -41,5 +42,9 @@ class MainApplication : Application(), ReactApplication {
       load()
     }
     ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager)
+
+    // Initialize Branch SDK
+    RNBranchModule.enableLogging()
+    RNBranchModule.getAutoInstance(this)
   }
 }

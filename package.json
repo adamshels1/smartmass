@@ -43,6 +43,7 @@
     "react-native-animatable": "^1.4.0",
     "react-native-animated-spinkit": "^1.5.2",
     "react-native-background-fetch": "^4.2.5",
+    "react-native-branch": "^6.4.0",
     "react-native-calendars": "^1.1304.1",
     "react-native-circular-chart": "^1.0.9",
     "react-native-circular-progress": "^1.4.1",

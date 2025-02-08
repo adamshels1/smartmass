@@ -27,20 +27,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- App Links for Referral System -->
+            <!-- Branch URI Scheme -->
+            <intent-filter>
+                <data android:scheme="smartmass" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+
+            <!-- Branch App Links (optional) -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                        android:scheme="https"
-                        android:host="smartmass.app"
-                        android:pathPrefix="/invite" />
-                <data
-                        android:scheme="https"
-                        android:host="5492-176-88-23-14.ngrok-free.app"
-                        android:pathPrefix="/invite" />
+                <data android:scheme="https" android:host="smartmass.app.link" />
+                <data android:scheme="https" android:host="smartmass-alternate.app.link" />
+                <data android:scheme="https" android:host="smartmass.test-app.link" />
+                <data android:scheme="https" android:host="smartmass-alternate.test-app.link" />
             </intent-filter>
+
+            <!-- App Links for Referral System -->
+<!--            <intent-filter android:autoVerify="true">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data-->
+<!--                        android:scheme="https"-->
+<!--                        android:host="smartmass.app"-->
+<!--                        android:pathPrefix="/invite" />-->
+<!--                <data-->
+<!--                        android:scheme="https"-->
+<!--                        android:host="5492-176-88-23-14.ngrok-free.app"-->
+<!--                        android:pathPrefix="/invite" />-->
+<!--            </intent-filter>-->
         </activity>
+
+        <!-- Добавленный meta-data -->
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_hxfWSMy2ouQ81QcjC3xyvlpfEqh7oiHl"/>
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="secret_live_EZoSRT1jK50MPpr4AtgLBgwiNNPtbZCN"/>
     </application>
 </manifest>

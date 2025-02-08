@@ -3,6 +3,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <GoogleSignIn/GoogleSignIn.h>
 #import <React/RCTLinkingManager.h>
+#import <RNBranch/RNBranch.h> // Импорт Branch.io
 
 @implementation AppDelegate
 
@@ -12,16 +13,33 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-    if ([FIRApp defaultApp] == nil) {
-      [FIRApp configure];
-    }
+
+  // Инициализация Firebase
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+
+  // Инициализация Branch.io
+  [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
+
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-    return [GIDSignIn.sharedInstance handleURL:url];
+  // Обработка ссылок для Google Sign-In
+  if ([GIDSignIn.sharedInstance handleURL:url]) {
+    return YES;
+  }
+
+  // Обработка ссылок для Branch.io
+  if ([RNBranch application:application openURL:url options:options]) {
+    return YES;
+  }
+
+  // Обработка ссылок для React Native Linking
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -40,6 +58,12 @@
 
 // Добавление обработки Universal Links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+  // Обработка Universal Links для Branch.io
+  if ([RNBranch continueUserActivity:userActivity]) {
+    return YES;
+  }
+
+  // Обработка Universal Links для React Native Linking
   return [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
