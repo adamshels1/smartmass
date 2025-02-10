@@ -47,7 +47,7 @@ const ReferralList: React.FC = () => {
       <FlatList
         data={referrals}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({item, _}) => (
+        renderItem={({item}) => (
           <View style={styles.itemContainer}>
             <NoAvatarIcon style={styles.avatar} />
             <View style={styles.infoContainer}>
