@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
   footerCard: {
     borderColor: '#31D6D6',
     borderWidth: 1,
+    marginTop: 10,
   },
 });
 
