@@ -10,6 +10,7 @@
   "Change to another {{name}}": "Замени {{name}}",
   "Clear all": "Очистить все",
   "Click here": "Нажмите здесь",
+  "copyText": "",
   "Current meal: {{mealName}} at {{mealTime}}, Get the recipe": "Текущий прием пищи: {{mealName}} в {{mealTime}}, Получить рецепт",
   "Exclude foods": "Исключить продукты",
   "for one day, following the example of exampleResponseDiet in pure JSON format, so that the total sum of all dishes contains {{calories}} kcal, the total number of meals per day is {{maxMealPerDay}}, and products should contain all the items that need to be purchased for the diet.": " на 1 день следуя примеру exampleResponseDiet в чистом JSON формате, так чтобы сумма всех блод содержала {{calories}} ккал, общее количество приемов пищи в день {{maxMealPerDay}}, products дожно содержать все продукты которые необходимо купить для diet",

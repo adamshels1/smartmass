@@ -10,6 +10,7 @@
   "Change to another {{name}}": "",
   "Clear all": "",
   "Click here": "",
+  "copyText": "",
   "Current meal: {{mealName}} at {{mealTime}}, Get the recipe": "",
   "Exclude foods": "",
   "for one day, following the example of exampleResponseDiet in pure JSON format, so that the total sum of all dishes contains {{calories}} kcal, the total number of meals per day is {{maxMealPerDay}}, and products should contain all the items that need to be purchased for the diet.": "",

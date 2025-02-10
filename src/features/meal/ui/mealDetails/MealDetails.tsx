@@ -142,7 +142,7 @@ const MealDetails = () => {
                 {() => <LightningIcon />}
               </AnimatedCircularProgress>
               <CustomText style={styles.nutritionText}>
-                {i18n.t('Каллории')}
+                {i18n.t('Калории')}
                 {'\n'}
                 {mealDetail.dishCalories || 0} Kcal
               </CustomText>
