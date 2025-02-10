@@ -26,6 +26,9 @@ export enum AppNavigation {
   SUBSCRIPTION = 'Subscription',
   SOURCES = 'Sources',
 
+  REFERRALS = 'Referrals',
+  MY_REFERRAL = 'My referral',
+
   MEAL_DETAILS = 'Meal Details',
 
   DAILY_MEALS = 'Daily Meals',

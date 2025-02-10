@@ -23,6 +23,8 @@ import EmailVerificationScreen from 'screens/EmailVerificationScreen.tsx';
 import SuccessEmailVerificationScreen from 'screens/SuccessEmailVerificationScreen.tsx';
 import ForgotPasswordScreen from 'screens/ForgotPasswordScreen.tsx';
 import SourcesScreen from 'screens/SourcesScreen.tsx';
+import ReferralsListScreen from 'screens/Settings/ReferralsListScreen.tsx';
+import MyReferral from 'screens/Settings/MyReferralScreen.tsx';
 
 // Create separate stacks for authenticated and unauthenticated routes
 const AuthStack = createNativeStackNavigator();
@@ -201,6 +203,22 @@ const AppNavigator = () => {
           headerTransparent: true,
         }}
         component={SourcesScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.REFERRALS}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={ReferralsListScreen}
+      />
+      <AppStack.Screen
+        name={AppNavigation.MY_REFERRAL}
+        options={{
+          headerShown: false,
+          headerTransparent: true,
+        }}
+        component={MyReferral}
       />
     </AppStack.Navigator>
   );

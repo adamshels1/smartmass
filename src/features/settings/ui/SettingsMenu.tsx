@@ -57,6 +57,14 @@ export const SettingsMenu: React.FC = () => {
           title={i18n.t('Information Sources')}
           navigationTarget={AppNavigation.SOURCES}
         />
+        <MenuItem
+          title={i18n.t('Моя реферальная ссылка')}
+          navigationTarget={AppNavigation.MY_REFERRAL}
+        />
+        <MenuItem
+          title={i18n.t('Мои приглашенные')}
+          navigationTarget={AppNavigation.REFERRALS}
+        />
         {/*<MenuItem*/}
         {/*  title={i18n.t('Подписка')}*/}
         {/*  navigationTarget={AppNavigation.SUBSCRIPTION}*/}
